@@ -1,0 +1,8 @@
+.DS_Store
+workspace.xml
+.gradle
+/local.properties
+libraries
+/build
+/captures
+android-client/build
