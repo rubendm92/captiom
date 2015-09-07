@@ -1,16 +1,21 @@
 package captiom.core.use_cases;
 
-import captiom.core.model.Gender;
 import captiom.core.model.Patient;
 import captiom.core.model.PatientNotFound;
-
-import java.time.LocalDate;
+import captiom.core.model.PatientService;
 
 public class SearchPatientCommand {
 
+	private final PatientService service;
+
+	public SearchPatientCommand(PatientService service) {
+		this.service = service;
+	}
+
 	public Patient searchPatient(String id) {
-		if (id.equals("1113"))
+		Patient patient = service.get(id);
+		if (patient == null)
 			throw new PatientNotFound(id);
-		return new Patient(id, LocalDate.of(1992, 6, 22), Gender.MALE);
+		return patient;
 	}
 }
