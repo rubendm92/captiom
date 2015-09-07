@@ -4,6 +4,9 @@
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/out/build/captiom" />
+      <excludeFolder url="file://$MODULE_DIR$/out/production/captiom" />
+      <excludeFolder url="file://$MODULE_DIR$/out/test/captiom" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

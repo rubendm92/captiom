@@ -6,3 +6,4 @@ libraries
 /build
 /captures
 android-client/build
+out

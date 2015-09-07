@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
-    <output url="file://$MODULE_DIR$/target/classes" />
-    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <output url="file://$MODULE_DIR$/../out/production/captiom/core" />
+    <output-test url="file://$MODULE_DIR$/../out/test/captiom/core" />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/out/build/captiom/core" />
+      <excludeFolder url="file://$MODULE_DIR$/out/production/captiom" />
+      <excludeFolder url="file://$MODULE_DIR$/out/production/captiom/core" />
+      <excludeFolder url="file://$MODULE_DIR$/out/test/captiom" />
+      <excludeFolder url="file://$MODULE_DIR$/out/test/captiom/core" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

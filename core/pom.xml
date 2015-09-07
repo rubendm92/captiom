@@ -12,4 +12,10 @@
 
     <artifactId>core</artifactId>
     <version>1.0</version>
+
+    <build>
+        <outputDirectory>../out/production/captiom/core</outputDirectory>
+        <testOutputDirectory>../out/test/captiom/core</testOutputDirectory>
+        <directory>../out/build/captiom/core</directory>
+    </build>
 </project>
