@@ -1,11 +1,11 @@
 package captiom.core.use_cases;
 
-import captiom.core.model.Patient;
-import captiom.core.model.PatientNotFound;
-import captiom.core.model.PatientService;
+import captiom.core.model.patient.Patient;
+import captiom.core.model.patient.PatientNotFound;
+import captiom.core.model.patient.PatientService;
 import org.junit.Test;
 
-import static captiom.core.model.Gender.MALE;
+import static captiom.core.model.patient.Gender.MALE;
 import static java.time.LocalDate.of;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;

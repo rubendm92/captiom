@@ -1,4 +1,4 @@
-package captiom.core.model;
+package captiom.core.model.patient;
 
 public class PatientService {
 
