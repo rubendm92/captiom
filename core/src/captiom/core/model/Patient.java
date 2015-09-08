@@ -13,4 +13,16 @@ public class Patient {
 		this.dateOfBirth = dateOfBirth;
 		this.gender = gender;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		return id == null ? ((Patient) o).id == null : id.equals(((Patient) o).id);
+	}
+
+	@Override
+	public int hashCode() {
+		return id != null ? id.hashCode() : 0;
+	}
 }
