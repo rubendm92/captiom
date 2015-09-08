@@ -1,4 +1,4 @@
-package captiom.core.model.device.dimension;
+package captiom.core.model.device;
 
 public class Height {
 
@@ -8,10 +8,6 @@ public class Height {
 	public Height(double pixels, double heightInMeters) {
 		this.pixels = pixels;
 		this.heightInMeters = heightInMeters;
-	}
-
-	public double pixels() {
-		return pixels;
 	}
 
 	public double inMeters() {

@@ -5,30 +5,40 @@ public class CharacterHeightCalculator {
 	private Device device;
 	private double distance;
 	private double focalLength;
-	private double charPosition;
+	private double charPosition = -1;
 
-	public DioptersReader rangeForDevice(Device device) {
+	public DioptersReader usingDevice(Device device) {
 		this.device = device;
 		return this::storeDiopters;
 	}
 
-	private DistanceReader storeDiopters(double diopters) {
-		this.focalLength = 1 / diopters;
-		return this::calculateRange;
+	public Range range() {
+		if (isNotSetup()) throw new CalculatorNotConfiguredException();
+		return new Range(min(), max());
 	}
 
-	private Range calculateRange(double distance) {
+	public double imageHeightForMinutes(int minutes) {
+		if (isNotSetup()) throw new CalculatorNotConfiguredException();
+		return calculateHeightInMeters(minutes) * device.pixelsPerMeter();
+	}
+
+	private boolean isNotSetup() {
+		return charPosition == -1;
+	}
+
+	private DistanceReader storeDiopters(double diopters) {
+		this.focalLength = 1 / diopters;
+		return this::storeDistance;
+	}
+
+	private CharacterHeightCalculator storeDistance(double distance) {
 		this.distance = distance;
 		calculateCharPosition();
-		return calculateRange();
+		return this;
 	}
 
 	private void calculateCharPosition() {
 		this.charPosition = (float) Math.abs(-distance * focalLength / (focalLength - distance));
-	}
-
-	private Range calculateRange() {
-		return new Range(min(), max());
 	}
 
 	private double min() {
@@ -45,6 +55,14 @@ public class CharacterHeightCalculator {
 
 	private double maxImageSize(double screenHeight) {
 		return (screenHeight / 7) * (charPosition / distance);
+	}
+
+	private double calculateHeightInMeters(final double minutes) {
+		return calculateCharDetail(minutes) * (distance / charPosition) * 7;
+	}
+
+	private double calculateCharDetail(double minutes) {
+		return (Math.tan(Math.toRadians(minutes / 60)) * charPosition);
 	}
 
 	public static class Range {
@@ -64,6 +82,6 @@ public class CharacterHeightCalculator {
 
 	@FunctionalInterface
 	public interface DistanceReader {
-		Range atDistance(double distance);
+		CharacterHeightCalculator atDistance(double distance);
 	}
 }

@@ -1,26 +1,28 @@
 package captiom.core.model.device;
 
-import captiom.core.model.device.dimension.Dimension;
-
 public class Device {
 
 	private final String id;
-	private Dimension dimension;
+	private Height height;
 
 	public Device(String id) {
 		this.id = id;
 	}
 
-	public Device withDimension(Dimension dimension) {
-		this.dimension = dimension;
+	public Device withHeight(Height height) {
+		this.height = height;
 		return this;
 	}
 
 	public double onePixelHeight() {
-		return dimension.height().onePixel();
+		return height.onePixel();
 	}
 
 	public double heightInMeters() {
-		return dimension.height().inMeters();
+		return height.inMeters();
+	}
+
+	public double pixelsPerMeter() {
+		return height.pixelsPerMeter();
 	}
 }
