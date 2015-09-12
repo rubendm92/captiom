@@ -23,6 +23,10 @@ public class Device {
 		return this;
 	}
 
+	public String id() {
+		return id;
+	}
+
 	public double onePixelHeight() {
 		return height.onePixel();
 	}

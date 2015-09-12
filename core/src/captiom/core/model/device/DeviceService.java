@@ -17,7 +17,7 @@ public class DeviceService {
 		return notifier.device(deviceId);
 	}
 
-	public void register(Device device) {
-		repository.save(device);
+	public Device register(Device device) {
+		return repository.save(device);
 	}
 }

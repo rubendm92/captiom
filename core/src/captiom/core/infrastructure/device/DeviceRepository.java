@@ -4,5 +4,5 @@ import captiom.core.model.device.Device;
 
 public interface DeviceRepository {
 
-	void save(Device device);
+	Device save(Device device);
 }
