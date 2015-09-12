@@ -1,4 +1,4 @@
-package captiom.core.use_cases;
+package captiom.core.use_cases.patient;
 
 import captiom.core.model.patient.Patient;
 import captiom.core.model.patient.PatientNotFound;

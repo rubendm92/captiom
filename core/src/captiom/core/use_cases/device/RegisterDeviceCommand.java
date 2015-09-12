@@ -1,4 +1,4 @@
-package captiom.core.use_cases;
+package captiom.core.use_cases.device;
 
 import captiom.core.model.device.Device;
 import captiom.core.model.device.DeviceService;
