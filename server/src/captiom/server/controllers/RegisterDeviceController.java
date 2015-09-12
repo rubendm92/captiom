@@ -1,23 +1,23 @@
 package captiom.server.controllers;
 
 import captiom.core.model.device.Device;
-import captiom.core.model.device.DeviceService;
 import captiom.core.model.device.Height;
+import captiom.core.use_cases.device.RegisterDeviceAction;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
 public class RegisterDeviceController implements Route {
 
-	private final DeviceService service;
+	private final RegisterDeviceAction action;
 
-	public RegisterDeviceController(DeviceService service) {
-		this.service = service;
+	public RegisterDeviceController(RegisterDeviceAction action) {
+		this.action = action;
 	}
 
 	@Override
 	public Object handle(Request request, Response response) throws Exception {
-		service.register(buildDevice(request));
+		action.register(buildDevice(request));
 		response.status(201);
 		return "OK";
 	}

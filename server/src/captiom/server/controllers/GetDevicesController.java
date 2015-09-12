@@ -1,7 +1,7 @@
 package captiom.server.controllers;
 
 import captiom.core.model.device.Device;
-import captiom.core.model.device.DeviceService;
+import captiom.core.use_cases.device.GetDevicesAction;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -13,16 +13,16 @@ import java.util.List;
 
 public class GetDevicesController implements Route {
 
-	private final DeviceService service;
+	private final GetDevicesAction action;
 
-	public GetDevicesController(DeviceService service) {
-		this.service = service;
+	public GetDevicesController(GetDevicesAction action) {
+		this.action = action;
 	}
 
 	@Override
 	public Object handle(Request request, Response response) throws Exception {
 		response.status(200);
-		return serialize(service.all()).toString();
+		return serialize(action.allDevices()).toString();
 	}
 
 	private JsonElement serialize(List<Device> devices) {

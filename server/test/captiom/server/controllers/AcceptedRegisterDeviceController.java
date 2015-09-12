@@ -2,6 +2,7 @@ package captiom.server.controllers;
 
 import captiom.core.model.device.Device;
 import captiom.core.model.device.DeviceService;
+import captiom.core.use_cases.device.RegisterDeviceAction;
 import org.junit.Test;
 import spark.Request;
 import spark.Response;
@@ -16,7 +17,7 @@ public class AcceptedRegisterDeviceController {
 	@Test
 	public void should_save_device_using_device_service() throws Exception {
 		DeviceService service = mock(DeviceService.class);
-		RegisterDeviceController controller = new RegisterDeviceController(service);
+		RegisterDeviceController controller = new RegisterDeviceController(new RegisterDeviceAction(service));
 		Request request = request();
 		Response response = mock(Response.class);
 		assertThat(controller.handle(request, response), is("OK"));
