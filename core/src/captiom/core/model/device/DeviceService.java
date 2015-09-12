@@ -1,12 +1,15 @@
 package captiom.core.model.device;
 
 import captiom.core.infrastructure.device.DeviceNotifier;
+import captiom.core.infrastructure.device.DeviceRepository;
 
 public class DeviceService {
 
+	private final DeviceRepository repository;
 	private final DeviceNotifier notifier;
 
-	public DeviceService(DeviceNotifier notifier) {
+	public DeviceService(DeviceRepository repository, DeviceNotifier notifier) {
+		this.repository = repository;
 		this.notifier = notifier;
 	}
 
@@ -15,6 +18,6 @@ public class DeviceService {
 	}
 
 	public void register(Device device) {
-		throw new UnsupportedOperationException();
+		repository.save(device);
 	}
 }
