@@ -18,19 +18,19 @@
       <profile default="true" name="Default" enabled="false">
         <processorPath useClasspath="true" />
       </profile>
-      <profile default="false" name="Maven default annotation processors profile" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
-        <module name="server" />
-      </profile>
       <profile default="false" name="Annotation profile for core" enabled="true">
         <sourceOutputDir name="../out/build/captiom/core/generated-sources/annotations" />
         <sourceTestOutputDir name="../out/build/captiom/core/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="core" />
+      </profile>
+      <profile default="false" name="Annotation profile for server" enabled="true">
+        <sourceOutputDir name="../out/build/captiom/server/generated-sources/annotations" />
+        <sourceTestOutputDir name="../out/build/captiom/server/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
