@@ -1,13 +1,16 @@
 package captiom.core.model.device;
 
+import captiom.core.infrastructure.device.DeviceNotifier;
+
 public class DeviceService {
 
-	public DeviceLink using(String deviceId) {
-		return null;
+	private final DeviceNotifier notifier;
+
+	public DeviceService(DeviceNotifier notifier) {
+		this.notifier = notifier;
 	}
 
-	@FunctionalInterface
-	public interface DeviceLink {
-		void drawChar(OptotypeCharacter character, double height, Eye eye);
+	public DeviceNotifier.DeviceLink using(String deviceId) {
+		return notifier.device(deviceId);
 	}
 }
