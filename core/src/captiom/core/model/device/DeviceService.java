@@ -3,6 +3,8 @@ package captiom.core.model.device;
 import captiom.core.infrastructure.device.DeviceNotifier;
 import captiom.core.infrastructure.device.DeviceRepository;
 
+import java.util.List;
+
 public class DeviceService {
 
 	private final DeviceRepository repository;
@@ -19,5 +21,9 @@ public class DeviceService {
 
 	public Device register(Device device) {
 		return repository.save(device);
+	}
+
+	public List<Device> all() {
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 }

@@ -14,8 +14,8 @@ public class AcceptedDeviceService {
 
 	@Test
 	public void should_register_device_into_repository_assigning_an_id_to_the_device() {
-		Device device = new Device().withHeight(new Height(1080, 0.06917));
-		Device deviceWithId = new Device("11").withHeight(new Height(1080, 0.06917));
+		Device device = new Device().height(new Height(1080, 0.06917));
+		Device deviceWithId = new Device("11").height(new Height(1080, 0.06917));
 		DeviceRepository repository = mock(DeviceRepository.class);
 		when(repository.save(device)).thenReturn(deviceWithId);
 		DeviceService service = new DeviceService(repository, notifier());

@@ -14,7 +14,7 @@ public class AcceptedCharacterHeightCalculator {
 	@Before
 	public void setUp() {
 		calculator = new CharacterHeightCalculator();
-		device = new Device("id").withHeight(new Height(1080, 0.06917));
+		device = new Device("id").height(new Height(1080, 0.06917));
 	}
 
 	@Test(expected = CalculatorNotConfiguredException.class)

@@ -23,8 +23,8 @@ public class RegisterDeviceController implements Route {
 	}
 
 	private Device buildDevice(Request request) {
-		return new Device().withHeight(buildHeight(request))
-				.withNotificationId(request.queryParams("notificationId"));
+		return new Device().height(buildHeight(request))
+				.notificationId(request.queryParams("notificationId"));
 	}
 
 	private Height buildHeight(Request request) {

@@ -14,7 +14,7 @@ public class AcceptedRegisterDeviceAction {
 	public void should_register_new_device_in_service() {
 		DeviceService service = mock(DeviceService.class);
 		RegisterDeviceAction action = new RegisterDeviceAction(service);
-		Device device = new Device("id").withHeight(new Height(1080, 0.06917));
+		Device device = new Device("id").height(new Height(1080, 0.06917));
 		action.register(device);
 		verify(service).register(device);
 	}
