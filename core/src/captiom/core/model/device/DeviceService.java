@@ -24,6 +24,6 @@ public class DeviceService {
 	}
 
 	public List<Device> all() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return repository.all();
 	}
 }
