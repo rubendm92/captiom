@@ -1,6 +1,7 @@
 package captiom.core.use_cases;
 
 import captiom.core.model.device.DeviceService;
+import captiom.core.model.device.Eye;
 import captiom.core.model.device.OptotypeCharacter;
 
 public class RefreshCharacterCommand {
@@ -9,6 +10,7 @@ public class RefreshCharacterCommand {
 	private String deviceId;
 	private OptotypeCharacter character;
 	private double height;
+	private Eye eye;
 
 	public RefreshCharacterCommand(DeviceService service) {
 		this.service = service;
@@ -21,12 +23,17 @@ public class RefreshCharacterCommand {
 
 	private HeightReader storeCharacter(OptotypeCharacter character) {
 		this.character = character;
+		return this::storeHeight;
+	}
+
+	private EyeReader storeHeight(double height) {
+		this.height = height;
 		return this::refreshDevice;
 	}
 
-	private RefreshCharacterCommand refreshDevice(double height) {
-		this.height = height;
-		service.using(deviceId).drawChar(character, height);
+	private RefreshCharacterCommand refreshDevice(Eye eye) {
+		this.eye = eye;
+		service.using(deviceId).drawChar(character, height, eye);
 		return this;
 	}
 
@@ -37,6 +44,11 @@ public class RefreshCharacterCommand {
 
 	@FunctionalInterface
 	public interface HeightReader {
-		RefreshCharacterCommand withHeight(double height);
+		EyeReader withHeight(double height);
+	}
+
+	@FunctionalInterface
+	public interface EyeReader {
+		RefreshCharacterCommand in(Eye eye);
 	}
 }

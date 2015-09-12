@@ -8,6 +8,6 @@ public class DeviceService {
 
 	@FunctionalInterface
 	public interface DeviceLink {
-		void drawChar(OptotypeCharacter character, double height);
+		void drawChar(OptotypeCharacter character, double height, Eye eye);
 	}
 }

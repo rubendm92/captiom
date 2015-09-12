@@ -1,7 +1,8 @@
 package captiom.core.use_cases;
 
 import captiom.core.model.device.DeviceService;
-import captiom.core.model.device.OptotypeCharacter;
+import captiom.core.model.device.Eye;
+import captiom.core.model.device.OptotypeCharacter.Snellen;
 import org.junit.Test;
 
 import static org.mockito.Mockito.*;
@@ -15,8 +16,8 @@ public class AcceptedRefreshCharacterCommand {
 		DeviceService.DeviceLink link = mock(DeviceService.DeviceLink.class);
 		when(service.using(deviceId)).thenReturn(link);
 		RefreshCharacterCommand command = new RefreshCharacterCommand(service);
-		command.using(deviceId).show(OptotypeCharacter.Snellen.OPENS_UP).withHeight(960);
+		command.using(deviceId).show(Snellen.OPENS_UP).withHeight(960).in(Eye.LEFT);
 		verify(service).using(deviceId);
-		verify(link).drawChar(OptotypeCharacter.Snellen.OPENS_UP, 960);
+		verify(link).drawChar(Snellen.OPENS_UP, 960, Eye.LEFT);
 	}
 }
