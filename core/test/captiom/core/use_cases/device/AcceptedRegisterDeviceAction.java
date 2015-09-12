@@ -8,14 +8,14 @@ import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class AcceptedRegisterDeviceCommand {
+public class AcceptedRegisterDeviceAction {
 
 	@Test
 	public void should_register_new_device_in_service() {
 		DeviceService service = mock(DeviceService.class);
-		RegisterDeviceCommand command = new RegisterDeviceCommand(service);
+		RegisterDeviceAction action = new RegisterDeviceAction(service);
 		Device device = new Device("id").withHeight(new Height(1080, 0.06917));
-		command.register(device);
+		action.register(device);
 		verify(service).register(device);
 	}
 }

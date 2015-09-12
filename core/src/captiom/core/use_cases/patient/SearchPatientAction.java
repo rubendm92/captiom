@@ -4,11 +4,11 @@ import captiom.core.model.patient.Patient;
 import captiom.core.model.patient.PatientNotFound;
 import captiom.core.model.patient.PatientService;
 
-public class SearchPatientCommand {
+public class SearchPatientAction {
 
 	private final PatientService service;
 
-	public SearchPatientCommand(PatientService service) {
+	public SearchPatientAction(PatientService service) {
 		this.service = service;
 	}
 

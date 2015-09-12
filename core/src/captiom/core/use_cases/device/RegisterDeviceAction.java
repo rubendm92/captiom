@@ -3,11 +3,11 @@ package captiom.core.use_cases.device;
 import captiom.core.model.device.Device;
 import captiom.core.model.device.DeviceService;
 
-public class RegisterDeviceCommand {
+public class RegisterDeviceAction {
 
 	private final DeviceService service;
 
-	public RegisterDeviceCommand(DeviceService service) {
+	public RegisterDeviceAction(DeviceService service) {
 		this.service = service;
 	}
 

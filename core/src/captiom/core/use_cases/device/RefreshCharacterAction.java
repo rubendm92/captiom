@@ -4,7 +4,7 @@ import captiom.core.model.device.DeviceService;
 import captiom.core.model.device.Eye;
 import captiom.core.model.device.OptotypeCharacter;
 
-public class RefreshCharacterCommand {
+public class RefreshCharacterAction {
 
 	private final DeviceService service;
 	private String deviceId;
@@ -12,7 +12,7 @@ public class RefreshCharacterCommand {
 	private double height;
 	private Eye eye;
 
-	public RefreshCharacterCommand(DeviceService service) {
+	public RefreshCharacterAction(DeviceService service) {
 		this.service = service;
 	}
 
@@ -31,7 +31,7 @@ public class RefreshCharacterCommand {
 		return this::refreshDevice;
 	}
 
-	private RefreshCharacterCommand refreshDevice(Eye eye) {
+	private RefreshCharacterAction refreshDevice(Eye eye) {
 		this.eye = eye;
 		service.using(deviceId).drawChar(character, height, eye);
 		return this;
@@ -49,6 +49,6 @@ public class RefreshCharacterCommand {
 
 	@FunctionalInterface
 	public interface EyeReader {
-		RefreshCharacterCommand in(Eye eye);
+		RefreshCharacterAction in(Eye eye);
 	}
 }

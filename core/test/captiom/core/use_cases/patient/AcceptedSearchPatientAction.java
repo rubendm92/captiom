@@ -12,11 +12,11 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class AcceptedSearchPatientCommand {
+public class AcceptedSearchPatientAction {
 
 	@Test
 	public void should_return_patient_given_patient_id() {
-		Patient patient = command(service("1111", new Patient("1111", of(1992, 6, 22), MALE))).searchPatient("1111");
+		Patient patient = action(service("1111", new Patient("1111", of(1992, 6, 22), MALE))).searchPatient("1111");
 		assertThat(patient.id, is("1111"));
 		assertThat(patient.dateOfBirth, is(of(1992, 6, 22)));
 		assertThat(patient.gender, is(MALE));
@@ -24,11 +24,11 @@ public class AcceptedSearchPatientCommand {
 
 	@Test(expected = PatientNotFound.class)
 	public void should_throw_patient_not_found_exception_when_patient_is_not_registered() {
-		command(service("1113", null)).searchPatient("1113");
+		action(service("1113", null)).searchPatient("1113");
 	}
 
-	private SearchPatientCommand command(PatientService service) {
-		return new SearchPatientCommand(service);
+	private SearchPatientAction action(PatientService service) {
+		return new SearchPatientAction(service);
 	}
 
 	private PatientService service(String id, Patient result) {
