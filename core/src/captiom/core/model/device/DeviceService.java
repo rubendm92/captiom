@@ -13,4 +13,8 @@ public class DeviceService {
 	public DeviceNotifier.DeviceLink using(String deviceId) {
 		return notifier.device(deviceId);
 	}
+
+	public void register(Device device) {
+		throw new UnsupportedOperationException();
+	}
 }
