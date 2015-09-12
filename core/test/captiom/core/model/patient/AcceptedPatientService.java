@@ -3,6 +3,8 @@ package captiom.core.model.patient;
 import captiom.core.infrastructure.patient.PatientRepository;
 import org.junit.Test;
 
+import java.util.Optional;
+
 import static java.time.LocalDate.of;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -16,6 +18,6 @@ public class AcceptedPatientService {
 		Patient patient = new Patient(patientId, of(1992, 6, 22), Gender.MALE);
 		PatientService service = new PatientService(repository);
 		service.get(patientId);
-		when(repository.find(patientId)).thenReturn(patient);
+		when(repository.find(patientId)).thenReturn(Optional.of(patient));
 	}
 }

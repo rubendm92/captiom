@@ -2,7 +2,9 @@ package captiom.core.infrastructure.patient;
 
 import captiom.core.model.patient.Patient;
 
+import java.util.Optional;
+
 public interface PatientRepository {
 
-	Patient find(String patientId);
+	Optional<Patient> find(String patientId);
 }

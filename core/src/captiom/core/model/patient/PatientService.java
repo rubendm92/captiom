@@ -2,6 +2,8 @@ package captiom.core.model.patient;
 
 import captiom.core.infrastructure.patient.PatientRepository;
 
+import java.util.Optional;
+
 public class PatientService {
 
 	private final PatientRepository repository;
@@ -10,7 +12,7 @@ public class PatientService {
 		this.repository = repository;
 	}
 
-	public Patient get(String id) {
+	public Optional<Patient> get(String id) {
 		return repository.find(id);
 	}
 
