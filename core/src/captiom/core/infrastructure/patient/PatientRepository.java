@@ -7,4 +7,5 @@ import java.util.Optional;
 public interface PatientRepository {
 
 	Optional<Patient> find(String patientId);
+	void save(Patient patient);
 }

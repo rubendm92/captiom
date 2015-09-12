@@ -9,6 +9,7 @@ import static java.time.LocalDate.of;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class AcceptedPatientService {
@@ -32,5 +33,16 @@ public class AcceptedPatientService {
 
 		PatientService service = new PatientService(repository);
 		assertThat(service.get(patientId).isPresent(), is(false));
+	}
+
+	@Test
+	public void should_save_patient_into_repository() {
+		String patientId = "4444";
+		Patient patient = new Patient(patientId, of(1992, 6, 22), Gender.MALE);
+		PatientRepository repository = mock(PatientRepository.class);
+
+		PatientService service = new PatientService(repository);
+		service.save(patient);
+		verify(repository).save(patient);
 	}
 }

@@ -17,6 +17,6 @@ public class PatientService {
 	}
 
 	public void save(Patient patient) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		repository.save(patient);
 	}
 }
