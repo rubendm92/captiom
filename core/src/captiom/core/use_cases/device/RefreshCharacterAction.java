@@ -9,7 +9,7 @@ public class RefreshCharacterAction {
 	private final DeviceService service;
 	private String deviceId;
 	private OptotypeCharacter character;
-	private double height;
+	private long detailDegrees;
 	private Eye eye;
 
 	public RefreshCharacterAction(DeviceService service) {
@@ -21,30 +21,30 @@ public class RefreshCharacterAction {
 		return this::storeCharacter;
 	}
 
-	private HeightReader storeCharacter(OptotypeCharacter character) {
+	private DetailReader storeCharacter(OptotypeCharacter character) {
 		this.character = character;
-		return this::storeHeight;
+		return this::storeDetail;
 	}
 
-	private EyeReader storeHeight(double height) {
-		this.height = height;
+	private EyeReader storeDetail(long detailDegrees) {
+		this.detailDegrees = detailDegrees;
 		return this::refreshDevice;
 	}
 
 	private RefreshCharacterAction refreshDevice(Eye eye) {
 		this.eye = eye;
-		service.using(deviceId).drawChar(character, height, eye);
+		service.using(deviceId).drawChar(character, detailDegrees, eye);
 		return this;
 	}
 
 	@FunctionalInterface
 	public interface CharacterReader {
-		HeightReader show(OptotypeCharacter character);
+		DetailReader show(OptotypeCharacter character);
 	}
 
 	@FunctionalInterface
-	public interface HeightReader {
-		EyeReader withHeight(double height);
+	public interface DetailReader {
+		EyeReader withDetail(long detailDegrees);
 	}
 
 	@FunctionalInterface

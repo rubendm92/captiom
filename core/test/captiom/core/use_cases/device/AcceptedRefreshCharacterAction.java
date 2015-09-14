@@ -17,8 +17,8 @@ public class AcceptedRefreshCharacterAction {
 		DeviceNotifier.DeviceLink link = mock(DeviceNotifier.DeviceLink.class);
 		when(service.using(deviceId)).thenReturn(link);
 		RefreshCharacterAction action = new RefreshCharacterAction(service);
-		action.using(deviceId).show(Snellen.OPENS_UP).withHeight(960).in(Eye.LEFT);
+		action.using(deviceId).show(Snellen.OPENS_UP).withDetail(320).in(Eye.LEFT);
 		verify(service).using(deviceId);
-		verify(link).drawChar(Snellen.OPENS_UP, 960, Eye.LEFT);
+		verify(link).drawChar(Snellen.OPENS_UP, 320, Eye.LEFT);
 	}
 }
