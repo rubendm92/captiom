@@ -32,5 +32,4 @@ public class AcceptedRegisterDeviceController {
 		when(request.queryParams("metersHeight")).thenReturn("0.06917");
 		return request;
 	}
-
 }
