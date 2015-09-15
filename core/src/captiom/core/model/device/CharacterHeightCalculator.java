@@ -1,5 +1,7 @@
 package captiom.core.model.device;
 
+import static java.lang.Math.*;
+
 public class CharacterHeightCalculator {
 
 	private Device device;
@@ -38,11 +40,11 @@ public class CharacterHeightCalculator {
 	}
 
 	private void calculateCharPosition() {
-		this.charPosition = (float) Math.abs(-distance * focalLength / (focalLength - distance));
+		this.charPosition = (float) abs(-distance * focalLength / (focalLength - distance));
 	}
 
 	private double min() {
-		return 60 * Math.toDegrees(Math.atan(minImageSize(device.onePixelHeight()) / charPosition));
+		return degreesToMinutes(toDegrees(atan(minImageSize(device.onePixelHeight()) / charPosition)));
 	}
 
 	private double minImageSize(double pixelSize) {
@@ -50,7 +52,7 @@ public class CharacterHeightCalculator {
 	}
 
 	private double max() {
-		return 60 * Math.toDegrees(Math.atan(maxImageSize(device.heightInMeters()) / charPosition));
+		return degreesToMinutes(toDegrees(atan(maxImageSize(device.heightInMeters()) / charPosition)));
 	}
 
 	private double maxImageSize(double screenHeight) {
@@ -62,7 +64,15 @@ public class CharacterHeightCalculator {
 	}
 
 	private double calculateCharDetail(double minutes) {
-		return (Math.tan(Math.toRadians(minutes / 60)) * charPosition);
+		return (tan(toRadians(minutesToDegrees(minutes))) * charPosition);
+	}
+
+	private double degreesToMinutes(double degrees) {
+		return degrees * 60;
+	}
+
+	private double minutesToDegrees(double minutes) {
+		return minutes / 60;
 	}
 
 	public static class Range {
