@@ -6,10 +6,13 @@ import android.test.suitebuilder.annotation.SmallTest;
 import com.rubendm.captiom.mobile.model.Device;
 import com.rubendm.captiom.mobile.model.ScreenHeight;
 
+import static com.rubendm.captiom.mobile.infrastructure.Server.*;
+import static com.rubendm.captiom.mobile.infrastructure.WebServiceDeviceRepository.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 public class AcceptedWebServiceDeviceRepository extends AndroidTestCase {
@@ -17,24 +20,44 @@ public class AcceptedWebServiceDeviceRepository extends AndroidTestCase {
     @SmallTest
     public void test_should_call_to_server_to_register_device() throws InterruptedException {
         Server server = successfulServer();
-        WebServiceDeviceRepository repository = new WebServiceDeviceRepository(server, null);
+        OnSaveFailedListener listener = mock(OnSaveFailedListener.class);
+        WebServiceDeviceRepository repository = new WebServiceDeviceRepository(server, listener);
         repository.save(device());
         waitForAsyncTask();
-        verify(server).connect("/devices", Server.RequestMethod.POST);
+        verify(server).connect("/devices", RequestMethod.POST);
+        verifyNoMoreInteractions(listener);
+    }
+
+    @SmallTest
+    public void test_should_notify_error_while_saving_device() throws InterruptedException {
+        Server server = failingServer();
+        OnSaveFailedListener listener = mock(OnSaveFailedListener.class);
+        WebServiceDeviceRepository repository = new WebServiceDeviceRepository(server, listener);
+        Device device = device();
+
+        repository.save(device);
+        waitForAsyncTask();
+        verify(server).connect("/devices", RequestMethod.POST);
+        verify(listener).failed(device, "");
     }
 
     private Server successfulServer() {
-        return server(true);
+        return server("", true);
     }
 
-    private Server server(boolean succeeded) {
+    private Server failingServer() {
+        return server("", false);
+    }
+
+    private Server server(String body, boolean succeeded) {
         Server server = mock(Server.class);
         ServerConnection connection = mock(ServerConnection.class);
         ServerConnection.ServerResponse response = mock(ServerConnection.ServerResponse.class);
+        when(response.body()).thenReturn(body);
         when(response.succeeded()).thenReturn(succeeded);
         when(connection.addParameter(anyString(), anyString())).thenReturn(connection);
         when(connection.send()).thenReturn(response);
-        when(server.connect(anyString(), any(Server.RequestMethod.class))).thenReturn(connection);
+        when(server.connect(anyString(), any(RequestMethod.class))).thenReturn(connection);
         return server;
     }
 
