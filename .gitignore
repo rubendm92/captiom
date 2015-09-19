@@ -8,3 +8,4 @@ libraries
 android-client/build
 out
 rubendm.xml
+local.properties
