@@ -9,6 +9,7 @@
   "author": "Rubén Díaz Martínez",
   "license": "ISC",
   "devDependencies": {
+    "bower": "^1.5.2",
     "gulp": "^3.9.0"
   }
 }

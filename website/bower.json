@@ -1,0 +1,15 @@
+{
+  "name": "captiom-website",
+  "version": "1.0.0",
+  "authors": [
+    "Rubén Díaz Martínez <rubendm92@gmail.com>"
+  ],
+  "license": "ISC",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
