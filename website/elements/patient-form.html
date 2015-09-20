@@ -3,10 +3,10 @@
 	<link rel="import" href="../bower_components/iron-form/iron-form.html"/>
 	<link rel="import" href="../bower_components/paper-input/paper-input.html"/>
 	<link rel="import" href="../bower_components/paper-button/paper-button.html"/>
-	<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html"/>
-	<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html"/>
+	<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html"/>
 	<link rel="import" href="../bower_components/paper-menu/paper-menu.html"/>
 	<link rel="import" href="../bower_components/paper-item/paper-item.html"/>
+	<link rel="import" href="slide-panel.html"/>
 
 	<style>
 
@@ -19,6 +19,7 @@
 			width: calc(49% - 32px);
 			display: inline-block;
 			line-height: 50px;
+			position: relative;
 		}
 
 		:host {
@@ -38,21 +39,35 @@
 			margin-top: 40px;
 		}
 
+		paper-ripple {
+			color: var(--paper-blue-100);
+		}
+
 		@media screen and (min-width: 600px) {
 			form {
 				width: 50%;
+			}
+
+			paper-button {
+				margin-top: 20px;
 			}
 		}
 	</style>
 
 	<template>
 		<form is="iron-form" method="post" action="/patient">
-			<paper-input name="name" label="Name" required></paper-input>
-			<paper-input name="age" label="Age" required type="number"></paper-input>
-			<paper-menu>
-				<paper-item>Male</paper-item>
-				<paper-item>Female</paper-item>
-			</paper-menu>
+			<paper-input id="name" name="name" label="Name" required on-keyup="inputChanged" maxlength="8" char-counter></paper-input>
+			<slide-panel id="moreInformation">
+				<paper-input id="age" name="age" label="Age" required type="number"></paper-input>
+				<paper-menu>
+					<paper-item>
+						<paper-ripple opacityDecayVelocity="2"></paper-ripple>Male
+					</paper-item>
+					<paper-item>
+						<paper-ripple opacityDecayVelocity="2"></paper-ripple>Female
+					</paper-item>
+				</paper-menu>
+			</slide-panel>
 
 			<paper-button raised onclick="clickHandler(event)">Submit</paper-button>
 		</form>
@@ -61,7 +76,11 @@
 	<script>
 		(function () {
 			Polymer({
-				is: "patient-form"
+				is: "patient-form",
+				inputChanged: function (e) {
+					if (e.target.value.length !== 8) return;
+					this.$.moreInformation.show();
+				}
 			});
 		})();
 	</script>
