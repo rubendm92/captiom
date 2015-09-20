@@ -1,0 +1,69 @@
+<dom-module id="patient-form">
+
+	<link rel="import" href="../bower_components/iron-form/iron-form.html"/>
+	<link rel="import" href="../bower_components/paper-input/paper-input.html"/>
+	<link rel="import" href="../bower_components/paper-button/paper-button.html"/>
+	<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html"/>
+	<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html"/>
+	<link rel="import" href="../bower_components/paper-menu/paper-menu.html"/>
+	<link rel="import" href="../bower_components/paper-item/paper-item.html"/>
+
+	<style>
+
+		form {
+			width: 90%;
+			margin: auto;
+		}
+
+		paper-item {
+			width: calc(49% - 32px);
+			display: inline-block;
+			line-height: 50px;
+		}
+
+		:host {
+			--paper-menu-selected-item: {
+				background-color: var(--paper-blue-900);
+				color: white;
+		    };
+
+			--paper-menu-focused-item: {
+				 background-color: var(--paper-blue-900);
+				 color: white;
+		    };
+		}
+
+		paper-button {
+			float: right;
+			margin-top: 40px;
+		}
+
+		@media screen and (min-width: 600px) {
+			form {
+				width: 50%;
+			}
+		}
+	</style>
+
+	<template>
+		<form is="iron-form" method="post" action="/patient">
+			<paper-input name="name" label="Name" required></paper-input>
+			<paper-input name="age" label="Age" required type="number"></paper-input>
+			<paper-menu>
+				<paper-item>Male</paper-item>
+				<paper-item>Female</paper-item>
+			</paper-menu>
+
+			<paper-button raised onclick="clickHandler(event)">Submit</paper-button>
+		</form>
+	</template>
+
+	<script>
+		(function () {
+			Polymer({
+				is: "patient-form"
+			});
+		})();
+	</script>
+
+</dom-module>
