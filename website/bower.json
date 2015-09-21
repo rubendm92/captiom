@@ -13,6 +13,7 @@
     "tests"
   ],
   "dependencies": {
+    "iron-ajax": "PolymerElements/iron-ajax#~1.0.4",
     "iron-form": "PolymerElements/iron-form#~1.0.9",
     "neon-animation": "PolymerElements/neon-animation#~1.0.6",
     "paper-button": "PolymerElements/paper-button#~1.0.4",

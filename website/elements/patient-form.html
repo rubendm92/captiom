@@ -6,6 +6,7 @@
 	<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html"/>
 	<link rel="import" href="../bower_components/paper-menu/paper-menu.html"/>
 	<link rel="import" href="../bower_components/paper-item/paper-item.html"/>
+	<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html"/>
 	<link rel="import" href="slide-panel.html"/>
 
 	<style>
@@ -20,6 +21,7 @@
 			display: inline-block;
 			line-height: 50px;
 			position: relative;
+			cursor: pointer;
 		}
 
 		:host {
@@ -55,11 +57,23 @@
 	</style>
 
 	<template>
-		<form is="iron-form" method="post" action="/patient">
-			<paper-input id="name" name="name" label="Name" required on-keyup="inputChanged" maxlength="8" char-counter></paper-input>
+		<iron-ajax
+				method="get"
+				handle-as="json"
+				on-response="patientResponse"
+				id="getPatientRequest"></iron-ajax>
+
+		<iron-ajax
+				url="/patient"
+				method="post"
+				handle-as="json"
+				id="postPatientRequest"></iron-ajax>
+
+		<form is="iron-form" method="post" action="/patient" id="patientForm">
+			<paper-input id="patientId" label="Patient id" required on-keyup="inputChanged" maxlength="8" char-counter></paper-input>
 			<slide-panel id="moreInformation">
-				<paper-input id="age" name="age" label="Age" required type="number"></paper-input>
-				<paper-menu>
+				<paper-input id="age" label="Age" required type="number"></paper-input>
+				<paper-menu id="sexMenu">
 					<paper-item>
 						<paper-ripple opacityDecayVelocity="2"></paper-ripple>Male
 					</paper-item>
@@ -69,19 +83,54 @@
 				</paper-menu>
 			</slide-panel>
 
-			<paper-button raised onclick="clickHandler(event)">Submit</paper-button>
+			<paper-button raised on-click="beginDiagnosis">Begin diagnosis</paper-button>
 		</form>
 	</template>
 
 	<script>
 		(function () {
+
+			const PATIENT_URL = "/patient/";
+			var lastRequest = "";
+
 			Polymer({
 				is: "patient-form",
 				inputChanged: function (e) {
 					if (e.target.value.length !== 8) return;
+					if (lastRequest === e.target.value) return;
+					lastRequest = e.target.value;
+					this.$.getPatientRequest.url = PATIENT_URL + lastRequest;
+					this.$.getPatientRequest.generateRequest();
+				},
+				patientResponse: function (e) {
 					this.$.moreInformation.show();
+					if (e.detail.status === 200)
+						fillPatientData(this.$, e.detail.response);
+				},
+				beginDiagnosis: function () {
+					if (!validate(this.$)) return;
+					this.$.postPatientRequest.params = {
+						patientId: this.$.patientId.value,
+						age: this.$.age.value,
+						sex: this.$.sexMenu.selected === 0 ? "Male" : "Female"
+					};
+					this.$.postPatientRequest.generateRequest();
+					console.log("can send to server");
 				}
 			});
+
+			function fillPatientData(element, patient) {
+				element.age.value = patient.age;
+				element.sexMenu.selected = isMale(patient.sex) ? 0 : 1;
+			}
+
+			function isMale(sex) {
+				return sex.toLowerCase() === 'male';
+			}
+
+			function validate(element) {
+				return element.patientForm.validate() && (element.sexMenu.selected === 0 || element.sexMenu.selected === 1);
+			}
 		})();
 	</script>
 
