@@ -8,7 +8,7 @@ public class Application {
 
 	public static void main(String[] args) {
 		externalStaticFileLocation("website/");
-		get("/patient/:id", (request, response) -> "{\"id\":\"" + request.params("id") + "\", \"age\":23, \"sex\":\"Male\"}");
+		get("/patient/:id", (request, response) -> "{\"id\":\"" + request.params("id") + "\", \"age\":23, \"gender\":\"Male\"}");
 		post("/patient", (request, response) -> "OK");
 	}
 }

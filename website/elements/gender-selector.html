@@ -1,0 +1,88 @@
+<dom-module id="gender-selector">
+
+<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html"/>
+<link rel="import" href="../bower_components/paper-menu/paper-menu.html"/>
+<link rel="import" href="../bower_components/paper-item/paper-item.html"/>
+<link rel="import" href="../bower_components/iron-form-element-behavior/iron-form-element-behavior.html"/>
+<link rel="import" href="../bower_components/iron-validatable-behavior/iron-validatable-behavior.html"/>
+<link rel="import" href="../bower_components/iron-validator-behavior/iron-validator-behavior.html"/>
+
+	<style>
+		paper-item {
+			width: calc(49% - 32px);
+			display: inline-block;
+			line-height: 50px;
+			position: relative;
+			cursor: pointer;
+		}
+
+		:host {
+			--paper-menu-selected-item: {
+				 background-color: var(--paper-blue-900);
+				 color: white;
+		    };
+
+			--paper-menu-focused-item: {
+				 background-color: var(--paper-blue-900);
+				 color: white;
+		    };
+		}
+
+		paper-ripple {
+			color: var(--paper-blue-100);
+		}
+	</style>
+
+	<template>
+		<paper-menu id="menu">
+			<paper-item>
+				<paper-ripple opacityDecayVelocity="2"></paper-ripple>Male
+			</paper-item>
+			<paper-item>
+				<paper-ripple opacityDecayVelocity="2"></paper-ripple>Female
+			</paper-item>
+		</paper-menu>
+	</template>
+
+	<script>
+		(function () {
+			const GENDERS = ["Male", "Female"];
+			Polymer({
+				is: "gender-selector",
+
+				properties: {
+					invalid: {
+						notify: true,
+						type: Boolean,
+						value: false
+					}
+				},
+
+				behaviors: [
+					Polymer.IronFormElementBehavior,
+					Polymer.IronValidatableBehavior,
+					Polymer.IronValidatorBehavior
+				],
+
+				attached: function() {
+					this.invalid = true;
+				},
+
+				validate: function() {
+					return this.$.menu.selected === 0 || this.$.menu.selected === 1;
+				},
+
+				gender: function () {
+					return this.$.menu.selected === 0 ? "Male" : "Female";
+				},
+
+				select: function (gender) {
+					if (GENDERS.indexOf(gender.toLowerCase()) < 0) return;
+					this.$.menu.selected = GENDERS.indexOf(gender.toLowerCase());
+					this.invalid = false;
+				}
+			});
+		})();
+	</script>
+
+</dom-module>

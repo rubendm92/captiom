@@ -3,10 +3,8 @@
 	<link rel="import" href="../bower_components/iron-form/iron-form.html"/>
 	<link rel="import" href="../bower_components/paper-input/paper-input.html"/>
 	<link rel="import" href="../bower_components/paper-button/paper-button.html"/>
-	<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html"/>
-	<link rel="import" href="../bower_components/paper-menu/paper-menu.html"/>
-	<link rel="import" href="../bower_components/paper-item/paper-item.html"/>
 	<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html"/>
+	<link rel="import" href="gender-selector.html"/>
 	<link rel="import" href="slide-panel.html"/>
 
 	<style>
@@ -16,33 +14,9 @@
 			margin: auto;
 		}
 
-		paper-item {
-			width: calc(49% - 32px);
-			display: inline-block;
-			line-height: 50px;
-			position: relative;
-			cursor: pointer;
-		}
-
-		:host {
-			--paper-menu-selected-item: {
-				background-color: var(--paper-blue-900);
-				color: white;
-		    };
-
-			--paper-menu-focused-item: {
-				 background-color: var(--paper-blue-900);
-				 color: white;
-		    };
-		}
-
 		paper-button {
 			float: right;
 			margin-top: 40px;
-		}
-
-		paper-ripple {
-			color: var(--paper-blue-100);
 		}
 
 		@media screen and (min-width: 600px) {
@@ -73,14 +47,7 @@
 			<paper-input id="patientId" label="Patient id" required on-keyup="inputChanged" maxlength="8" char-counter></paper-input>
 			<slide-panel id="moreInformation">
 				<paper-input id="age" label="Age" required type="number"></paper-input>
-				<paper-menu id="sexMenu">
-					<paper-item>
-						<paper-ripple opacityDecayVelocity="2"></paper-ripple>Male
-					</paper-item>
-					<paper-item>
-						<paper-ripple opacityDecayVelocity="2"></paper-ripple>Female
-					</paper-item>
-				</paper-menu>
+				<gender-selector id="genderMenu" required></gender-selector>
 			</slide-panel>
 
 			<paper-button raised on-click="beginDiagnosis">Begin diagnosis</paper-button>
@@ -112,7 +79,7 @@
 					this.$.postPatientRequest.params = {
 						patientId: this.$.patientId.value,
 						age: this.$.age.value,
-						sex: this.$.sexMenu.selected === 0 ? "Male" : "Female"
+						gender: this.$.genderMenu.gender()
 					};
 					this.$.postPatientRequest.generateRequest();
 					console.log("can send to server");
@@ -121,15 +88,11 @@
 
 			function fillPatientData(element, patient) {
 				element.age.value = patient.age;
-				element.sexMenu.selected = isMale(patient.sex) ? 0 : 1;
-			}
-
-			function isMale(sex) {
-				return sex.toLowerCase() === 'male';
+				element.genderMenu.select(patient.gender);
 			}
 
 			function validate(element) {
-				return element.patientForm.validate() && (element.sexMenu.selected === 0 || element.sexMenu.selected === 1);
+				return element.patientForm.validate();
 			}
 		})();
 	</script>
