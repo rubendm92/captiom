@@ -22,6 +22,7 @@
     "paper-input": "PolymerElements/paper-input#~1.0.14",
     "paper-item": "PolymerElements/paper-item#~1.0.2",
     "paper-menu": "PolymerElements/paper-menu#~1.1.0",
+    "paper-toolbar": "PolymerElements/paper-toolbar#~1.0.4",
     "polymer": "Polymer/polymer#~1.1.3"
   }
 }
