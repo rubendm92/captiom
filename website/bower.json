@@ -1,28 +1,15 @@
 {
-  "name": "captiom-website",
-  "version": "1.0.0",
-  "authors": [
-    "Rubén Díaz Martínez"
-  ],
-  "license": "ISC",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
+  "name": "polymer-starter-kit",
+  "private": true,
   "dependencies": {
-    "iron-ajax": "PolymerElements/iron-ajax#~1.0.4",
-    "iron-form": "PolymerElements/iron-form#~1.0.9",
-    "iron-validatable-behavior": "PolymerElements/iron-validatable-behavior#~1.0.4",
-    "iron-validator-behavior": "PolymerElements/iron-validator-behavior#~1.0.1",
-    "neon-animation": "PolymerElements/neon-animation#~1.0.6",
-    "paper-button": "PolymerElements/paper-button#~1.0.4",
-    "paper-input": "PolymerElements/paper-input#~1.0.14",
-    "paper-item": "PolymerElements/paper-item#~1.0.2",
-    "paper-menu": "PolymerElements/paper-menu#~1.1.0",
-    "paper-toolbar": "PolymerElements/paper-toolbar#~1.0.4",
-    "polymer": "Polymer/polymer#~1.1.3"
+    "polymer": "Polymer/polymer#^1.1.0",
+    "iron-elements": "PolymerElements/iron-elements#^1.0.0",
+    "paper-elements": "PolymerElements/paper-elements#^1.0.1",
+    "neon-elements": "PolymerElements/neon-elements#^1.0.0",
+    "page": "visionmedia/page.js#~1.6.3"
+  },
+  "devDependencies": {
+    "web-component-tester": "*",
+    "test-fixture": "PolymerElements/test-fixture#^1.0.0"
   }
 }

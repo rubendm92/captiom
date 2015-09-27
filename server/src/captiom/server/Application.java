@@ -7,7 +7,7 @@ import static spark.SparkBase.externalStaticFileLocation;
 public class Application {
 
 	public static void main(String[] args) {
-		externalStaticFileLocation("website/");
+		externalStaticFileLocation("website/dist");
 		get("/patient/:id", (request, response) -> "{\"id\":\"" + request.params("id") + "\", \"age\":23, \"gender\":\"Male\"}");
 		post("/patient", (request, response) -> "OK");
 	}
