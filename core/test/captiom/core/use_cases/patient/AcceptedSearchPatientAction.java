@@ -1,7 +1,6 @@
 package captiom.core.use_cases.patient;
 
 import captiom.core.model.patient.Patient;
-import captiom.core.model.patient.PatientNotFound;
 import captiom.core.model.patient.PatientService;
 import org.junit.Test;
 
@@ -18,15 +17,15 @@ public class AcceptedSearchPatientAction {
 
 	@Test
 	public void should_return_patient_given_patient_id() {
-		Patient patient = action(service("1111", Optional.of(new Patient("1111", of(1992, 6, 22), MALE)))).searchPatient("1111");
+		Patient patient = action(service("1111", Optional.of(new Patient("1111", of(1992, 6, 22), MALE)))).searchPatient("1111").get();
 		assertThat(patient.id, is("1111"));
 		assertThat(patient.dateOfBirth, is(of(1992, 6, 22)));
 		assertThat(patient.gender, is(MALE));
 	}
 
-	@Test(expected = PatientNotFound.class)
+	@Test
 	public void should_throw_patient_not_found_exception_when_patient_is_not_registered() {
-		action(service("1113", Optional.empty())).searchPatient("1113");
+		assertThat(action(service("1113", Optional.empty())).searchPatient("1113").isPresent(), is(false));
 	}
 
 	private SearchPatientAction action(PatientService service) {

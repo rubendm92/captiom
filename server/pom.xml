@@ -35,5 +35,12 @@
         <outputDirectory>../out/production/captiom/server</outputDirectory>
         <testOutputDirectory>../out/test/captiom/server</testOutputDirectory>
         <directory>../out/build/captiom/server</directory>
+        <sourceDirectory>src</sourceDirectory>
+        <testSourceDirectory>test</testSourceDirectory>
+        <resources>
+            <resource>
+                <directory>res</directory>
+            </resource>
+        </resources>
     </build>
 </project>

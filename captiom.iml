@@ -8,6 +8,7 @@
       <excludeFolder url="file://$MODULE_DIR$/out/production/captiom" />
       <excludeFolder url="file://$MODULE_DIR$/out/test/captiom" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
+      <excludeFolder url="file://$MODULE_DIR$/website" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
