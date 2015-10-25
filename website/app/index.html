@@ -24,6 +24,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <!-- build:js bower_components/webcomponentsjs/webcomponents-lite.min.js -->
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="bower_components/cotton-push/PushService.js"></script>
   <!-- endbuild -->
 
   <!-- will be replaced with elements/elements.vulcanized.html -->
@@ -36,60 +37,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </head>
 
 <body unresolved class="fullbleed layout vertical">
-  <span id="browser-sync-binding"></span>
-  <template is="dom-bind" id="app">
-
-    <iron-pages attr-for-selected="data-route" selected="{{route}}">
-
-      <section data-route="home">
-        <paper-toolbar id="mainToolbar">
-          <div class="middle middle-container center horizontal layout">
-            <div class="app-name">Captiom</div>
-          </div>
-        </paper-toolbar>
-        <patient-form></patient-form>
-      </section>
-
-      <section data-route="patient">
-        <paper-drawer-panel id="paperDrawerPanel">
-
-          <paper-header-panel class="flex" drawer fixed>
-
-            <paper-toolbar id="drawerToolbar">
-              <span class="paper-font-title">Patient ID</span>
-            </paper-toolbar>
-
-            <paper-menu class="list" attr-for-selected="data-route" selected="[[route]]">
-              //TODO Test configuration
-            </paper-menu>
-          </paper-header-panel>
-
-          <paper-header-panel main condenses keep-condensed-header>
-
-            <paper-toolbar id="mainToolbar">
-              <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
-              <span class="flex"></span>
-
-              <div class="middle middle-container center horizontal layout">
-                <div class="app-name">Captiom</div>
-              </div>
-            </paper-toolbar>
-
-            <div class="content">
-              <paper-material elevation="1">
-                Hello World!
-              </paper-material>
-            </div>
-          </paper-header-panel>
-        </paper-drawer-panel>
-      </section>
-
-    </iron-pages>
-  </template>
-
-  <!-- build:js scripts/app.js -->
-  <script src="scripts/app.js"></script>
-  <!-- endbuild-->
+  <captiom-app></captiom-app>
 </body>
 
 </html>

@@ -19,7 +19,7 @@
     "unwrap": true,
     "Polymer": true,
     "Platform": true,
-    "page": true,
-    "app": true
+    "PushService": true,
+    "CottonBehaviors": true
   }
 }
