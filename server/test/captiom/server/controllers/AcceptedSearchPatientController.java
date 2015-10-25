@@ -26,7 +26,7 @@ public class AcceptedSearchPatientController {
 
 		Object serializedPatient = controller.handle(request(patientId), response);
 
-		assertThat(serializedPatient, is("{\"id\":\"1\",\"birth\":709167600,\"gender\":\"Male\"}"));
+		assertThat(serializedPatient, is("{\"id\":\"1\",\"birth\":709171200,\"gender\":\"Male\"}"));
 		verify(response).status(200);
 	}
 
