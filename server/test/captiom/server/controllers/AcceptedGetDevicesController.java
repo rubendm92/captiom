@@ -30,14 +30,14 @@ public class AcceptedGetDevicesController {
 	}
 
 	private Device firstDevice() {
-		return new Device("1").height(new Height(1080, 0.06791)).notificationId("11").modelName("Device 1");
+		return new Device("1").height(new Height(1080, 0.06791)).modelName("Device 1");
 	}
 
 	private Device secondDevice() {
-		return new Device("2").height(new Height(720, 0.04591)).notificationId("1123").modelName("Device 2");
+		return new Device("2").height(new Height(720, 0.04591)).modelName("Device 2");
 	}
 
 	private String expectedDeviceList() {
-		return "[{\"id\":\"1\",\"modelName\":\"Device 1\"},{\"id\":\"2\",\"modelName\":\"Device 2\"}]";
+		return "[{\"id\":\"1\",\"model\":\"Device 1\"},{\"id\":\"2\",\"model\":\"Device 2\"}]";
 	}
 }

@@ -1,15 +1,7 @@
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 
 <dom-module id="captiom-app">
   <template>
@@ -65,8 +57,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin-left: 48px;
       }
 
-      /* Breakpoints */
-
       /* Small */
       @media (max-width: 600px) {
 
@@ -82,10 +72,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           border-right: 1px solid rgba(0, 0, 0, 0.14);
         }
 
-        patient-form {
-          padding: 48px 62px;
+        patient-form, device-configuration {
+          padding: 48px 128px;
         }
-
       }
     </style>
 
@@ -105,14 +94,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </section>
 
       <section>
+        <paper-header-panel main condenses keep-condensed-header>
+
+          <paper-toolbar id="mainToolbar">
+            <paper-icon-button icon="icons:arrow-back" on-tap="_back"></paper-icon-button>
+            <span class="flex"></span>
+            <div class="middle middle-container center horizontal layout">
+              <div class="app-name">Captiom</div>
+            </div>
+          </paper-toolbar>
+        </paper-header-panel>
+        <device-configuration></device-configuration>
+      </section>
+
+      <section>
         <paper-drawer-panel id="paperDrawerPanel">
           <paper-header-panel class="flex" drawer fixed>
             <paper-toolbar id="drawerToolbar">
+              <paper-icon-button icon="icons:arrow-back" on-tap="_back"></paper-icon-button>
               <span class="paper-font-title">Patient ID</span>
             </paper-toolbar>
-            <paper-menu class="list">
-                //TODO Test configuration
-            </paper-menu>
+            <test-configuration></test-configuration>
           </paper-header-panel>
 
           <paper-header-panel main condenses keep-condensed-header>
@@ -144,16 +146,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ready: function() {
         PushService.openConnection('ws://localhost:8081');
         this.when('ShowHome').execute(() => this._showHome());
+        this.when('ShowSetupDevice').execute(() => this._showSetupDevice());
         this.when('ShowPatient').execute(() => this._showPatient());
         this._showHome();
+      },
+
+      _back: function () {
+        this._show(this.querySelector('iron-pages').selected - 1);
       },
 
       _showHome: function() {
         this._show('0');
       },
 
-      _showPatient: function () {
+      _showSetupDevice: function () {
         this._show('1');
+      },
+
+      _showPatient: function () {
+        this._show('2');
       },
 
       _show: function (page) {

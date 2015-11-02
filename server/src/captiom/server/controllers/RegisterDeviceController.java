@@ -5,9 +5,8 @@ import captiom.core.model.device.Height;
 import captiom.core.use_cases.device.RegisterDeviceAction;
 import spark.Request;
 import spark.Response;
-import spark.Route;
 
-public class RegisterDeviceController implements Route {
+public class RegisterDeviceController implements Controller {
 
 	private final RegisterDeviceAction action;
 
@@ -23,8 +22,7 @@ public class RegisterDeviceController implements Route {
 	}
 
 	private Device buildDevice(Request request) {
-		return new Device().height(buildHeight(request))
-				.notificationId(request.queryParams("notificationId"));
+		return new Device(request.queryParams("notificationId")).height(buildHeight(request));
 	}
 
 	private Height buildHeight(Request request) {

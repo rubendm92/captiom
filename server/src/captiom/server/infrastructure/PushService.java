@@ -13,6 +13,7 @@ import java.util.List;
 public class PushService extends WebSocketServer {
 
 	private final List<ConnectionOpened> connectionOpenedListeners = new ArrayList<>();
+	private final JsonParser parser = new JsonParser();
 
 	public PushService(int port) {
 		super(new InetSocketAddress(port));
@@ -51,8 +52,8 @@ public class PushService extends WebSocketServer {
 
 	private String serialize(String title, String content) {
 		JsonObject object = new JsonObject();
-		object.addProperty("title", title);
-		object.add("content", new JsonParser().parse(content));
+		object.addProperty("name", title);
+		object.add("content", parser.parse(content));
 		return object.toString();
 	}
 

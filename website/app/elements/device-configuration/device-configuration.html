@@ -1,0 +1,116 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+
+<dom-module id="device-configuration">
+  <style>
+    :host {
+      display: block;
+    }
+
+    form > div {
+      max-height: 100px;
+      overflow-y: auto;
+    }
+
+    iron-selector > div {
+      cursor: pointer;
+      padding: 5px;
+    }
+
+    .iron-selected {
+      background-color: var(--dark-primary-color);
+      color: white;
+    }
+
+    paper-button {
+      float: right;
+      margin-top: 40px;
+    }
+
+    .device-label {
+      font-size: 13px;
+      color: var(--secondary-text-color);
+      font-family: 'Roboto', 'Noto', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      font-weight: 400;
+      line-height: 24px;
+    }
+
+    paper-icon-button {
+      position: absolute;
+      top: 17vh;
+      left: 7vh;
+    }
+
+    @media screen and (min-width: 600px) {
+      paper-button {
+        margin-top: 20px;
+      }
+    }
+  </style>
+  <template>
+
+    <iron-ajax
+        auto
+        url="/devices"
+        method="get"
+        handle-as="json"
+        last-response="{{devices}}"></iron-ajax>
+
+      <iron-ajax
+          url="/device"
+          method="post"
+          content-type="application/json"
+          id="setupDeviceRequest"></iron-ajax>
+
+    <form is="iron-form" method="post" action="/device" id="deviceConfiguration">
+      <label class="device-label">Device</label>
+      <div>
+        <iron-selector attr-for-selected="name" id="deviceSelector">
+          <template is="dom-repeat" items="{{devices}}">
+            <div name="{{item.id}}">{{item.model}}</div>
+          </template>
+        </iron-selector>
+      </div>
+
+      <paper-input-container>
+        <label>Diopters</label>
+        <input is="iron-input" type="number" id="diopters" autocomplete="off">
+      </paper-input-container>
+      <paper-input-container>
+        <label>Distance (mm)</label>
+        <input is="iron-input" type="number" id="distance" autocomplete="off">
+      </paper-input-container>
+
+       <paper-button raised on-click="_beginDiagnosis">Begin diagnosis</paper-button>
+   </form>
+
+  </template>
+  <script>
+  (() => {
+    'use strict';
+
+    Polymer({
+      is: 'device-configuration',
+
+      properties: {
+        devices: Array,
+        diopters: Number,
+        distance: Number
+      },
+
+      _beginDiagnosis: function () {
+        this.$.setupDeviceRequest.body = {
+          device: this.$.deviceSelector.selected,
+          diopters: this.$.diopters.value,
+          distance: this.$.distance.value,
+          operation: 'setup'
+        };
+        this.$.setupDeviceRequest.generateRequest();
+      }
+    });
+  })();
+  </script>
+</dom-module>

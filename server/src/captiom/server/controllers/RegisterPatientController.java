@@ -3,17 +3,13 @@ package captiom.server.controllers;
 import captiom.core.model.patient.Gender;
 import captiom.core.model.patient.Patient;
 import captiom.core.use_cases.patient.RegisterPatientAction;
-import captiom.server.infrastructure.PatientSerializer;
 import captiom.server.infrastructure.PushService;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import spark.Request;
 import spark.Response;
-import spark.Route;
 
-import java.time.LocalDateTime;
-
-import static java.time.ZoneOffset.UTC;
-
-public class RegisterPatientController implements Route {
+public class RegisterPatientController implements Controller {
 
 	private final RegisterPatientAction action;
 	private final PushService pushService;
@@ -25,18 +21,14 @@ public class RegisterPatientController implements Route {
 
 	@Override
 	public Object handle(Request request, Response response) throws Exception {
-		Patient patient = buildPatient(request);
+		Patient patient = buildPatient(GSON.fromJson(request.body(), JsonElement.class).getAsJsonObject());
 		action.register(patient);
-		pushService.notify("ShowPatient", new PatientSerializer().serialize(patient).toString());
+		pushService.notify("ShowSetupDevice");
 		response.status(200);
 		return "OK";
 	}
 
-	private Patient buildPatient(Request request) {
-		return new Patient(request.queryParams("patientId"), toDateTime(request.queryParams("birth")).toLocalDate(), Gender.valueOf(request.queryParams("gender").toUpperCase()));
-	}
-
-	private LocalDateTime toDateTime(String birth) {
-		return LocalDateTime.ofEpochSecond(Long.valueOf(birth), 0, UTC);
+	private Patient buildPatient(JsonObject object) {
+		return new Patient(object.get("patientId").getAsString(), object.get("age").getAsInt(), Gender.valueOf(object.get("gender").getAsString().toUpperCase()));
 	}
 }

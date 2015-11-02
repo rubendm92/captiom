@@ -1,0 +1,51 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="test-configuration">
+  <template>
+    <style>
+      :host {
+        display: block;
+        padding: 0 15px;
+        --paper-dropdown-menu-button: {
+          padding: 0;
+          width: 100%;
+        };
+      }
+
+      paper-dropdown-menu {
+        width: 100%;
+      }
+
+      @media (max-width: 600px) {
+
+        paper-menu {
+          width: 150px;
+        }
+      }
+
+      @media (min-width: 601px) {
+
+        paper-menu {
+          width: 226px;
+        }
+      }
+    </style>
+    <paper-dropdown-menu label="Device">
+      <paper-menu class="dropdown-content">
+        <paper-item>Nexus 5</paper-item>
+        <paper-item>LG G2</paper-item>
+      </paper-menu>
+    </paper-dropdown-menu>
+    <paper-input label="Diopters" type="number"></paper-input>
+    <paper-input label="Distance" type="number"></paper-input>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'test-configuration'
+    });
+  })();
+  </script>
+</dom-module>

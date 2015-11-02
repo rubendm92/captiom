@@ -24,14 +24,12 @@ public class AcceptedRegisterPatientController {
 		assertThat(controller.handle(request, response), is("OK"));
 
 		verify(response).status(200);
-		verify(pushService).notify("ShowPatient", "{\"id\":\"111\",\"birth\":709171200,\"gender\":\"Male\"}");
+		verify(pushService).notify("ShowSetupDevice");
 	}
 
 	private Request requestWithPatientData() {
 		Request request = mock(Request.class);
-		when(request.queryParams("patientId")).thenReturn("111");
-		when(request.queryParams("birth")).thenReturn("709171200");
-		when(request.queryParams("gender")).thenReturn("male");
+		when(request.body()).thenReturn("{\"patientId\":\"111\",\"age\":\"22\",\"gender\":\"male\"}");
 		return request;
 	}
 }

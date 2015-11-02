@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface DeviceRepository {
 
-	Device save(Device device);
+	void save(Device device);
 	List<Device> all();
 }

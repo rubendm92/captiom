@@ -6,9 +6,8 @@ import captiom.core.use_cases.device.RefreshCharacterAction;
 import captiom.server.infrastructure.OptotypeCharacterMapper;
 import spark.Request;
 import spark.Response;
-import spark.Route;
 
-public class RefreshDeviceController implements Route {
+public class RefreshDeviceController implements Controller {
 
 	private final RefreshCharacterAction action;
 

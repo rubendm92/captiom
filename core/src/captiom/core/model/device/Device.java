@@ -2,13 +2,9 @@ package captiom.core.model.device;
 
 public class Device {
 
-	private String id;
+	private final String id;
 	private Height height;
-	private String notificationId;
 	private String modelName;
-
-	public Device() {
-	}
 
 	public Device(String id) {
 		this.id = id;
@@ -16,11 +12,6 @@ public class Device {
 
 	public Device height(Height height) {
 		this.height = height;
-		return this;
-	}
-
-	public Device notificationId(String notificationId) {
-		this.notificationId = notificationId;
 		return this;
 	}
 
