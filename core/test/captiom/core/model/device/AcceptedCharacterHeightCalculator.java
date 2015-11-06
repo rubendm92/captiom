@@ -25,6 +25,7 @@ public class AcceptedCharacterHeightCalculator {
 	@Test
 	public void should_calculate_range_of_measurable_values_for_device_with_lenses_and_distance() {
 		CharacterHeightCalculator.Range range = configuredCalculator().range();
+
 		assertThat(range.min, closeTo(4.88, 0.1));
 		assertThat(range.max, closeTo(743, 0.1));
 	}

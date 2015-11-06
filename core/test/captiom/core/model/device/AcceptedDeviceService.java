@@ -14,7 +14,9 @@ public class AcceptedDeviceService {
 		Device device = new Device("11").height(new Height(1080, 0.06917));
 		DeviceRepository repository = mock(DeviceRepository.class);
 		DeviceService service = new DeviceService(repository, notifier());
+
 		service.register(device);
+
 		verify(repository).save(device);
 	}
 

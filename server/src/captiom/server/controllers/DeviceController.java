@@ -19,7 +19,11 @@ public class DeviceController implements Controller {
 
 	@Override
 	public Object handle(Request request, Response response) throws Exception {
-		return controllers.getOrDefault(operation(request), defaultController).handle(request, response);
+		return controller(operation(request)).handle(request, response);
+	}
+
+	private Controller controller(String operation) {
+		return controllers.getOrDefault(operation, defaultController);
 	}
 
 	private String operation(Request request) {

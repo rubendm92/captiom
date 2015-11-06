@@ -14,7 +14,9 @@ public class AcceptedRegisterPatientAction {
 	public void should_save_patient() {
 		PatientService service = mock(PatientService.class);
 		RegisterPatientAction action = new RegisterPatientAction(service);
+
 		action.register(new Patient("1111", 23, MALE));
+
 		verify(service).save(new Patient("1111", 23, MALE));
 	}
 }

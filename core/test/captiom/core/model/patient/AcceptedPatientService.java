@@ -10,12 +10,12 @@ public class AcceptedPatientService {
 
 	@Test
 	public void should_save_patient_into_repository() {
-		String patientId = "4444";
-		Patient patient = new Patient(patientId, 23, Gender.MALE);
+		Patient patient = new Patient("4444", 23, Gender.MALE);
 		PatientRepository repository = mock(PatientRepository.class);
 
 		PatientService service = new PatientService(repository);
 		service.save(patient);
+
 		verify(repository).save(patient);
 	}
 }

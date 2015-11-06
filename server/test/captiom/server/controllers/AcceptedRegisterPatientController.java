@@ -1,30 +1,32 @@
 package captiom.server.controllers;
 
-import captiom.core.use_cases.patient.RegisterPatientAction;
-import captiom.server.infrastructure.PushService;
+import captiom.core.model.patient.Gender;
+import captiom.core.model.patient.Patient;
+import captiom.server.displays.PatientFormDisplay;
+import captiom.server.infrastructure.DisplayService;
 import org.junit.Test;
 import spark.Request;
 import spark.Response;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class AcceptedRegisterPatientController {
 
 	@Test
-	public void should_save_patient_and_notify_show_patient_with_data() throws Exception {
-		PushService pushService = mock(PushService.class);
-		RegisterPatientController controller = new RegisterPatientController(mock(RegisterPatientAction.class), pushService);
+	public void should_save_patient() throws Exception {
+		DisplayService displayService = mock(DisplayService.class);
+		PatientFormDisplay patientFormDisplay = mock(PatientFormDisplay.class);
+		when(displayService.display(PatientFormDisplay.class)).thenReturn(patientFormDisplay);
+		RegisterPatientController controller = new RegisterPatientController(displayService);
 		Request request = requestWithPatientData();
 		Response response = mock(Response.class);
 
 		assertThat(controller.handle(request, response), is("OK"));
 
 		verify(response).status(200);
-		verify(pushService).notify("ShowSetupDevice");
+		verify(patientFormDisplay).patient(new Patient("111", 22, Gender.MALE));
 	}
 
 	private Request requestWithPatientData() {
