@@ -13,7 +13,7 @@ public class AcceptedDeviceConfigurationDisplay {
 	@Test
 	public void should_notify_via_push_to_device_configuration() {
 		PushService pushService = mock(PushService.class);
-		DeviceConfigurationDisplay display = new DeviceConfigurationDisplay(services(pushService));
+		DeviceDisplay display = new DeviceDisplay(services(pushService));
 		display.show();
 		verify(pushService).notify("DeviceConfiguration");
 	}

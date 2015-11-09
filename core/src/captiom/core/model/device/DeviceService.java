@@ -26,4 +26,8 @@ public class DeviceService {
 	public List<Device> all() {
 		return repository.all();
 	}
+
+	public Device get(String deviceId) {
+		return repository.get(deviceId);
+	}
 }

@@ -14,6 +14,7 @@ public class PatientFormDisplay implements Display {
 	private final Services services;
 	private final RegisterPatientAction action;
 	private final List<PatientRegistered> listeners = new ArrayList<>();
+	private Patient patient;
 
 	public PatientFormDisplay(Services services) {
 		this.services = services;
@@ -26,6 +27,7 @@ public class PatientFormDisplay implements Display {
 	}
 
 	public void patient(Patient patient) {
+		this.patient = patient;
 		action.register(patient);
 		listeners.stream().forEach(PatientRegistered::registered);
 	}
@@ -38,6 +40,10 @@ public class PatientFormDisplay implements Display {
 		JsonObject object = new JsonObject();
 		object.addProperty("patientIdLength", PATIENT_ID_LENGTH);
 		return object.toString();
+	}
+
+	public Patient patient() {
+		return patient;
 	}
 
 	@FunctionalInterface

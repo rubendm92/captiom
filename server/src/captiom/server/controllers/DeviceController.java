@@ -1,5 +1,7 @@
 package captiom.server.controllers;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import spark.Request;
 import spark.Response;
 
@@ -10,11 +12,13 @@ public class DeviceController implements Controller {
 
 	private final Map<String, Controller> controllers = new HashMap<>();
 	private final Controller defaultController;
+	private final Gson gson;
 
 	public DeviceController(RegisterDeviceController registerDeviceController, ConfigureDeviceController configureDeviceController) {
 		controllers.put("register", registerDeviceController);
 		controllers.put("configure", configureDeviceController);
 		defaultController = (request, response) -> null;
+		gson = new Gson();
 	}
 
 	@Override
@@ -27,6 +31,7 @@ public class DeviceController implements Controller {
 	}
 
 	private String operation(Request request) {
-		return request.queryParams("operation").toLowerCase();
+		JsonObject object = gson.fromJson(request.body(), JsonObject.class);
+		return object.get("operation").getAsString().toLowerCase();
 	}
 }

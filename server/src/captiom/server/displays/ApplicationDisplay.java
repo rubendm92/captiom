@@ -9,21 +9,38 @@ public class ApplicationDisplay implements Display {
 	public ApplicationDisplay(Services services) {
 		this.services = services;
 		services.displayService().register(new PatientFormDisplay(services));
-		patientFormDisplay(services).onPatientRegistered(this::showDeviceConfiguration);
+		patientFormDisplay().onPatientRegistered(this::showDeviceConfiguration);
 		show();
 	}
 
 	@Override
 	public void show() {
-		patientFormDisplay(services).show();
+		patientFormDisplay().show();
 	}
 
 	private void showDeviceConfiguration() {
-		services.displayService().register(new DeviceConfigurationDisplay(services));
-		services.displayService().display(DeviceConfigurationDisplay.class).show();
+		services.displayService().register(new DeviceDisplay(services));
+		deviceDisplay().show();
+		deviceDisplay().onDeviceSelected(this::showTest);
 	}
 
-	private PatientFormDisplay patientFormDisplay(Services services) {
-		return services.displayService().display(PatientFormDisplay.class);
+	private void showTest() {
+		services.displayService().register(new TestDisplay(patientFormDisplay().patient(), deviceDisplay().testRangeForCurrentDevice(), services));
+		testDisplay().show();
+	}
+
+	private PatientFormDisplay patientFormDisplay() {
+		return display(PatientFormDisplay.class);
+	}
+
+	private DeviceDisplay deviceDisplay() {
+		return display(DeviceDisplay.class);
+
+	}private TestDisplay testDisplay() {
+		return display(TestDisplay.class);
+	}
+
+	private <T extends Display> T display(Class<T> type) {
+		return services.displayService().display(type);
 	}
 }

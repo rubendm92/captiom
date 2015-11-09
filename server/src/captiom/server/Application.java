@@ -3,6 +3,7 @@ package captiom.server;
 import captiom.core.infrastructure.device.DeviceRepository;
 import captiom.core.model.device.Device;
 import captiom.core.model.device.DeviceService;
+import captiom.core.model.device.Height;
 import captiom.core.model.patient.PatientService;
 import captiom.core.use_cases.device.GetDevicesAction;
 import captiom.core.use_cases.device.RegisterDeviceAction;
@@ -31,7 +32,7 @@ public class Application {
 
 		post("/patient", new RegisterPatientController(services.displayService()));
 		get("/devices", new GetDevicesController(getDevicesAction));
-		post("/device", new DeviceController(new RegisterDeviceController(registerDeviceAction), new ConfigureDeviceController()));
+		post("/device", new DeviceController(new RegisterDeviceController(registerDeviceAction), new ConfigureDeviceController(services.displayService())));
 	}
 
 	private static Services services(PushService pushService, DisplayService displayService) {
@@ -76,6 +77,11 @@ public class Application {
 			@Override
 			public List<Device> all() {
 				return asList(new Device("1").modelName("Nexus 5"), new Device("2").modelName("LG G2"), new Device("3").modelName("Nexus 5X"), new Device("4").modelName("LG G2"), new Device("5").modelName("Nexus 5X"));
+			}
+
+			@Override
+			public Device get(String deviceId) {
+				return new Device("1").modelName("Nexus 5").height(new Height(1080, 0.06917));
 			}
 		}, null);
 	}

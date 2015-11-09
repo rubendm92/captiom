@@ -40,7 +40,7 @@ public class AcceptedDeviceController {
 
 	private Request request(String operation) {
 		Request request = mock(Request.class);
-		when(request.queryParams("operation")).thenReturn(operation);
+		when(request.body()).thenReturn("{\"operation\":\"" + operation + "\"}");
 		return request;
 	}
 }
