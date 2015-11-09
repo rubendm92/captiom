@@ -7,6 +7,7 @@
 
 <dom-module id="patient-form">
   <template>
+    <style include="shared-styles"></style>
     <style>
 
       :host {
@@ -33,7 +34,7 @@
         id="postPatientRequest"></iron-ajax>
 
     <form is="iron-form" method="post" action="/patient" id="patientForm">
-      <paper-input label="Patient id" required maxlength="8" char-counter value="{{patientId}}"></paper-input>
+      <paper-input id="patientIdInput" label="Patient id" required char-counter value="{{patientId}}"></paper-input>
       <paper-input-container>
         <label>Age</label>
         <input is="iron-input" type="number" id="age" autocomplete="off">
@@ -51,6 +52,13 @@
     Polymer({
       is: 'patient-form',
 
+      properties: {
+        configuration: {
+          type: Object,
+          observer: '_configure'
+        }
+      },
+
       beginDiagnosis: function () {
         if (!this._validate(this.$)) {
           return;
@@ -61,6 +69,14 @@
   				gender: this.querySelector('gender-selector').gender()
   			};
   			this.$.postPatientRequest.generateRequest();
+      },
+
+      _configure: function () {
+        if (!this.configuration) {
+          return;
+        }
+        this.$.patientIdInput.maxlength = this.configuration.patientIdLength;
+        this.$.patientIdInput.minlength = this.configuration.patientIdLength;
       },
 
       _validate: function (element) {

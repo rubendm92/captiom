@@ -3,6 +3,7 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 
 <dom-module id="device-configuration">
+  <style include="shared-styles"></style>
   <style>
     :host {
       display: block;
@@ -103,10 +104,10 @@
 
       _beginDiagnosis: function () {
         this.$.setupDeviceRequest.body = {
-          device: this.$.deviceSelector.selected,
+          deviceId: this.$.deviceSelector.selected,
           diopters: this.$.diopters.value,
           distance: this.$.distance.value,
-          operation: 'setup'
+          operation: 'configure'
         };
         this.$.setupDeviceRequest.generateRequest();
       }

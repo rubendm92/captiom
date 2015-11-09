@@ -112,9 +112,9 @@
           <paper-header-panel class="flex" drawer fixed>
             <paper-toolbar id="drawerToolbar">
               <paper-icon-button icon="icons:arrow-back" on-tap="_back"></paper-icon-button>
-              <span class="paper-font-title">Patient ID</span>
+              <span class="paper-font-title">{{patientId}}</span>
             </paper-toolbar>
-            <test-configuration></test-configuration>
+            <h3>//TODO</h3>
           </paper-header-panel>
 
           <paper-header-panel main condenses keep-condensed-header>
@@ -128,7 +128,7 @@
               </div>
             </paper-toolbar>
 
-            <h3>//TODO</h3>
+            <test-configuration></test-configuration>
           </paper-header-panel>
         </paper-drawer-panel>
       </section>
@@ -143,28 +143,34 @@
       is: 'captiom-app',
       behaviors: [CottonBehaviors.PushBehavior],
 
+      properties: {
+        patientId: String
+      },
+
       ready: function() {
         PushService.openConnection('ws://localhost:8081');
-        this.when('ShowHome').execute(() => this._showHome());
-        this.when('ShowSetupDevice').execute(() => this._showSetupDevice());
-        this.when('ShowPatient').execute(() => this._showPatient());
-        this._showHome();
+        this.when('PatientForm').execute(configuration => this._showHome(configuration));
+        this.when('DeviceConfiguration').execute(() => this._showSetupDevice());
+        this.when('Test').execute(configuration => this._showTest(configuration));
       },
 
       _back: function () {
         this._show(this.querySelector('iron-pages').selected - 1);
       },
 
-      _showHome: function() {
+      _showHome: function(configuration) {
         this._show('0');
+        this.querySelector('patient-form').configuration = configuration;
       },
 
       _showSetupDevice: function () {
         this._show('1');
       },
 
-      _showPatient: function () {
+      _showTest: function (configuration) {
         this._show('2');
+        this.patientId = configuration.patientId;
+        this.querySelector('test-configuration').configure(configuration.deviceRange);
       },
 
       _show: function (page) {
