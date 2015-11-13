@@ -1,0 +1,44 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+
+<dom-module id="optotype-character">
+  <style is="custom-style" include="shared-styles"></style>
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+  <template>
+    <canvas id="canvas" width="200" height="200"></canvas>
+  </template>
+  <script>
+  (() => {
+    'use strict';
+
+    Polymer({
+      is: 'optotype-character',
+
+      properties: {
+        character: String
+      },
+
+      attached: function () {
+        var context = this.$.canvas.getContext('2d');
+    		this._drawBackground(context);
+    		this._drawCharacter(context, this.character);
+      },
+
+      _drawBackground: function(context) {
+        context.fillStyle = '#ffffff';
+    		context.fillRect(0, 0, 200, 200);
+      },
+
+      _drawCharacter: function(context, character) {
+        context.fillStyle = '#000000';
+        context.font = 'normal 100pt Optotypes';
+        context.fillText(character, 5, 150);
+      }
+    });
+  })();
+  </script>
+</dom-module>

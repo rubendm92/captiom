@@ -10,9 +10,28 @@
     paper-slider {
       width: 100%;
     }
+
+    ul {
+    	width: auto;
+    	margin-left: auto;
+    	margin-right: auto;
+    	overflow: auto;
+    	list-style: none
+    }
+
+  	li {
+  		float: left;
+  		margin: 30px;
+  		border: 1px solid #bfbfbf;
+    }
   </style>
   <template>
     <paper-slider min="{{range.min}}" max="{{range.max}}" pin></paper-slider>
+    <ul>
+      <template is="dom-repeat" items="{{characters}}">
+        <li><optotype-character character="{{item}}"></optotype-character></li>
+      </template>
+    </ul>
   </template>
   <script>
   (() => {
@@ -22,11 +41,13 @@
       is: 'test-configuration',
 
       properties: {
-        range: Object
+        range: Object,
+        characters: Array
       },
 
-      configure: function (range) {
-        this.range = range;
+      configure: function (configuration) {
+        this.range = configuration.deviceRange;
+        this.characters = configuration.characters;
       }
     });
   })();
