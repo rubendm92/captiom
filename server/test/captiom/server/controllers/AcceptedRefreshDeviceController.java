@@ -3,12 +3,12 @@ package captiom.server.controllers;
 import captiom.core.infrastructure.device.DeviceNotifier;
 import captiom.core.model.device.DeviceService;
 import captiom.core.model.device.Eye;
+import captiom.core.model.device.OptotypeCharacter;
 import captiom.core.use_cases.device.RefreshCharacterAction;
 import org.junit.Test;
 import spark.Request;
 import spark.Response;
 
-import static captiom.core.model.device.OptotypeCharacter.Snellen;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
@@ -27,7 +27,7 @@ public class AcceptedRefreshDeviceController {
 		assertThat(controller.handle(request(deviceId), response), is("OK"));
 		verify(response).status(200);
 		verify(service).using(deviceId);
-		verify(link).drawChar(Snellen.OPENS_UP, 300, Eye.LEFT);
+		verify(link).drawChar(OptotypeCharacter.TumblingE.OPENS_UP, 300, Eye.LEFT);
 	}
 
 	private Request request(String deviceId) {

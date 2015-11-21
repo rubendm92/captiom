@@ -3,7 +3,7 @@ package captiom.core.use_cases.device;
 import captiom.core.infrastructure.device.DeviceNotifier;
 import captiom.core.model.device.DeviceService;
 import captiom.core.model.device.Eye;
-import captiom.core.model.device.OptotypeCharacter.Snellen;
+import captiom.core.model.device.OptotypeCharacter.TumblingE;
 import org.junit.Test;
 
 import static org.mockito.Mockito.*;
@@ -18,9 +18,9 @@ public class AcceptedRefreshCharacterAction {
 		when(service.using(deviceId)).thenReturn(link);
 		RefreshCharacterAction action = new RefreshCharacterAction(service);
 
-		action.using(deviceId).show(Snellen.OPENS_UP).withDetail(320).in(Eye.LEFT);
+		action.using(deviceId).show(TumblingE.OPENS_UP).withDetail(320).in(Eye.LEFT);
 
 		verify(service).using(deviceId);
-		verify(link).drawChar(Snellen.OPENS_UP, 320, Eye.LEFT);
+		verify(link).drawChar(TumblingE.OPENS_UP, 320, Eye.LEFT);
 	}
 }
