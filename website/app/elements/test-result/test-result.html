@@ -1,0 +1,84 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+
+<dom-module id="test-result">
+  <style>
+    :host {
+      display: block;
+      height: 100%;
+      @apply(--layout-vertical);
+    }
+
+    h3 {
+      margin: 0;
+      padding: 15px;
+      padding-left: 30px;
+      font-weight: normal;
+      border-bottom: 1px solid var(--divider-color);
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      @apply(--layout-flex);
+      overflow: auto;
+    }
+
+    ul li {
+      padding: 5px 10px;
+    }
+
+    div {
+      width: 100%;
+    }
+
+    paper-button {
+      width: 45%;
+    }
+  </style>
+  <template>
+    <h3>[[date]]</h3>
+    <ul>
+      <template is="dom-repeat" items="{{cases}}">
+        <li><test-case character="{{item}}"></test-case></li>
+      </template>
+    </ul>
+    <div>
+      <paper-button on-tap="_suggest">Suggest</paper-button>
+      <paper-button on-tap="_notifyFinish">Finish</paper-button>
+    </div>
+  </template>
+  <script>
+  (() => {
+    'use strict';
+
+    Polymer({
+      is: 'test-result',
+
+      properties: {
+        date: String,
+        cases: Array
+      },
+
+      ready: function () {
+        this.date = this._formattedDate(new Date());
+      },
+
+      _formattedDate: function (date) {
+        return date.toLocaleString('es').substring(0, date.toLocaleString('es').indexOf(' '));
+      },
+
+      _suggest: function () {
+
+      },
+
+      _notifyFinish: function () {
+        this.fire('finish');
+      }
+    });
+  })();
+  </script>
+</dom-module>
