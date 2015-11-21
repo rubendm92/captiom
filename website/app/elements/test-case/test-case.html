@@ -1,0 +1,63 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<dom-module id="test-case">
+  <style is="custom-style" include="shared-styles"></style>
+  <style>
+
+    :host {
+      @apply(--layout-horizontal);
+    }
+
+    span {
+      font-family: 'Optotypes';
+    }
+
+    span.space {
+      @apply(--layout-flex);
+    }
+
+    paper-icon-button.correct {
+      color: green;
+    }
+
+    paper-icon-button.wrong {
+      color: red;
+    }
+  </style>
+  <template>
+    <span>[[character]]</span>
+    <span class="space"></span>
+    <div>
+      <paper-icon-button icon="done" class="correct" on-tap="_rightAnswer"></paper-icon-button>
+      <paper-icon-button icon="clear" class="wrong" on-tap="_wrongAnswer"></paper-icon-button>
+    </div>
+  </template>
+  <script>
+  (() => {
+    'use strict';
+
+    Polymer({
+      is: 'test-case',
+
+      properties: {
+        character: String
+      },
+
+      _rightAnswer: function () {
+        this._hideIcon('.wrong');
+      },
+
+      _wrongAnswer: function () {
+        this._hideIcon('.correct');
+      },
+
+      _hideIcon: function (icon) {
+        this.querySelector(icon).setAttribute('hidden', '');
+      }
+    });
+  })();
+  </script>
+</dom-module>
