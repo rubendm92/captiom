@@ -8,7 +8,10 @@
     "neon-animation": "PolymerElements/neon-animation#^1.0.7",
     "cotton-push": "https://bitbucket.org/cottons/cotton-push.git",
     "iron-list": "PolymerElements/iron-list#~1.1.5",
-    "iron-selector": "PolymerElements/iron-selector#~1.0.8"
+    "iron-selector": "PolymerElements/iron-selector#~1.0.8",
+    "paper-scroll-header-panel": "PolymerElements/paper-scroll-header-panel#~1.0.10",
+    "paper-menu": "PolymerElements/paper-menu#~1.1.1",
+    "paper-item": "PolymerElements/paper-item#~1.0.7"
   },
   "devDependencies": {
     "web-component-tester": "*",
