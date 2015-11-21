@@ -106,8 +106,7 @@
         this.$.setupDeviceRequest.body = {
           deviceId: this.$.deviceSelector.selected,
           diopters: this.$.diopters.value,
-          distance: this.$.distance.value,
-          operation: 'configure'
+          distance: this.$.distance.value
         };
         this.$.setupDeviceRequest.generateRequest();
       }
