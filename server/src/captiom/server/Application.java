@@ -5,6 +5,7 @@ import captiom.core.model.device.Device;
 import captiom.core.model.device.DeviceService;
 import captiom.core.model.device.Height;
 import captiom.core.model.patient.PatientService;
+import captiom.core.model.test.TestService;
 import captiom.core.use_cases.device.GetDevicesAction;
 import captiom.core.use_cases.device.RegisterDeviceAction;
 import captiom.server.controllers.*;
@@ -40,10 +41,16 @@ public class Application {
 
 			private final PatientService patientService = createPatientService();
 			private final DeviceService deviceService = createDeviceService();
+			private final TestService testService = new TestService();
 
 			@Override
 			public PushService pushService() {
 				return pushService;
+			}
+
+			@Override
+			public DisplayService displayService() {
+				return displayService;
 			}
 
 			@Override
@@ -57,8 +64,8 @@ public class Application {
 			}
 
 			@Override
-			public DisplayService displayService() {
-				return displayService;
+			public TestService testService() {
+				return testService;
 			}
 		};
 	}
