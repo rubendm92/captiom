@@ -16,8 +16,7 @@ import captiom.server.infrastructure.Services;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static spark.Spark.get;
-import static spark.Spark.post;
+import static spark.Spark.*;
 import static spark.SparkBase.staticFileLocation;
 
 public class Application {
@@ -32,7 +31,8 @@ public class Application {
 
 		post("/patient", new RegisterPatientController(services.displayService()));
 		get("/devices", new GetDevicesController(getDevicesAction));
-		post("/device", new DeviceController(new RegisterDeviceController(registerDeviceAction), new ConfigureDeviceController(services.displayService())));
+		put("/device", new RegisterDeviceController(registerDeviceAction));
+		post("/device", new ConfigureDeviceController(services.displayService()));
 	}
 
 	private static Services services(PushService pushService, DisplayService displayService) {
