@@ -1,0 +1,35 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+
+<dom-module id="eye-selector">
+  <style>
+    :host {
+      display: block;
+    }
+
+    paper-item {
+      display: inline;
+      padding: 10px;
+    }
+  </style>
+  <template>
+    <paper-menu>
+      <paper-item>Left</paper-item>
+      <paper-item>Right</paper-item>
+    </paper-menu>
+  </template>
+  <script>
+  (() => {
+    'use strict';
+
+    Polymer({
+      is: 'eye-selector',
+
+      properties: {
+        eye: String
+      }
+    });
+  })();
+  </script>
+</dom-module>
