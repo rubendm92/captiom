@@ -5,7 +5,14 @@
   <style is="custom-style" include="shared-styles"></style>
   <style>
     :host {
-      display: block;
+  		border: 1px solid #bfbfbf;
+  		box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  		transition: all 0.5s ease-in;
+    }
+
+    :host:hover {
+  		box-shadow: 5px 5px 6px rgba(0, 0, 0, 0.4);
+  		transform: scale(1.1);
     }
   </style>
   <template>

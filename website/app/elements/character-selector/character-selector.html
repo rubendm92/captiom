@@ -1,0 +1,48 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="optotype-character.html">
+
+<dom-module id="character-selector">
+  <style>
+    :host {
+      display: block;
+    }
+
+    iron-selector {
+    	width: auto;
+    	margin-left: auto;
+    	margin-right: auto;
+    	overflow: auto;
+    }
+
+  	iron-selector > optotype-character {
+  		float: left;
+  		margin: 30px;
+    }
+
+    iron-selector .iron-selected {
+      transform: scale(1.2);
+    }
+  </style>
+  <template>
+    <iron-selector  attr-for-selected="character">
+      <template is="dom-repeat" items="{{characters}}">
+        <optotype-character character="{{item}}"></optotype-character>
+      </template>
+    </iron-selector>
+  </template>
+  <script>
+  (() => {
+    'use strict';
+
+    Polymer({
+      is: 'character-selector',
+
+      properties: {
+        characters: Array,
+        selectedCharacter: String
+      }
+    });
+  })();
+  </script>
+</dom-module>
