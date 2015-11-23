@@ -1,9 +1,11 @@
 package captiom.server.displays;
 
 import captiom.core.model.device.CharacterHeightCalculator;
+import captiom.core.model.device.Eye;
 import captiom.core.model.device.OptotypeCharacter;
 import captiom.core.model.patient.Patient;
 import captiom.core.model.test.Test;
+import captiom.core.use_cases.device.RefreshCharacterAction;
 import captiom.server.infrastructure.OptotypeCharacterMapper;
 import captiom.server.infrastructure.Services;
 import com.google.gson.JsonArray;
@@ -17,12 +19,16 @@ public class TestDisplay implements Display {
 
 	private final Patient patient;
 	private final CharacterHeightCalculator.Range testRange;
+	private final String deviceId;
 	private final Services services;
+	private final RefreshCharacterAction refreshCharacterAction;
 
-	public TestDisplay(Patient patient, CharacterHeightCalculator.Range testRange, Services services) {
+	public TestDisplay(Patient patient, CharacterHeightCalculator.Range testRange, String deviceId, Services services) {
 		this.patient = patient;
 		this.testRange = testRange;
+		this.deviceId = deviceId;
 		this.services = services;
+		this.refreshCharacterAction = new RefreshCharacterAction(services.deviceService());
 	}
 
 	@Override
@@ -61,5 +67,12 @@ public class TestDisplay implements Display {
 				.map(OptotypeCharacterMapper::toString)
 				.map(JsonPrimitive::new)
 				.collect(JsonArray::new, JsonArray::add, JsonArray::addAll);
+	}
+
+	public void showChar(String character, double degrees, String measure, String eye) {
+		refreshCharacterAction.using(deviceId)
+				.show(OptotypeCharacterMapper.fromString(character))
+				.withDetail((long) degrees)
+				.in(Eye.valueOf(eye.toUpperCase()));
 	}
 }

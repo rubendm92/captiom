@@ -6,11 +6,12 @@ import captiom.server.infrastructure.Services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class DeviceDisplay implements Display {
 
 	private final Services services;
-	private final List<DeviceSelected> listeners = new ArrayList<>();
+	private final List<Consumer<String>> listeners = new ArrayList<>();
 	private final CharacterHeightCalculator characterHeightCalculator = new CharacterHeightCalculator();
 
 	public DeviceDisplay(Services services) {
@@ -22,13 +23,13 @@ public class DeviceDisplay implements Display {
 		services.pushService().notify("DeviceConfiguration");
 	}
 
-	public void onDeviceSelected(DeviceSelected listener) {
+	public void onDeviceSelected(Consumer<String> listener) {
 		listeners.add(listener);
 	}
 
 	public void configure(Configuration configuration) {
 		configureCharacterHeightCalculator(configuration);
-		listeners.stream().forEach(DeviceSelected::selected);
+		listeners.stream().forEach(listener -> listener.accept(configuration.deviceId));
 	}
 
 	public CharacterHeightCalculator.Range testRangeForCurrentDevice() {
@@ -43,10 +44,6 @@ public class DeviceDisplay implements Display {
 
 	private Device device(String deviceId) {
 		return services.deviceService().get(deviceId);
-	}
-
-	public interface DeviceSelected {
-		void selected();
 	}
 
 	public static class Configuration {

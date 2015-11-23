@@ -34,6 +34,7 @@ public class Application {
 		get("/devices", new GetDevicesController(getDevicesAction));
 		put("/device", new RegisterDeviceController(registerDeviceAction));
 		post("/device", new ConfigureDeviceController(services.displayService()));
+		post("/test", new TestController(services.displayService()));
 	}
 
 	private static Services services(PushService pushService, DisplayService displayService) {

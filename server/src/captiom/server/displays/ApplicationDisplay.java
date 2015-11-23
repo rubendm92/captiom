@@ -24,8 +24,9 @@ public class ApplicationDisplay implements Display {
 		deviceDisplay().onDeviceSelected(this::showTest);
 	}
 
-	private void showTest() {
-		services.displayService().register(new TestDisplay(patientFormDisplay().patient(), deviceDisplay().testRangeForCurrentDevice(), services));
+	private void showTest(String deviceId) {
+		services.displayService().register(new TestDisplay(patientFormDisplay().patient(),
+				deviceDisplay().testRangeForCurrentDevice(), deviceId, services));
 		testDisplay().show();
 	}
 
