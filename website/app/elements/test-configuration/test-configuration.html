@@ -1,5 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/paper-slider/paper-slider.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../character-selector/character-selector.html">
+<link rel="import" href="../eye-selector/eye-selector.html">
+<link rel="import" href="../degrees-selector/degrees-selector.html">
 
 <dom-module id="test-configuration">
   <style>
@@ -7,31 +10,79 @@
       display: block;
     }
 
-    paper-slider {
-      width: 100%;
+    paper-menu {
+      @apply(--layout-horizontal);
+      @apply(--layout-center-justified);
     }
 
-    ul {
-    	width: auto;
-    	margin-left: auto;
-    	margin-right: auto;
-    	overflow: auto;
-    	list-style: none
+    paper-item {
+      cursor: pointer;
     }
 
-  	li {
-  		float: left;
-  		margin: 30px;
-  		border: 1px solid #bfbfbf;
+    eye-selector {
+      @apply(--layout-horizontal);
+      @apply(--layout-center-justified);
+    }
+
+    character-selector {
+      padding-top: 50px;
+    }
+
+    degrees-selector {
+      position: relative;
+    }
+
+    .eye-selector-container {
+      position: fixed;
+      padding-top: 10px;
+      background-color: white;
+      width: calc(100% - 270px);
+      z-index: 10;
+    }
+
+    .degress-selector-container {
+      position: fixed;
+      width: 30px;
+      height: 100%;
+      z-index: 10;
+      top: 64px;
+      right: 10px;
+    }
+
+    degrees-selector {
+      height: calc(100% - 72px);
+    }
+
+    @media (max-width: 600px) {
+
+      .eye-selector-container {
+        width: calc(100% - 15px);
+      }
     }
   </style>
   <template>
-    <paper-slider min="{{range.min}}" max="{{range.max}}" pin></paper-slider>
-    <ul>
-      <template is="dom-repeat" items="{{characters}}">
-        <li><optotype-character character="{{item}}"></optotype-character></li>
-      </template>
-    </ul>
+    <iron-ajax
+      url="/test"
+      method="post"
+      handle-as="json"></iron-ajax>
+    <iron-pages selected="0">
+      <div>
+        <paper-menu selected={{selectedTest}}>
+          <template is="dom-repeat" items="{{tests}}">
+            <paper-item>{{item.name}}</paper-item>
+          </template>
+        </paper-menu>
+      </div>
+      <div>
+        <div class="eye-selector-container">
+          <eye-selector on-eye-selected="_eyeSelected"></eye-selector>
+        </div>
+        <div class="degress-selector-container">
+          <degrees-selector on-degrees-selected="_degreesSelected"></degrees-selector>
+        </div>
+        <character-selector on-character-selected="_characterSelected"></character-selector>
+      </div>
+    </iron-pages>
   </template>
   <script>
   (() => {
@@ -41,13 +92,69 @@
       is: 'test-configuration',
 
       properties: {
-        range: Object,
-        characters: Array
+        tests: Array,
+        selectedTest: {
+          type: String,
+          observer: '_testSelected',
+          value: '-1'
+        },
+        currentTestConfiguration: {
+          type: Object,
+          observer: '_updateConfiguration'
+        }
       },
 
       configure: function (configuration) {
-        this.range = configuration.deviceRange;
-        this.characters = configuration.characters;
+        this.querySelector('iron-pages').selected = '0';
+        this.selectedTest = '-1';
+        this.querySelector('degrees-selector').range = configuration.deviceRange;
+        this.querySelector('character-selector').characters = [];
+        this.tests = configuration.tests;
+        this.currentTestConfiguration = {};
+      },
+
+      back: function () {
+        this.querySelector('iron-pages').selected = '0';
+        this.selectedTest = '-1';
+        this.querySelector('character-selector').characters = [];
+      },
+
+      _testSelected: function () {
+        if (this.selectedTest === '-1' || !this.tests) {
+          return;
+        }
+        this.querySelector('iron-pages').selected = '1';
+        this.querySelector('character-selector').characters = this.tests[this.selectedTest].characters;
+      },
+
+      _eyeSelected: function (e) {
+        this.currentTestConfiguration.eye = e.detail.eye;
+      },
+
+      _degreesSelected: function (e) {
+        this._clearConfiguration();
+        this.currentTestConfiguration.degrees = e.detail.degrees;
+      },
+
+      _characterSelected: function (e) {
+        this.currentTestConfiguration.character = e.detail.character;
+      },
+
+      _clearConfiguration: function () {
+        this.currentTestConfiguration = {};
+      },
+
+      _updateConfiguration: function () {
+        if (!this._isConfigured('eye') || !this._isConfigured('degrees') || !this._isConfigured('character')) {
+          return;
+        }
+        let query = this.querySelector('iron-ajax');
+        query.body = this.currentTestConfiguration;
+        query.generateRequest();
+      },
+
+      _isConfigured: function (parameter) {
+        return this.currentTestConfiguration.hasOwnProperty(parameter);
       }
     });
   })();

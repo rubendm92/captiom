@@ -2,6 +2,7 @@
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
 
 <dom-module id="captiom-app">
   <template>
@@ -57,6 +58,10 @@
         margin-left: 48px;
       }
 
+      paper-drawer-panel::content #drawer, paper-drawer-panel::content #scrim {
+        z-index: 20;
+      }
+
       /* Small */
       @media (max-width: 600px) {
 
@@ -109,15 +114,15 @@
 
       <section>
         <paper-drawer-panel id="paperDrawerPanel">
-          <paper-header-panel class="flex" drawer fixed>
+          <paper-scroll-header-panel class="flex" drawer fixed>
             <paper-toolbar id="drawerToolbar">
               <paper-icon-button icon="icons:arrow-back" on-tap="_back"></paper-icon-button>
               <span class="paper-font-title">{{patientId}}</span>
             </paper-toolbar>
-            <h3>//TODO</h3>
-          </paper-header-panel>
+            <test-result cases='["+", "-", "*", "/"]' on-finish="_showAllTests"></test-result>
+          </paper-scroll-header-panel>
 
-          <paper-header-panel main condenses keep-condensed-header>
+          <paper-scroll-header-panel main fixed>
 
             <paper-toolbar id="mainToolbar">
               <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
@@ -129,7 +134,7 @@
             </paper-toolbar>
 
             <test-configuration></test-configuration>
-          </paper-header-panel>
+          </paper-scroll-header-panel>
         </paper-drawer-panel>
       </section>
 
@@ -148,7 +153,6 @@
       },
 
       ready: function() {
-        PushService.openConnection('ws://localhost:8081');
         this.when('PatientForm').execute(configuration => this._showHome(configuration));
         this.when('DeviceConfiguration').execute(() => this._showSetupDevice());
         this.when('Test').execute(configuration => this._showTest(configuration));
@@ -171,6 +175,10 @@
         this._show('2');
         this.patientId = configuration.patientId;
         this.querySelector('test-configuration').configure(configuration);
+      },
+
+      _showAllTests: function () {
+        this.querySelector('test-configuration').back();
       },
 
       _show: function (page) {

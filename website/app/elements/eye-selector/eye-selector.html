@@ -11,10 +11,11 @@
     paper-item {
       display: inline;
       padding: 10px;
+      cursor: pointer;
     }
   </style>
   <template>
-    <paper-menu>
+    <paper-menu selected="{{selected}}">
       <paper-item>Left</paper-item>
       <paper-item>Right</paper-item>
     </paper-menu>
@@ -27,7 +28,19 @@
       is: 'eye-selector',
 
       properties: {
-        eye: String
+        eye: String,
+        selected: {
+          type: String,
+          observer: '_onEyeSelected'
+        }
+      },
+
+      _onEyeSelected: function () {
+        if (this.selected === 0) {
+          this.fire('eye-selected', {eye: 'LEFT'});
+        } else if (this.selected === 1) {
+          this.fire('eye-selected', {eye: 'RIGHT'});
+        }
       }
     });
   })();
