@@ -53,7 +53,7 @@ public class PushService extends WebSocketServer {
 	private String serialize(String title, String content) {
 		JsonObject object = new JsonObject();
 		object.addProperty("name", title);
-		object.add("content", parser.parse(content));
+		object.add("parameters", parser.parse(content));
 		return object.toString();
 	}
 
