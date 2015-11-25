@@ -16,7 +16,7 @@
     }
   </style>
   <template>
-    <canvas id="canvas" width="200" height="200"></canvas>
+    <canvas id="canvas" width="100" height="100"></canvas>
   </template>
   <script>
   (() => {
@@ -37,13 +37,13 @@
 
       _drawBackground: function(context) {
         context.fillStyle = '#ffffff';
-    		context.fillRect(0, 0, 200, 200);
+    		context.fillRect(0, 0, 100, 100);
       },
 
       _drawCharacter: function(context, character) {
         context.fillStyle = '#000000';
-        context.font = 'normal 100pt Optotypes';
-        context.fillText(character, 5, 150);
+        context.font = 'normal 50pt Optotypes';
+        context.fillText(character, 2, 75);
       }
     });
   })();
