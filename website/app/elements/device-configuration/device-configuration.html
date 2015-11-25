@@ -85,7 +85,7 @@
         <input is="iron-input" type="number" id="distance" autocomplete="off">
       </paper-input-container>
 
-       <paper-button raised on-click="_beginDiagnosis">Begin diagnosis</paper-button>
+       <paper-button raised on-click="_beginExam">Begin exam</paper-button>
    </form>
 
   </template>
@@ -102,7 +102,7 @@
         distance: Number
       },
 
-      _beginDiagnosis: function () {
+      _beginExam: function () {
         this.$.setupDeviceRequest.body = {
           deviceId: this.$.deviceSelector.selected,
           diopters: this.$.diopters.value,
