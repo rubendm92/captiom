@@ -24,7 +24,7 @@ public class Application {
 
 		post("/patient", new RegisterPatientController(services.displayService()));
 		get("/devices", new GetDevicesController(getDevicesAction));
-		put("/device", new RegisterDeviceController(registerDeviceAction));
+		put("/devices", new RegisterDeviceController(registerDeviceAction));
 		post("/device", new ConfigureDeviceController(services.displayService()));
 		post("/test", new TestController(services.displayService()));
 	}

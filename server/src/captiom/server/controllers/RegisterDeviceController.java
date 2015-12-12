@@ -22,7 +22,7 @@ public class RegisterDeviceController implements Controller {
 	}
 
 	private Device buildDevice(Request request) {
-		return new Device(request.queryParams("notificationId")).height(buildHeight(request));
+		return new Device(request.queryParams("notificationId")).height(buildHeight(request)).modelName(request.queryParams("modelName"));
 	}
 
 	private Height buildHeight(Request request) {
