@@ -1,6 +1,6 @@
-package com.rubendm.captiom.mobile.model;
+package me.rubendm.captiom.mobile.model;
 
-import com.rubendm.captiom.mobile.infrastructure.DeviceRepository;
+import me.rubendm.captiom.mobile.infrastructure.DeviceRepository;
 
 public class DeviceService {
 

@@ -1,13 +1,13 @@
-package com.rubendm.captiom.mobile.infrastructure;
+package me.rubendm.captiom.mobile.infrastructure;
 
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
-import com.rubendm.captiom.mobile.model.Device;
-import com.rubendm.captiom.mobile.model.ScreenHeight;
+import me.rubendm.captiom.mobile.model.Device;
+import me.rubendm.captiom.mobile.model.ScreenHeight;
 
-import static com.rubendm.captiom.mobile.infrastructure.Server.*;
-import static com.rubendm.captiom.mobile.infrastructure.WebServiceDeviceRepository.*;
+import static me.rubendm.captiom.mobile.infrastructure.Server.RequestMethod;
+import static me.rubendm.captiom.mobile.infrastructure.WebServiceDeviceRepository.OnSaveFailedListener;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -38,7 +38,7 @@ public class AcceptedWebServiceDeviceRepository extends AndroidTestCase {
         repository.save(device);
         waitForAsyncTask();
         verify(server).connect("/devices", RequestMethod.POST);
-        verify(listener).failed(device, "");
+        verify(listener).failed("");
     }
 
     private Server successfulServer() {

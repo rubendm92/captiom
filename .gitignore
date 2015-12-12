@@ -12,3 +12,4 @@ local.properties
 website/node_modules
 website/bower_components
 server/res/site
+google-services.json

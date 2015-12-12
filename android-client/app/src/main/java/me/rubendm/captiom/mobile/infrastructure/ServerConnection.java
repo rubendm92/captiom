@@ -1,4 +1,4 @@
-package com.rubendm.captiom.mobile.infrastructure;
+package me.rubendm.captiom.mobile.infrastructure;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
