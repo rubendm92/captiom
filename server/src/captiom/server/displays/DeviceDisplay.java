@@ -32,6 +32,10 @@ public class DeviceDisplay implements Display {
 		listeners.stream().forEach(listener -> listener.accept(configuration.deviceId));
 	}
 
+	public CharacterHeightCalculator calculatorForDevice() {
+		return characterHeightCalculator;
+	}
+
 	public CharacterHeightCalculator.Range testRangeForCurrentDevice() {
 		return characterHeightCalculator.range();
 	}

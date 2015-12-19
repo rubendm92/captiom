@@ -19,11 +19,11 @@ public class OptotypeCharacterMapper {
 	}
 
 	public static OptotypeCharacter fromString(String value) {
-		return stringToChar.get(value);
+		return stringToChar.getOrDefault(value, TumblingE.OPENS_RIGHT);
 	}
 
 	public static String toString(OptotypeCharacter character) {
-		return charToString.get(character);
+		return charToString.getOrDefault(character, "+");
 	}
 
 	private static void fillStringToCharMap() {

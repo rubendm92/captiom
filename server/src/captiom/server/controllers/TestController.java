@@ -15,6 +15,7 @@ public class TestController implements Controller {
 
 	private static final String SHOW_CHAR = "showChar";
 	private static final String ADD_RECORD = "addRecord";
+	private static final String CLEAR = "clear";
 	private static final String FINISH = "finish";
 	private final Map<String, BiFunction<JsonObject, Response, String>> actions = new HashMap<>();
 	private final DisplayService displayService;
@@ -24,6 +25,7 @@ public class TestController implements Controller {
 		actions.put(SHOW_CHAR, this::showChar);
 		actions.put(ADD_RECORD, this::addRecord);
 		actions.put(FINISH, this::finish);
+		actions.put(CLEAR, this::clearDevice);
 	}
 
 	@Override
@@ -37,8 +39,8 @@ public class TestController implements Controller {
 	}
 
 	private String showChar(JsonObject body, Response response) {
-		double degrees = body.getAsJsonObject("character").get("value").getAsDouble();
-		String measure = body.getAsJsonObject("character").get("measure").getAsString();
+		double degrees = body.getAsJsonObject("detail").get("value").getAsDouble();
+		String measure = body.getAsJsonObject("detail").get("measure").getAsString();
 		String character = body.get("character").getAsString();
 		String eye = body.get("eye").getAsString();
 		testDisplay().showChar(character, degrees, measure, eye);
@@ -46,18 +48,22 @@ public class TestController implements Controller {
 	}
 
 	private String addRecord(JsonObject body, Response response) {
-		double degrees = body.getAsJsonObject("character").get("value").getAsDouble();
-		String measure = body.getAsJsonObject("character").get("measure").getAsString();
+		double degrees = body.getAsJsonObject("detail").get("value").getAsDouble();
+		String measure = body.getAsJsonObject("detail").get("measure").getAsString();
 		String character = body.get("character").getAsString();
 		String eye = body.get("eye").getAsString();
-		// TODO
-		// testDisplay().saveRecord();
+		boolean success = body.get("success").getAsBoolean();
+		testDisplay().addRecord(character, degrees, measure, eye, success);
 		return "OK";
 	}
 
 	private String finish(JsonObject body, Response response) {
-		// TODO
-		// testDisplay().finishTest();
+		 testDisplay().finishTest();
+		return "OK";
+	}
+
+	private String clearDevice(JsonObject body, Response response) {
+		testDisplay().clearDevice();
 		return "OK";
 	}
 

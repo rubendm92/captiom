@@ -18,14 +18,14 @@ import java.util.List;
 public class TestDisplay implements Display {
 
 	private final Patient patient;
-	private final CharacterHeightCalculator.Range testRange;
+	private final CharacterHeightCalculator calculator;
 	private final String deviceId;
 	private final Services services;
 	private final RefreshCharacterAction refreshCharacterAction;
 
-	public TestDisplay(Patient patient, CharacterHeightCalculator.Range testRange, String deviceId, Services services) {
+	public TestDisplay(Patient patient, CharacterHeightCalculator calculator, String deviceId, Services services) {
 		this.patient = patient;
-		this.testRange = testRange;
+		this.calculator = calculator;
 		this.deviceId = deviceId;
 		this.services = services;
 		this.refreshCharacterAction = new RefreshCharacterAction(services.deviceService());
@@ -46,8 +46,8 @@ public class TestDisplay implements Display {
 
 	private JsonElement serializeRange() {
 		JsonObject object = new JsonObject();
-		object.addProperty("min", (int) testRange.min);
-		object.addProperty("max", (int) testRange.max);
+		object.addProperty("min", (int) calculator.range().min);
+		object.addProperty("max", (int) calculator.range().max);
 		return object;
 	}
 
@@ -72,7 +72,23 @@ public class TestDisplay implements Display {
 	public void showChar(String character, double degrees, String measure, String eye) {
 		refreshCharacterAction.using(deviceId)
 				.show(OptotypeCharacterMapper.fromString(character))
-				.withDetail((long) degrees)
+				.withDetail(toPixels(degrees, measure))
 				.in(Eye.valueOf(eye.toUpperCase()));
+	}
+
+	private long toPixels(double degrees, String measure) {
+		return (long) calculator.imageHeightForMinutes((int) degrees);
+	}
+
+	public void clearDevice() {
+		refreshCharacterAction.clear(deviceId);
+	}
+
+	public void addRecord(String character, double degrees, String measure, String eye, boolean success) {
+
+	}
+
+	public void finishTest() {
+
 	}
 }

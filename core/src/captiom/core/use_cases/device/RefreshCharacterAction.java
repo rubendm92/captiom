@@ -37,6 +37,10 @@ public class RefreshCharacterAction {
 		return this;
 	}
 
+	public void clear(String deviceId) {
+		service.using(deviceId).clear();
+	}
+
 	@FunctionalInterface
 	public interface CharacterReader {
 		DetailReader show(OptotypeCharacter character);

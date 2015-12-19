@@ -16,7 +16,7 @@ public class DeviceService {
 	}
 
 	public DeviceNotifier.DeviceLink using(String deviceId) {
-		return notifier.device(deviceId);
+		return notifier.device(get(deviceId));
 	}
 
 	public void register(Device device) {

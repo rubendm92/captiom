@@ -26,7 +26,7 @@ public class ApplicationDisplay implements Display {
 
 	private void showTest(String deviceId) {
 		services.displayService().register(new TestDisplay(patientFormDisplay().patient(),
-				deviceDisplay().testRangeForCurrentDevice(), deviceId, services));
+				deviceDisplay().calculatorForDevice(), deviceId, services));
 		testDisplay().show();
 	}
 
