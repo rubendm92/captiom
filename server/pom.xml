@@ -47,5 +47,10 @@
                 <directory>res</directory>
             </resource>
         </resources>
+        <testResources>
+            <testResource>
+                <directory>test-res</directory>
+            </testResource>
+        </testResources>
     </build>
 </project>

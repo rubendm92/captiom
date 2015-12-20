@@ -9,6 +9,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.stream.Stream;
 public class CsvPatientRepository implements PatientRepository {
 
 	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-	private static final byte[] HEADER = "ID;Name;Birth date;Gender".getBytes(Charset.forName("utf-8"));
+	private static final byte[] HEADER = "ID;Name;Birth date;Gender\n".getBytes(Charset.forName("utf-8"));
 	private final Path patientsFile;
 
 	public CsvPatientRepository(String workingDirectory) {
@@ -65,7 +66,7 @@ public class CsvPatientRepository implements PatientRepository {
 
 	private void register(Patient patient) {
 		try {
-			Files.write(patientsFile, toCsv(patient).getBytes(Charset.forName("utf-8")));
+			Files.write(patientsFile, toCsv(patient).getBytes(Charset.forName("utf-8")), StandardOpenOption.APPEND);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
