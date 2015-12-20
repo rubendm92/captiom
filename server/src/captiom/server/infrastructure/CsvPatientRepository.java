@@ -60,7 +60,7 @@ public class CsvPatientRepository implements PatientRepository {
 		String id = data[0];
 		String name = data[1];
 		LocalDate birthDate = LocalDate.from(FORMATTER.parse(data[2]));
-		Gender gender = Gender.valueOf(data[3]);
+		Gender gender = Gender.valueOf(data[3].toUpperCase());
 		return new Patient(id, name, birthDate, gender);
 	}
 

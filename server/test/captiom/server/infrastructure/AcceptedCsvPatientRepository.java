@@ -62,11 +62,27 @@ public class AcceptedCsvPatientRepository {
 		checkThatPatientsFileExistsAndContainsPatient(patient);
 	}
 
+	@Test
+	public void should_not_duplicate_patient() throws IOException {
+		CsvPatientRepository repository = new CsvPatientRepository(PATIENTS_REPO.toString());
+		Patient patient = new Patient("1", "Ruben", LocalDate.of(1992, 6, 22), Gender.MALE);
+
+		repository.save(patient);
+		repository.save(patient);
+
+		checkThatPatientsFileOnlyContainsHeaderAndOnePatient();
+	}
+
 	private void checkThatPatientsFileExistsAndContainsPatient(Patient patient) throws IOException {
 		Path patientsFile = Paths.get(PATIENTS_REPO.toString(), "patients.csv");
 		assertTrue(Files.exists(patientsFile));
 		List<String> lines = Files.readAllLines(patientsFile);
 
 		assertThat(lines.get(1), is(patient.id + ";" + patient.name + ";" + DateTimeFormatter.ofPattern("dd/MM/yyyy").format(patient.birthDate) + ";" +  patient.gender));
+	}
+
+	private void checkThatPatientsFileOnlyContainsHeaderAndOnePatient() throws IOException {
+		Path patientsFile = Paths.get(PATIENTS_REPO.toString(), "patients.csv");
+		assertThat(Files.readAllLines(patientsFile).size(), is(2));
 	}
 }
