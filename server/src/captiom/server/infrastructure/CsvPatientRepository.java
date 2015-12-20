@@ -23,7 +23,14 @@ public class CsvPatientRepository implements PatientRepository {
 
 	public CsvPatientRepository(String workingDirectory) {
 		this.patientsFile = Paths.get(workingDirectory, "patients.csv");
+	}
+
+	@Override
+	public void save(Patient patient) {
 		createFileIfItDoesNotExist();
+		if (allPatients().noneMatch(patient::equals)) {
+			register(patient);
+		}
 	}
 
 	private void createFileIfItDoesNotExist() {
@@ -32,13 +39,6 @@ public class CsvPatientRepository implements PatientRepository {
 			Files.write(patientsFile, HEADER);
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void save(Patient patient) {
-		if (allPatients().noneMatch(patient::equals)) {
-			register(patient);
 		}
 	}
 
@@ -73,6 +73,6 @@ public class CsvPatientRepository implements PatientRepository {
 	}
 
 	private String toCsv(Patient patient) {
-		return patient.id + ";" + patient.name + ";" + FORMATTER.format(patient.birthDate) + ";" + patient.gender;
+		return patient.id + ";" + patient.name + ";" + FORMATTER.format(patient.birthDate) + ";" + patient.gender + "\n";
 	}
 }

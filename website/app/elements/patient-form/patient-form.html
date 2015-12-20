@@ -3,7 +3,8 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html"/>
 <link rel="import" href="../../bower_components/paper-button/paper-button.html"/>
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html"/>
-<link rel="import" href="../gender-selector/gender-selector.html"/>
+<link rel="import" href="gender-selector.html"/>
+<link rel="import" href="date-input.html"/>
 
 <dom-module id="patient-form">
   <template>
@@ -34,11 +35,9 @@
         id="postPatientRequest"></iron-ajax>
 
     <form is="iron-form" method="post" action="/patient" id="patientForm">
+      <paper-input id="nameInput" label="Patient name" required value="{{patientName}}"></paper-input>
       <paper-input id="patientIdInput" label="Patient id" required char-counter value="{{patientId}}"></paper-input>
-      <paper-input-container>
-        <label>Age</label>
-        <input is="iron-input" type="number" id="age" autocomplete="off">
-      </paper-input-container>
+      <date-input id="birthDate" label="Birth date (dd/mm/yyyy)" required></date-input>
       <gender-selector id="genderMenu" required></gender-selector>
 
       <paper-button raised on-click="beginDiagnosis">Configure device</paper-button>
@@ -65,7 +64,8 @@
         }
   			this.$.postPatientRequest.body = {
   				patientId: this.patientId,
-  				age: this.$.age.value,
+          name: this.patientName,
+  				birthDate: this.$.birthDate.value.getTime() - (this.$.birthDate.value.getTimezoneOffset() * 60 * 1000),
   				gender: this.querySelector('gender-selector').gender()
   			};
   			this.$.postPatientRequest.generateRequest();
