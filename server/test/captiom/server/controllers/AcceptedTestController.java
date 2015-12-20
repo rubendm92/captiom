@@ -26,14 +26,14 @@ public class AcceptedTestController {
 	public void should_show_char_on_test_display() throws Exception {
 		controller.handle(requestToShowChar(), mock(Response.class));
 
-		verify(testDisplay).showChar("+", 200, "MAR", "LEFT");
+		verify(testDisplay).showChar("+", 200, "LEFT");
 	}
 
 	@Test
 	public void should_add_record_to_patient_test() throws Exception {
 		controller.handle(requestToAddRecord(), mock(Response.class));
 
-		verify(testDisplay).addRecord("+", 200, "MAR", "LEFT", true);
+		verify(testDisplay).addRecord("+", 200, "LEFT", true);
 	}
 
 	@Test
@@ -52,13 +52,13 @@ public class AcceptedTestController {
 
 	private Request requestToShowChar() {
 		Request request = mock(Request.class);
-		when(request.body()).thenReturn("{\"operation\":\"showChar\",\"detail\":{\"value\":200,\"measure\":\"MAR\"},\"character\":\"+\",\"eye\":\"LEFT\"}");
+		when(request.body()).thenReturn("{\"operation\":\"showChar\",\"detail\":200,\"character\":\"+\",\"eye\":\"LEFT\"}");
 		return request;
 	}
 
 	private Request requestToAddRecord() {
 		Request request = mock(Request.class);
-		when(request.body()).thenReturn("{\"operation\":\"addRecord\",\"detail\":{\"value\":200,\"measure\":\"MAR\"},\"character\":\"+\",\"eye\":\"LEFT\",\"success\":\"true\"}");
+		when(request.body()).thenReturn("{\"operation\":\"addRecord\",\"detail\":200,\"character\":\"+\",\"eye\":\"LEFT\",\"success\":\"true\"}");
 		return request;
 	}
 

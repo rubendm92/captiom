@@ -7,11 +7,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-public class GetTestRecords {
+public class GetTestRecordsAction {
 
 	private final TestService testService;
 
-	public GetTestRecords(TestService testService) {
+	public GetTestRecordsAction(TestService testService) {
 		this.testService = testService;
 	}
 

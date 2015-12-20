@@ -5,15 +5,15 @@ import captiom.core.model.test.TestService;
 
 import static java.util.Arrays.asList;
 
-public class AddTestRecord {
+public class AddTestRecordAction {
 
 	private final TestService testService;
 
-	public AddTestRecord(TestService testService) {
+	public AddTestRecordAction(TestService testService) {
 		this.testService = testService;
 	}
 
-	public void add(Record... testResults) {
-		testService.register(asList(testResults));
+	public void add(String patientId, Record... testResults) {
+		testService.register(patientId, asList(testResults));
 	}
 }

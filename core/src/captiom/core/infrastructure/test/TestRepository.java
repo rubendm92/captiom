@@ -11,5 +11,5 @@ public interface TestRepository {
 
 	List<Test> availableTests();
 	Map<LocalDateTime, List<Record>> testResultsByDate(String patientId);
-	void save(List<Record> testResults);
+	void save(String patientId, List<Record> testResults);
 }

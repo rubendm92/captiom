@@ -1,14 +1,18 @@
 package captiom.core.model.patient;
 
+import java.time.LocalDate;
+
 public class Patient {
 
 	public final String id;
-	public final int age;
+	public final String name;
+	public final LocalDate birthDate;
 	public final Gender gender;
 
-	public Patient(String id, int age, Gender gender) {
+	public Patient(String id, String name, LocalDate birthDate, Gender gender) {
 		this.id = id;
-		this.age = age;
+		this.name = name;
+		this.birthDate = birthDate;
 		this.gender = gender;
 	}
 

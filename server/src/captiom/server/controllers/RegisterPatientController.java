@@ -9,6 +9,8 @@ import com.google.gson.JsonObject;
 import spark.Request;
 import spark.Response;
 
+import java.time.LocalDate;
+
 public class RegisterPatientController implements Controller {
 
 	private final DisplayService displayService;
@@ -26,14 +28,19 @@ public class RegisterPatientController implements Controller {
 	}
 
 	private Patient buildPatient(JsonObject object) {
-		return new Patient(getString(object, "patientId"), getInteger(object, "age"), Gender.valueOf(getString(object, "gender").toUpperCase()));
-	}
-
-	private int getInteger(JsonObject object, String name) {
-		return object.get(name).getAsInt();
+		return new Patient(getString(object, "patientId"), getString(object, "name"),
+				getLocalDate(object, "birthDate"), Gender.valueOf(getString(object, "gender").toUpperCase()));
 	}
 
 	private String getString(JsonObject object, String name) {
 		return object.get(name).getAsString();
+	}
+
+	private LocalDate getLocalDate(JsonObject object, String name) {
+		return LocalDate.ofEpochDay(toDays(object.get(name).getAsLong()));
+	}
+
+	private long toDays(long milliseconds) {
+		return milliseconds / (1000 * 60 * 60 * 24);
 	}
 }

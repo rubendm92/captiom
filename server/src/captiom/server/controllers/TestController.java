@@ -39,21 +39,19 @@ public class TestController implements Controller {
 	}
 
 	private String showChar(JsonObject body, Response response) {
-		double degrees = body.getAsJsonObject("detail").get("value").getAsDouble();
-		String measure = body.getAsJsonObject("detail").get("measure").getAsString();
+		long detail = body.get("detail").getAsLong();
 		String character = body.get("character").getAsString();
 		String eye = body.get("eye").getAsString();
-		testDisplay().showChar(character, degrees, measure, eye);
+		testDisplay().showChar(character, detail, eye);
 		return "OK";
 	}
 
 	private String addRecord(JsonObject body, Response response) {
-		double degrees = body.getAsJsonObject("detail").get("value").getAsDouble();
-		String measure = body.getAsJsonObject("detail").get("measure").getAsString();
+		long detail = body.get("detail").getAsLong();
 		String character = body.get("character").getAsString();
 		String eye = body.get("eye").getAsString();
 		boolean success = body.get("success").getAsBoolean();
-		testDisplay().addRecord(character, degrees, measure, eye, success);
+		testDisplay().addRecord(character, detail, eye, success);
 		return "OK";
 	}
 

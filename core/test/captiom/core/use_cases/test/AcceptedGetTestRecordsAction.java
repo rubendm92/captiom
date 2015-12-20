@@ -6,15 +6,15 @@ import org.junit.Test;
 
 import static org.mockito.Mockito.*;
 
-public class AcceptedGetTestRecordsForPatient {
+public class AcceptedGetTestRecordsAction {
 
 	@Test
 	public void should_retrieve_all_records_for_given_patient() {
 		TestRepository testRepository = mock(TestRepository.class);
-		GetTestRecords getTestRecords = new GetTestRecords(new TestService(testRepository));
+		GetTestRecordsAction action = new GetTestRecordsAction(new TestService(testRepository));
 
 		String patientId = "1";
-		getTestRecords.forPatient(patientId);
+		action.forPatient(patientId);
 
 		verify(testRepository, times(1)).testResultsByDate(patientId);
 	}

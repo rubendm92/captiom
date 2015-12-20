@@ -16,7 +16,7 @@ public class Application {
 
 	public static void main(String[] args) {
 		staticFileLocation("site");
-		Services services = services(new PushService(8081), new DisplayService());
+		Services services = services(new PushService(8081), args[0]);
 		services.pushService().addConnectionOpenedListener(() -> services.displayService().register(new ApplicationDisplay(services)));
 
 		GetDevicesAction getDevicesAction = new GetDevicesAction(services.deviceService());
@@ -29,12 +29,13 @@ public class Application {
 		post("/test", new TestController(services.displayService()));
 	}
 
-	private static Services services(PushService pushService, DisplayService displayService) {
+	private static Services services(PushService pushService, String workingDirectory) {
 		return new Services() {
 
-			private final PatientService patientService = createPatientService();
+			private final PatientService patientService = createPatientService(workingDirectory);
 			private final DeviceService deviceService = createDeviceService();
-			private final TestService testService = new TestService();
+			private final TestService testService = createTestService(workingDirectory);
+			private final DisplayService displayService = new DisplayService();
 
 			@Override
 			public PushService pushService() {
@@ -63,12 +64,15 @@ public class Application {
 		};
 	}
 
-	private static PatientService createPatientService() {
-		return new PatientService(patient -> {
-		});
+	private static PatientService createPatientService(String workingDirectory) {
+		return new PatientService(new CsvPatientRepository(workingDirectory));
 	}
 
 	private static DeviceService createDeviceService() {
 		return new DeviceService(new InMemoryDeviceRepository(), new AndroidDeviceNotifier());
+	}
+
+	private static TestService createTestService(String workingDirectory) {
+		return new TestService(new CsvTestRepository(workingDirectory));
 	}
 }

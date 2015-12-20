@@ -8,6 +8,8 @@ import org.junit.Test;
 import spark.Request;
 import spark.Response;
 
+import java.time.LocalDate;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
@@ -26,12 +28,12 @@ public class AcceptedRegisterPatientController {
 		assertThat(controller.handle(request, response), is("OK"));
 
 		verify(response).status(200);
-		verify(patientFormDisplay).patient(new Patient("111", 22, Gender.MALE));
+		verify(patientFormDisplay).patient(new Patient("111", "Ruben", LocalDate.of(1992, 6, 22), Gender.MALE));
 	}
 
 	private Request requestWithPatientData() {
 		Request request = mock(Request.class);
-		when(request.body()).thenReturn("{\"patientId\":\"111\",\"age\":\"22\",\"gender\":\"male\"}");
+		when(request.body()).thenReturn("{\"patientId\":\"111\",\"name\":\"Ruben\",\"birthDate\":\"709171200000\",\"gender\":\"male\"}");
 		return request;
 	}
 }

@@ -18,8 +18,8 @@ public class TestService {
 		return testRepository.availableTests();
 	}
 
-	public void register(List<Record> testResult) {
-		testRepository.save(testResult);
+	public void register(String patientId, List<Record> testResult) {
+		testRepository.save(patientId, testResult);
 	}
 
 	public Map<LocalDateTime, List<Record>> resultsForPatient(String patientId) {
