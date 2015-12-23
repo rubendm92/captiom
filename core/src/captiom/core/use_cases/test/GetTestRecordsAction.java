@@ -3,7 +3,7 @@ package captiom.core.use_cases.test;
 import captiom.core.model.test.Record;
 import captiom.core.model.test.TestService;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +15,7 @@ public class GetTestRecordsAction {
 		this.testService = testService;
 	}
 
-	public Map<LocalDateTime, List<Record>> forPatient(String patientId) {
+	public Map<LocalDate, List<Record>> forPatient(String patientId) {
 		return testService.resultsForPatient(patientId);
 	}
 }

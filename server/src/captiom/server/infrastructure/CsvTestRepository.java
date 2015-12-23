@@ -1,6 +1,7 @@
 package captiom.server.infrastructure;
 
 import captiom.core.infrastructure.test.TestRepository;
+import captiom.core.model.device.Eye;
 import captiom.core.model.device.OptotypeCharacter;
 import captiom.core.model.test.Record;
 import captiom.core.model.test.Test;
@@ -11,8 +12,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,9 +41,15 @@ public class CsvTestRepository implements TestRepository {
 		return availableTests;
 	}
 
+	// TODO
 	@Override
-	public Map<LocalDateTime, List<Record>> testResultsByDate(String patientId) {
-		return null;
+	public Map<LocalDate, List<Record>> testResultsByDate(String patientId) {
+		Map<LocalDate, List<Record>> history = new LinkedHashMap<>();
+		history.put(LocalDate.of(2015, 6, 22), asList(new Record("+", 200, Eye.LEFT, true), new Record("-", 200, Eye.RIGHT, true)));
+		history.put(LocalDate.of(2015, 10, 5), asList(new Record("+", 100, Eye.RIGHT, true), new Record("-", 200, Eye.RIGHT, true)));
+		history.put(LocalDate.of(2016, 6, 22), asList(new Record("/", 200, Eye.LEFT, true), new Record("1", 200, Eye.RIGHT, true)));
+		history.put(LocalDate.of(2016, 10, 5), asList(new Record("*", 100, Eye.RIGHT, true), new Record("4", 200, Eye.RIGHT, true)));
+		return history;
 	}
 
 	@Override

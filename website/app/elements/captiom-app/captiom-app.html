@@ -117,9 +117,9 @@
           <paper-scroll-header-panel class="flex" drawer fixed>
             <paper-toolbar id="drawerToolbar">
               <paper-icon-button icon="icons:arrow-back" on-tap="_back"></paper-icon-button>
-              <span class="paper-font-title">{{patientId}}</span>
+              <span class="paper-font-title">{{patientName}}</span>
             </paper-toolbar>
-            <test-result cases='["+", "-", "*", "/"]' on-finish="_showAllTests"></test-result>
+            <test-result on-finish="_showAllTests"></test-result>
           </paper-scroll-header-panel>
 
           <paper-scroll-header-panel main fixed>
@@ -149,7 +149,7 @@
       behaviors: [CottonBehaviors.PushBehavior],
 
       properties: {
-        patientId: String
+        patientName: String
       },
 
       ready: function() {
@@ -173,8 +173,9 @@
 
       _showTest: function (configuration) {
         this._show('2');
-        this.patientId = configuration.patientId;
+        this.patientName = configuration.patientName;
         this.querySelector('test-configuration').configure(configuration);
+        this.querySelector('test-result').cases= configuration.history;
       },
 
       _showAllTests: function () {

@@ -11,8 +11,24 @@
       @apply(--layout-horizontal);
     }
 
-    span {
+    span.character {
       font-family: 'Optotypes';
+    }
+
+    div.info {
+      padding-left: 15px;
+    }
+
+    div > div, div > span {
+      font-size: smaller;
+    }
+
+    div > div.detail {
+      display: inline;
+    }
+
+    div > span {
+      padding-left: 5px;
     }
 
     span.space {
@@ -28,7 +44,11 @@
     }
   </style>
   <template>
-    <span>[[character]]</span>
+    <span class="character">[[case.character]]</span>
+    <div class="info">
+      <div class="eye">[[case.eye]]</div>
+      <div class="detail">[[case.detail]]</div><span>degrees</span>
+    </div>
     <span class="space"></span>
     <div>
       <paper-icon-button icon="done" class="correct" on-tap="_rightAnswer"></paper-icon-button>
@@ -43,7 +63,7 @@
       is: 'test-case',
 
       properties: {
-        character: String
+        case: Object
       },
 
       _rightAnswer: function () {

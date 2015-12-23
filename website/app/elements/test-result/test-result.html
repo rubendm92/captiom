@@ -24,16 +24,22 @@
       list-style: none;
       margin: 0;
       padding: 0;
-      @apply(--layout-flex);
-      overflow: auto;
     }
 
     ul li {
       padding: 5px 10px;
     }
 
+    ul.tests {
+      height: calc(100% - 48px);
+      overflow: auto;
+    }
+
     div {
       width: 100%;
+      display: flex;
+      flex: 1;
+      align-items: flex-end;
     }
 
     paper-button {
@@ -41,10 +47,16 @@
     }
   </style>
   <template>
-    <h3>[[date]]</h3>
-    <ul>
+    <ul class="tests">
       <template is="dom-repeat" items="{{cases}}">
-        <li><test-case character="{{item}}"></test-case></li>
+        <li>
+          <h3>{{item.date}}</h3>
+          <ul>
+            <template is="dom-repeat" items="{{item.results}}">
+              <li><test-case case="{{item}}"></test-case></li>
+            </template>
+          </ul>
+        </li>
       </template>
     </ul>
     <div>

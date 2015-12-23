@@ -13,7 +13,8 @@ import captiom.server.infrastructure.OptotypeCharacterMapper;
 import captiom.server.infrastructure.Services;
 import com.google.gson.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import java.util.stream.Stream;
 
 public class TestDisplay implements Display {
 
+	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	private final Patient patient;
 	private final CharacterHeightCalculator calculator;
 	private final String deviceId;
@@ -47,7 +49,7 @@ public class TestDisplay implements Display {
 
 	private String serializeConfiguration() {
 		JsonObject object = new JsonObject();
-		object.addProperty("patientId", patient.id);
+		object.addProperty("patientName", patient.name);
 		object.add("deviceRange", serializeRange());
 		object.add("tests", serializeAvailableTests(services.testService().availableTests()));
 		object.add("history", serializePatientHistory(getTestRecords.forPatient(patient.id)));
@@ -65,13 +67,13 @@ public class TestDisplay implements Display {
 		return toJsonArray(tests.stream().map(this::serializeTest));
 	}
 
-	private JsonElement serializePatientHistory(Map<LocalDateTime, List<Record>> history) {
+	private JsonElement serializePatientHistory(Map<LocalDate, List<Record>> history) {
 		return toJsonArray(history.entrySet().stream().map(this::serializeDayHistory));
 	}
 
-	private JsonElement serializeDayHistory(Map.Entry<LocalDateTime, List<Record>> entry) {
+	private JsonElement serializeDayHistory(Map.Entry<LocalDate, List<Record>> entry) {
 		JsonObject object = new JsonObject();
-		object.addProperty("date", "");
+		object.addProperty("date", FORMATTER.format(entry.getKey()));
 		object.add("results", toJsonArray(entry.getValue().stream().map(this::serializeRecord)));
 		return object;
 	}
