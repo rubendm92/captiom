@@ -1,6 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
-<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="eye-element.html">
 
 <dom-module id="eye-selector">
   <style>
@@ -8,40 +7,26 @@
       display: block;
     }
 
-    paper-item {
-      display: inline;
-      padding: 10px;
-      cursor: pointer;
+    div {
+      @apply(--layout-horizontal);
+    }
+
+    eye-element {
+      padding: 0 5px;
     }
   </style>
   <template>
-    <paper-menu selected="{{selected}}">
-      <paper-item>Left</paper-item>
-      <paper-item>Right</paper-item>
-    </paper-menu>
+    <div>
+      <eye-element side="LEFT"></eye-element>
+      <eye-element side="RIGHT"></eye-element>
+    </div>
   </template>
   <script>
   (() => {
     'use strict';
 
     Polymer({
-      is: 'eye-selector',
-
-      properties: {
-        eye: String,
-        selected: {
-          type: String,
-          observer: '_onEyeSelected'
-        }
-      },
-
-      _onEyeSelected: function () {
-        if (this.selected === 0) {
-          this.fire('eye-selected', {eye: 'LEFT'});
-        } else if (this.selected === 1) {
-          this.fire('eye-selected', {eye: 'RIGHT'});
-        }
-      }
+      is: 'eye-selector'
     });
   })();
   </script>
