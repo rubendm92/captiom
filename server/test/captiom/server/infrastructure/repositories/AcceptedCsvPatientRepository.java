@@ -1,4 +1,4 @@
-package captiom.server.infrastructure;
+package captiom.server.infrastructure.repositories;
 
 import captiom.core.model.patient.Gender;
 import captiom.core.model.patient.Patient;

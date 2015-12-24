@@ -1,4 +1,4 @@
-package captiom.server.infrastructure;
+package captiom.server.infrastructure.repositories;
 
 import captiom.core.infrastructure.test.TestRepository;
 import captiom.core.model.device.Eye;

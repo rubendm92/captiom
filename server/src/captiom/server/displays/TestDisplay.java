@@ -2,27 +2,21 @@ package captiom.server.displays;
 
 import captiom.core.model.device.CharacterHeightCalculator;
 import captiom.core.model.device.Eye;
-import captiom.core.model.device.OptotypeCharacter;
 import captiom.core.model.patient.Patient;
 import captiom.core.model.test.Record;
-import captiom.core.model.test.Test;
 import captiom.core.use_cases.device.RefreshCharacterAction;
 import captiom.core.use_cases.test.AddTestRecordAction;
 import captiom.core.use_cases.test.GetTestRecordsAction;
 import captiom.server.infrastructure.OptotypeCharacterMapper;
 import captiom.server.infrastructure.Services;
-import com.google.gson.*;
+import captiom.server.infrastructure.serializers.TestDisplayConfigurationSerializer;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
 
 public class TestDisplay implements Display {
 
-	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	private static final TestDisplayConfigurationSerializer serializer = new TestDisplayConfigurationSerializer();
 	private final Patient patient;
 	private final CharacterHeightCalculator calculator;
 	private final String deviceId;
@@ -39,7 +33,7 @@ public class TestDisplay implements Display {
 		this.services = services;
 		this.refreshCharacter = new RefreshCharacterAction(services.deviceService());
 		this.addTestRecord = new AddTestRecordAction(services.testService());
-		getTestRecords = new GetTestRecordsAction(services.testService());
+		this.getTestRecords = new GetTestRecordsAction(services.testService());
 	}
 
 	@Override
@@ -48,56 +42,7 @@ public class TestDisplay implements Display {
 	}
 
 	private String serializeConfiguration() {
-		JsonObject object = new JsonObject();
-		object.addProperty("patientName", patient.name);
-		object.add("deviceRange", serializeRange());
-		object.add("tests", serializeAvailableTests(services.testService().availableTests()));
-		object.add("history", serializePatientHistory(getTestRecords.forPatient(patient.id)));
-		return object.toString();
-	}
-
-	private JsonElement serializeRange() {
-		JsonObject object = new JsonObject();
-		object.addProperty("min", (int) calculator.range().min);
-		object.addProperty("max", (int) calculator.range().max);
-		return object;
-	}
-
-	private JsonElement serializeAvailableTests(List<Test> tests) {
-		return toJsonArray(tests.stream().map(this::serializeTest));
-	}
-
-	private JsonElement serializePatientHistory(Map<LocalDate, List<Record>> history) {
-		return toJsonArray(history.entrySet().stream().map(this::serializeDayHistory));
-	}
-
-	private JsonElement serializeDayHistory(Map.Entry<LocalDate, List<Record>> entry) {
-		JsonObject object = new JsonObject();
-		object.addProperty("date", FORMATTER.format(entry.getKey()));
-		object.add("results", toJsonArray(entry.getValue().stream().map(this::serializeRecord)));
-		return object;
-	}
-
-	private JsonElement serializeRecord(Record record) {
-		return new Gson().toJsonTree(record);
-	}
-
-	private JsonArray toJsonArray(Stream<JsonElement> stream) {
-		return stream.collect(JsonArray::new, JsonArray::add, JsonArray::addAll);
-	}
-
-	private JsonElement serializeTest(Test test) {
-		JsonObject object = new JsonObject();
-		object.addProperty("name", test.name());
-		object.add("characters", serializeCharacters(test.characters()));
-		return object;
-	}
-
-	private JsonElement serializeCharacters(List<OptotypeCharacter> characters) {
-		return characters.stream()
-				.map(OptotypeCharacterMapper::toString)
-				.map(JsonPrimitive::new)
-				.collect(JsonArray::new, JsonArray::add, JsonArray::addAll);
+		return serializer.serialize(patient, calculator.range(), services.testService().availableTests(), getTestRecords.forPatient(patient.id)).toString();
 	}
 
 	public void showChar(String character, long degrees, String eye) {

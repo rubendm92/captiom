@@ -1,4 +1,4 @@
-package captiom.server.infrastructure;
+package captiom.server.infrastructure.repositories;
 
 import com.google.gson.JsonObject;
 

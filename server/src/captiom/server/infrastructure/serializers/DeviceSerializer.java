@@ -1,4 +1,4 @@
-package captiom.server.infrastructure;
+package captiom.server.infrastructure.serializers;
 
 import captiom.core.model.device.Device;
 import com.google.gson.JsonArray;

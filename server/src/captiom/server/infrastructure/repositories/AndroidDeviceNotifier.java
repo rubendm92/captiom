@@ -1,9 +1,10 @@
-package captiom.server.infrastructure;
+package captiom.server.infrastructure.repositories;
 
 import captiom.core.infrastructure.device.DeviceNotifier;
 import captiom.core.model.device.Device;
 import captiom.core.model.device.Eye;
 import captiom.core.model.device.OptotypeCharacter;
+import captiom.server.infrastructure.OptotypeCharacterMapper;
 
 public class AndroidDeviceNotifier implements DeviceNotifier {
 
