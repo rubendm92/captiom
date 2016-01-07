@@ -1,6 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="device-selector.html">
 
 <dom-module id="device-configuration">
   <style include="shared-styles"></style>
@@ -9,29 +9,9 @@
       display: block;
     }
 
-    iron-selector > div {
-      cursor: pointer;
-      padding: 5px;
-    }
-
-    .iron-selected {
-      background-color: var(--dark-primary-color);
-      color: white;
-    }
-
     paper-button {
       float: right;
       margin-top: 40px;
-    }
-
-    .device-label {
-      font-size: 13px;
-      color: var(--secondary-text-color);
-      font-family: 'Roboto', 'Noto', sans-serif;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-      font-weight: 400;
-      line-height: 24px;
     }
 
     paper-icon-button {
@@ -62,22 +42,14 @@
           id="setupDeviceRequest"></iron-ajax>
 
     <form is="iron-form" method="post" action="/device" id="deviceConfiguration">
-      <label class="device-label">Device</label>
-      <div>
-        <iron-selector attr-for-selected="name" id="deviceSelector">
-          <template is="dom-repeat" items="{{devices}}">
-            <div name="{{item.id}}">{{item.model}}</div>
-          </template>
-        </iron-selector>
-      </div>
-
-      <paper-input-container>
+      <device-selector id="deviceSelector" devices="{{devices}}" required></device-selector>
+      <paper-input-container auto-validate>
         <label>Diopters</label>
-        <input is="iron-input" type="number" id="diopters" autocomplete="off">
+        <input is="iron-input" type="number" id="diopters" autocomplete="off" required>
       </paper-input-container>
-      <paper-input-container>
+      <paper-input-container auto-validate>
         <label>Distance (mm)</label>
-        <input is="iron-input" type="number" id="distance" autocomplete="off">
+        <input is="iron-input" type="number" id="distance" autocomplete="off" required>
       </paper-input-container>
 
        <paper-button raised on-click="_beginExam">Begin exam</paper-button>
@@ -98,12 +70,19 @@
       },
 
       _beginExam: function () {
+        if (!this._validate()) {
+          return;
+        }
         this.$.setupDeviceRequest.body = {
-          deviceId: this.$.deviceSelector.selected,
+          deviceId: this.$.deviceSelector.selectedDevice,
           diopters: this.$.diopters.value,
           distance: this.$.distance.value
         };
         this.$.setupDeviceRequest.generateRequest();
+      },
+
+      _validate: function () {
+        return this.$.deviceSelector.validate() && this.$.diopters.value && this.$.distance.value;
       }
     });
   })();

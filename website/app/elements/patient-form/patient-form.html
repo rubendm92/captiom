@@ -35,8 +35,8 @@
         id="postPatientRequest"></iron-ajax>
 
     <form is="iron-form" method="post" action="/patient" id="patientForm">
-      <paper-input id="nameInput" label="Patient name" required value="{{patientName}}"></paper-input>
-      <paper-input id="patientIdInput" label="Patient id" required char-counter value="{{patientId}}"></paper-input>
+      <paper-input id="nameInput" label="Patient name" auto-validate required value="{{patientName}}"></paper-input>
+      <paper-input id="patientIdInput" label="Patient id" auto-validate required char-counter value="{{patientId}}"></paper-input>
       <date-input id="birthDate" label="Birth date (dd/mm/yyyy)" required></date-input>
       <gender-selector id="genderMenu" required></gender-selector>
 

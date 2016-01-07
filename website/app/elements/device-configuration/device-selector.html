@@ -1,0 +1,84 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/iron-form-element-behavior/iron-form-element-behavior.html"/>
+<link rel="import" href="../../bower_components/iron-validatable-behavior/iron-validatable-behavior.html"/>
+<link rel="import" href="../../bower_components/iron-validator-behavior/iron-validator-behavior.html"/>
+
+<dom-module id="device-selector">
+  <style include="shared-styles"></style>
+  <style>
+    :host {
+      display: block;
+    }
+
+    :host > div.invalid {
+      border: 2px solid #db4437;
+    }
+
+    iron-selector > div {
+      cursor: pointer;
+      padding: 5px;
+    }
+
+    .iron-selected {
+      background-color: var(--dark-primary-color);
+      color: white;
+    }
+
+    label {
+      font-size: 13px;
+      color: var(--secondary-text-color);
+      font-family: 'Roboto', 'Noto', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      font-weight: 400;
+      line-height: 24px;
+    }
+
+  </style>
+  <template>
+
+    <label>Device</label>
+    <div>
+      <iron-selector attr-for-selected="name" selected="{{selectedDevice}}">
+        <template is="dom-repeat" items="{{devices}}">
+          <div name="{{item.id}}">{{item.model}}</div>
+        </template>
+      </iron-selector>
+    </div>
+
+  </template>
+  <script>
+  (() => {
+    'use strict';
+
+    Polymer({
+      is: 'device-selector',
+
+      properties: {
+        devices: Array,
+        selectedDevice: String,
+        invalid: {
+          notify: true,
+          type: Boolean,
+          value: true
+        }
+      },
+
+      behaviors: [Polymer.IronFormElementBehavior, Polymer.IronValidatableBehavior, Polymer.IronValidatorBehavior],
+
+      validate: function() {
+        if (this.selectedDevice) {
+          this.querySelector('div').classList.remove('invalid');
+          return true;
+        }
+        this.querySelector('div').classList.add('invalid');
+        return false;
+      },
+
+      _invalidChanged: function() {
+      }
+    });
+  })();
+  </script>
+</dom-module>
