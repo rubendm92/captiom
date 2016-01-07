@@ -13,8 +13,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +25,7 @@ import static java.util.Arrays.asList;
 
 public class CsvTestRepository implements TestRepository {
 
-	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	private static final String EXTENSION = ".csv";
 	private static final byte[] HEADER = "Date;Test;Eye;Detail;Character;Result\n".getBytes(Charset.forName("utf-8"));
 	private final Path workingDirectory;
@@ -41,15 +41,33 @@ public class CsvTestRepository implements TestRepository {
 		return availableTests;
 	}
 
-	// TODO
 	@Override
 	public Map<LocalDate, List<Record>> testResultsByDate(String patientId) {
-		Map<LocalDate, List<Record>> history = new LinkedHashMap<>();
-		history.put(LocalDate.of(2015, 6, 22), asList(new Record("+", "Tumbling E", 200, Eye.LEFT, true), new Record("-", "Tumbling E", 200, Eye.RIGHT, true)));
-		history.put(LocalDate.of(2015, 10, 5), asList(new Record("+", "Tumbling E", 100, Eye.RIGHT, true), new Record("-", "Tumbling E", 200, Eye.RIGHT, true)));
-		history.put(LocalDate.of(2016, 6, 22), asList(new Record("/", "Tumbling E", 200, Eye.LEFT, true), new Record("1", "Tumbling E", 200, Eye.RIGHT, true)));
-		history.put(LocalDate.of(2016, 10, 5), asList(new Record("*", "Tumbling E", 100, Eye.RIGHT, true), new Record("4", "Tumbling E", 200, Eye.RIGHT, true)));
+		LinkedHashMap<LocalDate, List<Record>> history = new LinkedHashMap<>();
+		readRecordsOf(patientId)
+				.map(l -> l.split(";"))
+				.forEach(splitLine -> {
+					LocalDate instant = instantFrom(splitLine[0]);
+					history.putIfAbsent(instant, new ArrayList<>());
+					history.get(instant).add(recordFrom(splitLine));
+				});
 		return history;
+	}
+
+	private Stream<String> readRecordsOf(String patientId) {
+		try {
+			return Files.lines(Paths.get(workingDirectory.toFile().getAbsolutePath(), patientId + ".csv")).skip(1);
+		} catch (IOException e) {
+			return Stream.empty();
+		}
+	}
+
+	private LocalDate instantFrom(String instant) {
+		return LocalDate.from(FORMATTER.parse(instant));
+	}
+
+	private Record recordFrom(String[] splitLine) {
+		return new Record(splitLine[4], splitLine[1], Long.valueOf(splitLine[3]), Eye.valueOf(splitLine[2]), splitLine[5].equals("Right"));
 	}
 
 	@Override
@@ -95,22 +113,19 @@ public class CsvTestRepository implements TestRepository {
 	}
 
 	private String now() {
-		return FORMATTER.format(LocalDateTime.now());
+		return FORMATTER.format(LocalDate.now());
 	}
 
 	private Test landolt() {
-		return new Test("Landolt", toList(OptotypeCharacter.C.values()));
+		return new Test("Landolt", asList(OptotypeCharacter.C.values()));
 	}
 
 	private Test snellen() {
-		return new Test("Snellen", toList(OptotypeCharacter.Snellen.values()));
+		return new Test("Snellen", asList(OptotypeCharacter.Snellen.values()));
 	}
 
 	private Test tumblingE() {
-		return new Test("Tumbling E", toList(OptotypeCharacter.TumblingE.values()));
+		return new Test("Tumbling E", asList(OptotypeCharacter.TumblingE.values()));
 	}
 
-	private List<OptotypeCharacter> toList(OptotypeCharacter[] characteres) {
-		return asList(characteres);
-	}
 }
