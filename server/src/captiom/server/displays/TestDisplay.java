@@ -60,8 +60,8 @@ public class TestDisplay implements Display {
 		refreshCharacter.clear(deviceId);
 	}
 
-	public void addRecord(String character, long detail, String eye, boolean success) {
-		unsavedRecords.add(new Record(character, detail, Eye.valueOf(eye), success));
+	public void addRecord(Record record) {
+		unsavedRecords.add(record);
 	}
 
 	public void finishTest() {

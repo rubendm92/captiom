@@ -1,5 +1,7 @@
 package captiom.server.controllers;
 
+import captiom.core.model.device.Eye;
+import captiom.core.model.test.Record;
 import captiom.server.displays.TestDisplay;
 import captiom.server.infrastructure.DisplayService;
 import com.google.gson.JsonElement;
@@ -48,10 +50,11 @@ public class TestController implements Controller {
 
 	private String addRecord(JsonObject body, Response response) {
 		long detail = body.get("detail").getAsLong();
+		String testName = body.get("testName").getAsString();
 		String character = body.get("character").getAsString();
 		String eye = body.get("eye").getAsString();
 		boolean success = body.get("success").getAsBoolean();
-		testDisplay().addRecord(character, detail, eye, success);
+		testDisplay().addRecord(new Record(character, testName, detail, Eye.valueOf(eye), success));
 		return "OK";
 	}
 

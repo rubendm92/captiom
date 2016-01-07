@@ -16,7 +16,7 @@ public class AcceptedAddTestRecordAction {
 		TestRepository testRepository = mock(TestRepository.class);
 		AddTestRecordAction action = new AddTestRecordAction(new TestService(testRepository));
 		String patientId = "1";
-		Record record = new Record("C", 200, Eye.LEFT, true);
+		Record record = new Record("C", "anyTest", 200, Eye.LEFT, true);
 
 		action.add(patientId, record);
 

@@ -45,10 +45,10 @@ public class CsvTestRepository implements TestRepository {
 	@Override
 	public Map<LocalDate, List<Record>> testResultsByDate(String patientId) {
 		Map<LocalDate, List<Record>> history = new LinkedHashMap<>();
-		history.put(LocalDate.of(2015, 6, 22), asList(new Record("+", 200, Eye.LEFT, true), new Record("-", 200, Eye.RIGHT, true)));
-		history.put(LocalDate.of(2015, 10, 5), asList(new Record("+", 100, Eye.RIGHT, true), new Record("-", 200, Eye.RIGHT, true)));
-		history.put(LocalDate.of(2016, 6, 22), asList(new Record("/", 200, Eye.LEFT, true), new Record("1", 200, Eye.RIGHT, true)));
-		history.put(LocalDate.of(2016, 10, 5), asList(new Record("*", 100, Eye.RIGHT, true), new Record("4", 200, Eye.RIGHT, true)));
+		history.put(LocalDate.of(2015, 6, 22), asList(new Record("+", "Tumbling E", 200, Eye.LEFT, true), new Record("-", "Tumbling E", 200, Eye.RIGHT, true)));
+		history.put(LocalDate.of(2015, 10, 5), asList(new Record("+", "Tumbling E", 100, Eye.RIGHT, true), new Record("-", "Tumbling E", 200, Eye.RIGHT, true)));
+		history.put(LocalDate.of(2016, 6, 22), asList(new Record("/", "Tumbling E", 200, Eye.LEFT, true), new Record("1", "Tumbling E", 200, Eye.RIGHT, true)));
+		history.put(LocalDate.of(2016, 10, 5), asList(new Record("*", "Tumbling E", 100, Eye.RIGHT, true), new Record("4", "Tumbling E", 200, Eye.RIGHT, true)));
 		return history;
 	}
 
@@ -91,9 +91,11 @@ public class CsvTestRepository implements TestRepository {
 	}
 
 	private String toCsv(Record record) {
-		String now = FORMATTER.format(LocalDateTime.now());
-		String test = "//TODO"; //TODO
-		return now + ";" + test + ";" + record.eye + ";" + record.detail + ";" + record.character + ";" + (record.success ? "Right" : "Wrong");
+		return now() + ";" + record.testName + ";" + record.eye + ";" + record.detail + ";" + record.character + ";" + (record.success ? "Right" : "Wrong");
+	}
+
+	private String now() {
+		return FORMATTER.format(LocalDateTime.now());
 	}
 
 	private Test landolt() {

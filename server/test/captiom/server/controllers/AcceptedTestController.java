@@ -1,5 +1,6 @@
 package captiom.server.controllers;
 
+import captiom.core.model.test.Record;
 import captiom.server.displays.TestDisplay;
 import captiom.server.infrastructure.DisplayService;
 import org.junit.Before;
@@ -33,7 +34,7 @@ public class AcceptedTestController {
 	public void should_add_record_to_patient_test() throws Exception {
 		controller.handle(requestToAddRecord(), mock(Response.class));
 
-		verify(testDisplay).addRecord("+", 200, "LEFT", true);
+		verify(testDisplay).addRecord(any(Record.class));
 	}
 
 	@Test
@@ -58,7 +59,7 @@ public class AcceptedTestController {
 
 	private Request requestToAddRecord() {
 		Request request = mock(Request.class);
-		when(request.body()).thenReturn("{\"operation\":\"addRecord\",\"detail\":200,\"character\":\"+\",\"eye\":\"LEFT\",\"success\":\"true\"}");
+		when(request.body()).thenReturn("{\"operation\":\"addRecord\",\"detail\":200,\"testName\":\"anyTest\",\"character\":\"+\",\"eye\":\"LEFT\",\"success\":\"true\"}");
 		return request;
 	}
 
