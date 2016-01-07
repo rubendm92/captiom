@@ -13,7 +13,7 @@
     }
   </style>
   <template>
-    <vertical-paper-slider class="horizontal layout" min="{{range.min}}" max="{{range.max}}" pin></vertical-paper-slider>
+    <vertical-paper-slider class="horizontal layout" value="{{degrees}}" min="{{range.min}}" max="{{range.max}}" pin></vertical-paper-slider>
   </template>
   <script>
   (() => {
@@ -23,7 +23,15 @@
       is: 'degrees-selector',
 
       properties: {
-        range: Object
+        range: Object,
+        degrees: {
+          type: Number,
+          observer: '_degreesSelected'
+        }
+      },
+
+      _degreesSelected: function () {
+        this.fire('degrees-selected', {degrees: this.degrees});
       }
     });
   })();

@@ -73,11 +73,22 @@
 
       properties: {
         date: String,
-        cases: Array
+        cases: {
+          type: Array,
+          notify: true
+        }
       },
 
       ready: function () {
         this.date = this._formattedDate(new Date());
+      },
+
+      addRecord: function (record) {
+        this.push('cases', {date: this.date, results: [{eye: record.eye, character: record.char, detail: record.degrees}]});
+      },
+
+      clearHistory: function () {
+        this.cases = [];
       },
 
       _formattedDate: function (date) {

@@ -133,7 +133,7 @@
               </div>
             </paper-toolbar>
 
-            <test-configuration></test-configuration>
+            <test-configuration on-test-started="_clearHistory" on-new-record="_addRecord"></test-configuration>
           </paper-scroll-header-panel>
         </paper-drawer-panel>
       </section>
@@ -184,6 +184,14 @@
 
       _show: function (page) {
         this.querySelector('iron-pages').selected = page;
+      },
+
+      _addRecord: function (e) {
+        this.querySelector('test-result').addRecord(e.detail);
+      },
+
+      _clearHistory: function () {
+        this.querySelector('test-result').clearHistory();
       }
 
     });

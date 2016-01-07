@@ -33,6 +33,7 @@
         var context = this.$.canvas.getContext('2d');
     		this._drawBackground(context);
     		this._drawCharacter(context, this.character);
+        this.$.canvas.addEventListener('click', () => this.fire('character-selected', {character: this.character}));
       },
 
       _drawBackground: function(context) {

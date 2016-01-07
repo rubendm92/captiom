@@ -98,25 +98,28 @@
           observer: '_testSelected',
           value: '-1'
         },
-        currentTestConfiguration: {
-          type: Object,
-          observer: '_updateConfiguration'
-        }
+        currentTestConfiguration: Object
       },
 
+      observers: [
+
+      ],
+
       configure: function (configuration) {
-        this.querySelector('iron-pages').selected = '0';
-        this.selectedTest = '-1';
+        this._reset();
         this.querySelector('degrees-selector').range = configuration.deviceRange;
-        this.querySelector('character-selector').characters = [];
         this.tests = configuration.tests;
-        this.currentTestConfiguration = {};
       },
 
       back: function () {
+        this._reset();
+      },
+
+      _reset: function () {
         this.querySelector('iron-pages').selected = '0';
         this.selectedTest = '-1';
         this.querySelector('character-selector').characters = [];
+        this._clearConfiguration();
       },
 
       _testSelected: function () {
@@ -125,36 +128,52 @@
         }
         this.querySelector('iron-pages').selected = '1';
         this.querySelector('character-selector').characters = this.tests[this.selectedTest].characters;
+        this.fire('test-started');
       },
 
       _eyeSelected: function (e) {
         this.currentTestConfiguration.eye = e.detail.eye;
+        this._updateConfiguration();
       },
 
       _degreesSelected: function (e) {
         this._clearConfiguration();
-        this.currentTestConfiguration.degrees = e.detail.degrees;
+        this.currentTestConfiguration.detail = e.detail.degrees;
       },
 
       _characterSelected: function (e) {
         this.currentTestConfiguration.character = e.detail.character;
+        this._updateConfiguration();
       },
 
       _clearConfiguration: function () {
-        this.currentTestConfiguration = {};
+        this.currentTestConfiguration = {operation: 'showChar'};
       },
 
       _updateConfiguration: function () {
-        if (!this._isConfigured('eye') || !this._isConfigured('degrees') || !this._isConfigured('character')) {
+        if (!this._isConfigured('eye') || !this._isConfigured('detail') || !this._isConfigured('character')) {
           return;
         }
-        let query = this.querySelector('iron-ajax');
-        query.body = this.currentTestConfiguration;
-        query.generateRequest();
+        this._notifyServer(this.querySelector('iron-ajax'));
+        this._showRecord(this.currentTestConfiguration);
       },
 
       _isConfigured: function (parameter) {
         return this.currentTestConfiguration.hasOwnProperty(parameter);
+      },
+
+      _notifyServer: function (query) {
+        query.body = JSON.stringify(this.currentTestConfiguration);
+        query.generateRequest();
+      },
+
+      _showRecord: function (configuration) {
+        this.fire('new-record', {
+          char: configuration.character,
+          testName: '',
+          degrees: configuration.detail,
+          eye: configuration.eye
+        });
       }
     });
   })();
