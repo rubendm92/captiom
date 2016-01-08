@@ -47,22 +47,32 @@
     }
   </style>
   <template>
-    <ul class="tests">
-      <template is="dom-repeat" items="{{cases}}">
-        <li>
-          <h3>{{item.date}}</h3>
-          <ul>
-            <template is="dom-repeat" items="{{item.results}}">
-              <li><test-case case="{{item}}"></test-case></li>
-            </template>
-          </ul>
-        </li>
-      </template>
-    </ul>
-    <div>
-      <paper-button on-tap="_suggest">Suggest</paper-button>
-      <paper-button on-tap="_notifyFinish">Finish</paper-button>
-    </div>
+    <template is="dom-if" if="{{_isHistory(history)}}">
+      <ul class="tests">
+        <template is="dom-repeat" items="{{history}}">
+          <li>
+            <h3>{{item.date}}</h3>
+            <ul>
+              <template is="dom-repeat" items="{{item.results}}">
+                <li><test-case case="{{item}}"></test-case></li>
+              </template>
+            </ul>
+          </li>
+        </template>
+      </ul>
+    </template>
+    <template is="dom-if" if="{{_isExam(history)}}">
+      <h3>{{date}}</h3>
+      <ul class="tests">
+        <template is="dom-repeat" items="{{cases}}">
+          <li><test-case case="{{item}}"></test-case></li>
+        </template>
+      </ul>
+      <div>
+        <paper-button on-tap="_suggest">Suggest</paper-button>
+        <paper-button on-tap="_notifyFinish">Finish</paper-button>
+      </div>
+    </template>
   </template>
   <script>
   (() => {
@@ -73,6 +83,10 @@
 
       properties: {
         date: String,
+        history: {
+          type: Array,
+          notify: true
+        },
         cases: {
           type: Array,
           notify: true
@@ -84,10 +98,11 @@
       },
 
       addRecord: function (record) {
-        this.push('cases', {date: this.date, results: [{eye: record.eye, character: record.char, detail: record.degrees}]});
+        this.push('cases', {eye: record.eye, character: record.char, detail: record.degrees});
       },
 
       clearHistory: function () {
+        this.history = [];
         this.cases = [];
       },
 
@@ -101,6 +116,14 @@
 
       _notifyFinish: function () {
         this.fire('finish');
+      },
+
+      _isHistory: function (history) {
+        return history.length !== 0;
+      },
+
+      _isExam: function (history) {
+        return history.length === 0;
       }
     });
   })();

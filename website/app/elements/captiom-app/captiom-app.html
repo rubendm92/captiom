@@ -175,7 +175,7 @@
         this._show('2');
         this.patientName = configuration.patientName;
         this.querySelector('test-configuration').configure(configuration);
-        this.querySelector('test-result').cases= configuration.history;
+        this.querySelector('test-result').history = configuration.history;
       },
 
       _showAllTests: function () {

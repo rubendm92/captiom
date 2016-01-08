@@ -67,7 +67,7 @@ public class CsvTestRepository implements TestRepository {
 	}
 
 	private Record recordFrom(String[] splitLine) {
-		return new Record(splitLine[4], splitLine[1], Long.valueOf(splitLine[3]), Eye.valueOf(splitLine[2]), splitLine[5].equals("Right"));
+		return new Record(splitLine[4], splitLine[1], Long.valueOf(splitLine[3]), Eye.valueOf(splitLine[2]), splitLine[5].equalsIgnoreCase("Right"));
 	}
 
 	@Override

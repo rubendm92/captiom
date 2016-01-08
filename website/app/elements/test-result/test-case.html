@@ -63,7 +63,16 @@
       is: 'test-case',
 
       properties: {
-        case: Object
+        case: {
+          type: Object,
+          observer: '_updateButtons'
+        }
+      },
+
+      _updateButtons: function () {
+        if (this.case.hasOwnProperty('success')) {
+          this._hideIcon(this.case.success ? '.wrong' : '.correct');
+        }
       },
 
       _rightAnswer: function () {
