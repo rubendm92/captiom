@@ -31,7 +31,7 @@
       },
 
       _degreesSelected: function () {
-        this.fire('degrees-selected', {degrees: this.degrees});
+        this.fire('degrees-selected', {degrees: Math.round(this.degrees)});
       }
     });
   })();

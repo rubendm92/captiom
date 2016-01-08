@@ -320,7 +320,7 @@
     },
 
     _positionKnob: function(ratio) {
-      this._setImmediateValue(this._calcStep(this._calcKnobPosition(ratio)));
+      this._setImmediateValue(Math.round(this._calcStep(this._calcKnobPosition(ratio))));
       this._setRatio(this._calcRatio(this.immediateValue));
 
       this.$.sliderKnob.style.bottom = 'calc(' + (this.ratio * 100) + '% - 16px)';
@@ -363,7 +363,7 @@
       var dx = Math.min(this._maxx, Math.max(this._minx, (-1 * event.detail.dy)));
       this._x = this._startx + dx;
 
-      var immediateValue = this._calcStep(this._calcKnobPosition(this._x / this._y));
+      var immediateValue = Math.round(this._calcStep(this._calcKnobPosition(this._x / this._y)));
       this._setImmediateValue(immediateValue);
 
       var translateY = ((this._calcRatio(immediateValue) * this._y) - this._startx) - 16;
