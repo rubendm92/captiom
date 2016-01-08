@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="test-case.html">
@@ -47,6 +48,13 @@
     }
   </style>
   <template>
+    <iron-ajax
+        url="/test"
+        method="post"
+        handle-as="json"
+        content-type="application/json"
+        body='{"operation":"finish"}'
+        id="finishRequest"></iron-ajax>
     <template is="dom-if" if="{{_isHistory(history)}}">
       <ul class="tests">
         <template is="dom-repeat" items="{{history}}">
@@ -98,7 +106,10 @@
       },
 
       addRecord: function (record) {
-        this.push('cases', {eye: record.eye, character: record.char, detail: record.degrees});
+        if (this.cases.length > 0 && !this.cases[this.cases.length - 1].hasOwnProperty('success')) {
+          this.pop('cases');
+        }
+        this.push('cases', {eye: record.eye, character: record.char, detail: record.degrees, testName: record.testName});
       },
 
       clearHistory: function () {
@@ -116,6 +127,7 @@
 
       _notifyFinish: function () {
         this.fire('finish');
+        this.$.finishRequest.generateRequest();
       },
 
       _isHistory: function (history) {

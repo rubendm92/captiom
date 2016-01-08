@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 
@@ -44,6 +45,12 @@
     }
   </style>
   <template>
+    <iron-ajax
+        url="/test"
+        method="post"
+        handle-as="json"
+        content-type="application/json"
+        id="caseResultRequest"></iron-ajax>
     <span class="character">[[case.character]]</span>
     <div class="info">
       <div class="eye">[[case.eye]]</div>
@@ -76,15 +83,37 @@
       },
 
       _rightAnswer: function () {
+        if (this.case.hasOwnProperty('success')) {
+          return;
+        }
         this._hideIcon('.wrong');
+        this._sendRequest(true);
       },
 
       _wrongAnswer: function () {
+        if (this.case.hasOwnProperty('success')) {
+          return;
+        }
         this._hideIcon('.correct');
+        this._sendRequest(false);
+
       },
 
       _hideIcon: function (icon) {
         this.querySelector(icon).setAttribute('hidden', '');
+      },
+
+      _sendRequest: function (success) {
+        let query = this.querySelector('iron-ajax');
+        query.body = this._generateBody(success);
+        query.generateRequest();
+      },
+
+      _generateBody: function (success) {
+        this.case.success = success;
+        let request = this.case;
+        request.operation = 'addRecord';
+        return JSON.stringify(request);
       }
     });
   })();

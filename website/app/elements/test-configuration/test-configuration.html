@@ -170,7 +170,7 @@
       _showRecord: function (configuration) {
         this.fire('new-record', {
           char: configuration.character,
-          testName: '',
+          testName: this.tests[this.selectedTest].name,
           degrees: configuration.detail,
           eye: configuration.eye
         });
