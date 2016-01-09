@@ -55,6 +55,13 @@
         content-type="application/json"
         body='{"operation":"finish"}'
         id="finishRequest"></iron-ajax>
+    <iron-ajax
+        url="/test"
+        method="post"
+        handle-as="json"
+        content-type="application/json"
+        body='{"operation":"suggest"}'
+        id="suggestRequest"></iron-ajax>
     <template is="dom-if" if="{{_isHistory(history)}}">
       <ul class="tests">
         <template is="dom-repeat" items="{{history}}">
@@ -101,8 +108,11 @@
         }
       },
 
+      behaviors: [CottonBehaviors.PushBehavior],
+
       ready: function () {
         this.date = this._formattedDate(new Date());
+        this.when('History').execute(history => this.history = history);
       },
 
       addRecord: function (record) {
@@ -122,7 +132,7 @@
       },
 
       _suggest: function () {
-
+        this.$.suggestRequest.generateRequest();
       },
 
       _notifyFinish: function () {

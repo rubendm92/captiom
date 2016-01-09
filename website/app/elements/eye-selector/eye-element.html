@@ -95,8 +95,15 @@
         side: String
       },
 
+      close: function () {
+        this.$.socket.classList.add('closed');
+      },
+
       _eyeChosen: function () {
         this.$.socket.classList.toggle('closed');
+        if (this.$.socket.classList.contains('closed')) {
+          return;
+        }
         this.fire('eye-selected', {eye: this.side});
       }
     });

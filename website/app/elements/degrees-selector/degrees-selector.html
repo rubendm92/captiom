@@ -26,6 +26,12 @@
         }
       },
 
+      reset: function () {
+        if (this.range) {
+          this.querySelector('vertical-paper-slider').value = this.range.max;
+        }
+      },
+
       _degreesSelected: function () {
         this.fire('degrees-selected', {degrees: Math.round(this.degrees)});
       }

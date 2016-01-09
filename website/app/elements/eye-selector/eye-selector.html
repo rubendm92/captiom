@@ -26,7 +26,11 @@
     'use strict';
 
     Polymer({
-      is: 'eye-selector'
+      is: 'eye-selector',
+
+      reset: function () {
+        [].slice.call(this.querySelectorAll('eye-element')).forEach(eye => eye.close());
+      }
     });
   })();
   </script>

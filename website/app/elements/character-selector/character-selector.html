@@ -41,6 +41,10 @@
       properties: {
         characters: Array,
         selectedCharacter: String
+      },
+
+      reset: function () {
+        this.querySelector('iron-selector').selected = undefined;
       }
     });
   })();

@@ -9,6 +9,7 @@ import captiom.core.use_cases.test.AddTestRecordAction;
 import captiom.core.use_cases.test.GetTestRecordsAction;
 import captiom.server.infrastructure.OptotypeCharacterMapper;
 import captiom.server.infrastructure.Services;
+import captiom.server.infrastructure.serializers.HistorySerializer;
 import captiom.server.infrastructure.serializers.TestDisplayConfigurationSerializer;
 
 import java.util.ArrayList;
@@ -16,7 +17,8 @@ import java.util.List;
 
 public class TestDisplay implements Display {
 
-	private static final TestDisplayConfigurationSerializer serializer = new TestDisplayConfigurationSerializer();
+	private static final TestDisplayConfigurationSerializer configurationSerializer = new TestDisplayConfigurationSerializer();
+	private static final HistorySerializer historySerializer = new HistorySerializer();
 	private final Patient patient;
 	private final CharacterHeightCalculator calculator;
 	private final String deviceId;
@@ -42,7 +44,7 @@ public class TestDisplay implements Display {
 	}
 
 	private String serializeConfiguration() {
-		return serializer.serialize(patient, calculator.range(), services.testService().availableTests(), getTestRecords.forPatient(patient.id)).toString();
+		return configurationSerializer.serialize(patient, calculator.range(), services.testService().availableTests(), getTestRecords.forPatient(patient.id)).toString();
 	}
 
 	public void showChar(String character, long degrees, String eye) {
@@ -67,5 +69,6 @@ public class TestDisplay implements Display {
 	public void finishTest() {
 		addTestRecord.add(patient.id, unsavedRecords.toArray(new Record[unsavedRecords.size()]));
 		unsavedRecords.clear();
+		services.pushService().notify("History", historySerializer.serialize(getTestRecords.forPatient(patient.id)).toString());
 	}
 }

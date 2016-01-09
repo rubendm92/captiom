@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-class HistorySerializer {
+public class HistorySerializer {
 
 	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
