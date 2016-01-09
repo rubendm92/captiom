@@ -102,9 +102,11 @@
         currentTestConfiguration: Object
       },
 
-      observers: [
+      behaviors: [CottonBehaviors.PushBehavior],
 
-      ],
+      ready: function () {
+        this.when('Suggestion').execute(suggestion => this._showSuggestion(suggestion));
+      },
 
       configure: function (configuration) {
         this._reset();
@@ -130,9 +132,12 @@
         if (this.selectedTest === '-1' || !this.tests) {
           return;
         }
+        let query = this.querySelector('iron-ajax');
         this.querySelector('iron-pages').selected = '1';
         this.querySelector('character-selector').characters = this.tests[this.selectedTest].characters;
         this.fire('test-started');
+        query.body = JSON.stringify({operation: 'selectTest', test: this.tests[this.selectedTest].name});
+        query.generateRequest();
       },
 
       _eyeSelected: function (e) {
@@ -178,6 +183,12 @@
           degrees: configuration.detail,
           eye: configuration.eye
         });
+      },
+
+      _showSuggestion: function (suggestion) {
+        this.querySelector('degrees-selector').degrees = suggestion.degrees;
+        this.querySelector('character-selector').select(suggestion.character);
+        this._showRecord({character: suggestion.character, detail: suggestion.degrees, eye: suggestion.eye});
       }
     });
   })();

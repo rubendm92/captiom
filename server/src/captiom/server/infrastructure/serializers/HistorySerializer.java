@@ -1,7 +1,7 @@
 package captiom.server.infrastructure.serializers;
 
 import captiom.core.model.test.Record;
-import com.google.gson.Gson;
+import captiom.server.infrastructure.OptotypeCharacterMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -28,7 +28,13 @@ public class HistorySerializer {
 	}
 
 	private JsonElement serializeRecord(Record record) {
-		return new Gson().toJsonTree(record);
+		JsonObject object = new JsonObject();
+		object.addProperty("character", OptotypeCharacterMapper.toString(record.character));
+		object.addProperty("testName", record.testName);
+		object.addProperty("detail", record.detail);
+		object.addProperty("eye", record.eye.toString());
+		object.addProperty("success", record.success);
+		return object;
 	}
 
 	private JsonArray toJsonArray(Stream<JsonElement> stream) {

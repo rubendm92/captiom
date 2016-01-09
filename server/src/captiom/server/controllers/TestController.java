@@ -17,6 +17,7 @@ import java.util.function.BiFunction;
 
 public class TestController implements Controller {
 
+	private static final String SELECT_TEST = "selectTest";
 	private static final String SHOW_CHAR = "showChar";
 	private static final String ADD_RECORD = "addRecord";
 	private static final String SUGGEST = "suggest";
@@ -27,6 +28,7 @@ public class TestController implements Controller {
 
 	public TestController(DisplayService displayService) {
 		this.displayService = displayService;
+		actions.put(SELECT_TEST, this::selectTest);
 		actions.put(SHOW_CHAR, this::showChar);
 		actions.put(ADD_RECORD, this::addRecord);
 		actions.put(SUGGEST, this::suggest);
@@ -42,6 +44,11 @@ public class TestController implements Controller {
 
 	private JsonObject bodyFrom(Request request) {
 		return GSON.fromJson(request.body(), JsonElement.class).getAsJsonObject();
+	}
+
+	private String selectTest(JsonObject body, Response response) {
+		testDisplay().selectTest(body.get("test").getAsString());
+		return "OK";
 	}
 
 	private String showChar(JsonObject body, Response response) {

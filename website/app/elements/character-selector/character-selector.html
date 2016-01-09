@@ -25,7 +25,7 @@
     }
   </style>
   <template>
-    <iron-selector  attr-for-selected="character">
+    <iron-selector attr-for-selected="character">
       <template is="dom-repeat" items="{{characters}}">
         <optotype-character character="{{item}}"></optotype-character>
       </template>
@@ -41,6 +41,10 @@
       properties: {
         characters: Array,
         selectedCharacter: String
+      },
+
+      select: function (character) {
+        this.querySelector('iron-selector').selected = character;
       },
 
       reset: function () {
