@@ -3,17 +3,13 @@
 
 <dom-module id="degrees-selector">
   <style>
-    :host {
+    :host, vertical-paper-slider {
       display: block;
-      height: 100%;
-    }
-
-    vertical-paper-slider {
       height: 100%;
     }
   </style>
   <template>
-    <vertical-paper-slider class="horizontal layout" value="{{degrees}}" min="{{range.min}}" max="{{range.max}}" pin></vertical-paper-slider>
+    <vertical-paper-slider value="{{degrees}}" min="{{range.min}}" max="{{range.max}}" pin></vertical-paper-slider>
   </template>
   <script>
   (() => {

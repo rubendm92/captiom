@@ -12,7 +12,7 @@
     <style>
       :host {
         display: inline-block;
-        width: 35px;
+        width: 85px;
         height: 200px;
         cursor: default;
         -webkit-user-select: none;
@@ -31,7 +31,8 @@
       #sliderContainer {
         position: relative;
         width: 32px;
-        height: 100%;
+        height: calc(100% - 45px);
+        margin-left: 24px;
       }
 
       #sliderContainer:focus {
@@ -188,6 +189,9 @@
       }
 
     </style>
+    <paper-input value="{{immediateValue}}" no-label-float>
+      <div suffix>MAR</div>
+    </paper-input>
     <div id="sliderContainer"
       class$="[[_getClassNames(disabled, pin, immediateValue, min, expand, dragging, transiting)]]">
 
@@ -225,21 +229,12 @@
 
     properties: {
 
-      /**
-       * If true, a pin with numeric value label is shown when the slider thumb
-       * is pressed. Use for settings for which users need to know the exact
-       * value of the setting.
-       */
       pin: {
         type: Boolean,
         value: false,
         notify: true
       },
 
-      /**
-       * The immediate value of the slider.  This value is updated while the user
-       * is dragging the slider.
-       */
       immediateValue: {
         type: Number,
         value: 0,
@@ -247,18 +242,12 @@
         notify: true
       },
 
-      /**
-       * If true, the knob is expanded
-       */
       expand: {
         type: Boolean,
         value: false,
         readOnly: true
       },
 
-      /**
-       * True when the user is dragging the slider.
-       */
       dragging: {
         type: Boolean,
         value: false,
@@ -306,7 +295,7 @@
       if (this.dragging) {
         this.fire('immediate-value-change');
       } else {
-        this.value = this.immediateValue;
+        this.value = Math.round(this.immediateValue);
       }
     },
 
@@ -376,7 +365,7 @@
       this.$.sliderKnob.classList.remove('dragging');
       this._setDragging(false);
       this._resetKnob();
-      this.value = this.immediateValue;
+      this.value = Math.round(this.immediateValue);
 
       s.transform = s.webkitTransform = '';
 
@@ -385,11 +374,7 @@
 
     _knobdown: function(event) {
       this._expandKnob();
-
-      // cancel selection
       event.preventDefault();
-
-      // set the focus manually because we will called prevent default
       this.focus();
     },
 
@@ -423,10 +408,7 @@
     },
 
     _mergeClasses: function(classes) {
-      return Object.keys(classes).filter(
-        function(className) {
-          return classes[className];
-        }).join(' ');
+      return Object.keys(classes).filter(className => classes[className]).join(' ');
     },
 
     _getClassNames: function() {
@@ -441,7 +423,7 @@
     },
 
     _changeValue: function(event) {
-      this.value = event.target.value;
+      this.value = Math.round(event.target.value);
       this.fire('change');
     }
   });
