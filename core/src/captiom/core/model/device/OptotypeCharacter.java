@@ -13,4 +13,5 @@ public interface OptotypeCharacter {
 	enum Snellen implements OptotypeCharacter {
 		C, D, E, F, L, N, O, P, T, Z
 	}
+
 }

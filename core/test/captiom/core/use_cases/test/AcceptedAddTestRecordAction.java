@@ -2,6 +2,7 @@ package captiom.core.use_cases.test;
 
 import captiom.core.infrastructure.test.TestRepository;
 import captiom.core.model.device.Eye;
+import captiom.core.model.device.OptotypeCharacter;
 import captiom.core.model.test.Record;
 import captiom.core.model.test.TestService;
 import org.junit.Test;
@@ -16,7 +17,7 @@ public class AcceptedAddTestRecordAction {
 		TestRepository testRepository = mock(TestRepository.class);
 		AddTestRecordAction action = new AddTestRecordAction(new TestService(testRepository));
 		String patientId = "1";
-		Record record = new Record("C", "anyTest", 200, Eye.LEFT, true);
+		Record record = new Record(OptotypeCharacter.Snellen.C, "anyTest", 200, Eye.LEFT, true);
 
 		action.add(patientId, record);
 

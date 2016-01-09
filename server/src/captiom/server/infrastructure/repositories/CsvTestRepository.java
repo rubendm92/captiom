@@ -5,6 +5,7 @@ import captiom.core.model.device.Eye;
 import captiom.core.model.device.OptotypeCharacter;
 import captiom.core.model.test.Record;
 import captiom.core.model.test.Test;
+import captiom.server.infrastructure.OptotypeCharacterMapper;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -67,7 +68,7 @@ public class CsvTestRepository implements TestRepository {
 	}
 
 	private Record recordFrom(String[] splitLine) {
-		return new Record(splitLine[4], splitLine[1], Long.valueOf(splitLine[3]), Eye.valueOf(splitLine[2]), splitLine[5].equalsIgnoreCase("Right"));
+		return new Record(OptotypeCharacterMapper.fromString(splitLine[4]), splitLine[1], Long.valueOf(splitLine[3]), Eye.valueOf(splitLine[2]), splitLine[5].equalsIgnoreCase("Right"));
 	}
 
 	@Override

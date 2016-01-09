@@ -1,9 +1,11 @@
 package captiom.server.controllers;
 
 import captiom.core.model.device.Eye;
+import captiom.core.model.device.OptotypeCharacter;
 import captiom.core.model.test.Record;
 import captiom.server.displays.TestDisplay;
 import captiom.server.infrastructure.DisplayService;
+import captiom.server.infrastructure.OptotypeCharacterMapper;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import spark.Request;
@@ -17,6 +19,7 @@ public class TestController implements Controller {
 
 	private static final String SHOW_CHAR = "showChar";
 	private static final String ADD_RECORD = "addRecord";
+	private static final String SUGGEST = "suggest";
 	private static final String CLEAR = "clear";
 	private static final String FINISH = "finish";
 	private final Map<String, BiFunction<JsonObject, Response, String>> actions = new HashMap<>();
@@ -26,6 +29,7 @@ public class TestController implements Controller {
 		this.displayService = displayService;
 		actions.put(SHOW_CHAR, this::showChar);
 		actions.put(ADD_RECORD, this::addRecord);
+		actions.put(SUGGEST, this::suggest);
 		actions.put(FINISH, this::finish);
 		actions.put(CLEAR, this::clearDevice);
 	}
@@ -51,10 +55,15 @@ public class TestController implements Controller {
 	private String addRecord(JsonObject body, Response response) {
 		long detail = body.get("detail").getAsLong();
 		String testName = body.get("testName").getAsString();
-		String character = body.get("character").getAsString();
+		OptotypeCharacter character = OptotypeCharacterMapper.fromString(body.get("character").getAsString());
 		String eye = body.get("eye").getAsString();
 		boolean success = body.get("success").getAsBoolean();
 		testDisplay().addRecord(new Record(character, testName, detail, Eye.valueOf(eye), success));
+		return "OK";
+	}
+
+	private String suggest(JsonObject body, Response response) {
+		testDisplay().suggest();
 		return "OK";
 	}
 
