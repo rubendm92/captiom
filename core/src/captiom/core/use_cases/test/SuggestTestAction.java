@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.function.BiFunction;
+import java.util.stream.Stream;
 
 public class SuggestTestAction {
 
@@ -34,8 +35,7 @@ public class SuggestTestAction {
 	}
 
 	private int rightRecordsForLastTest(List<Record> records) {
-		return (int) records.stream()
-				.filter(r -> lastTest(records).eye == r.eye)
+		return (int) recordsForLastTestedEye(records)
 				.filter(r -> lastTest(records).detail == r.detail)
 				.filter(r -> r.success)
 				.count();
@@ -64,8 +64,22 @@ public class SuggestTestAction {
 	}
 
 	private Suggestion suggestionWithLowerValue(List<Record> records, List<OptotypeCharacter> characters) {
-		long degrees = (long) (((lastTest(records).detail - range.min) / 2) + range.min);
+		long minValue = minValue(records);
+		long degrees = (lastTest(records).detail - minValue) / 2 + minValue;
 		return new Suggestion(degrees, randomCharacter(characters), lastTest(records).eye);
+	}
+
+	private long minValue(List<Record> records) {
+		return recordsForLastTestedEye(records)
+				.filter(r -> lastTest(records).detail > r.detail)
+				.map(r -> r.detail)
+				.findFirst()
+				.orElse((long) range.min);
+	}
+
+	private Stream<Record> recordsForLastTestedEye(List<Record> records) {
+		return records.stream()
+				.filter(r -> lastTest(records).eye == r.eye);
 	}
 
 	private Suggestion suggestionWithSameDegrees(List<Record> records, List<OptotypeCharacter> characters) {

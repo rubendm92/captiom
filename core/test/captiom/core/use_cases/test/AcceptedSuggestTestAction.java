@@ -48,48 +48,56 @@ public class AcceptedSuggestTestAction {
 	}
 
 	@Test
-	public void should_give_suggestion_with_more_degrees_if_there_is_one_wrong_record() {
+	public void should_give_suggestion_with_one_third_more_degrees_if_there_is_one_wrong_record() {
 		Suggestion suggestion = action.suggestGiven(oneWrongRecord(), characters);
 
 		assertThat(suggestion.degrees, is(70L));
 	}
 
 	@Test
-	public void should_give_suggestion_with_more_degrees_if_there_is_two_wrong_records() {
+	public void should_give_suggestion_with_two_third_more_degrees_if_there_is_two_wrong_records() {
 		Suggestion suggestion = action.suggestGiven(twoWrongRecords(), characters);
 
 		assertThat(suggestion.degrees, is(90L));
 	}
+	
+	@Test
+	public void should_give_suggestion_with_value_between_lower_failing_degree_and_current_value() {
+		Suggestion suggestion = action.suggestGiven(threeCorrectRecordsAfterFailingOneLower(), characters);
+
+		assertThat(suggestion.degrees, is(40L));
+	}
 
 	private List<Record> oneWrongRecord() {
-		return asList(
-				new Record(Snellen.C, "Snellen", 50, Eye.LEFT, true),
-				new Record(Snellen.D, "Snellen", 50, Eye.LEFT, false),
-				new Record(Snellen.N, "Snellen", 50, Eye.LEFT, true)
-		);
+		return threeRecords(true, false, true);
 	}
 
 	private List<Record> twoWrongRecords() {
-		return asList(
-				new Record(Snellen.C, "Snellen", 50, Eye.LEFT, true),
-				new Record(Snellen.D, "Snellen", 50, Eye.LEFT, false),
-				new Record(Snellen.N, "Snellen", 50, Eye.LEFT, false)
-		);
+		return threeRecords(true, false, false);
 	}
 
 	private List<Record> threeCorrectRecords() {
-		return threeRecordsWithSameResult(true);
+		return threeRecords(true, true, true);
 	}
 
 	private List<Record> threeWrongRecords() {
-		return threeRecordsWithSameResult(false);
+		return threeRecords(false, false, false);
 	}
 
-	private List<Record> threeRecordsWithSameResult(boolean success) {
+	private List<Record> threeRecords(boolean... results) {
 		return asList(
-				new Record(Snellen.C, "Snellen", 50, Eye.LEFT, success),
-				new Record(Snellen.D, "Snellen", 50, Eye.LEFT, success),
-				new Record(Snellen.N, "Snellen", 50, Eye.LEFT, success)
+				new Record(Snellen.C, "Snellen", 50, Eye.LEFT, results[0]),
+				new Record(Snellen.D, "Snellen", 50, Eye.LEFT, results[1]),
+				new Record(Snellen.N, "Snellen", 50, Eye.LEFT, results[2])
+		);
+	}
+
+	private List<Record> threeCorrectRecordsAfterFailingOneLower() {
+		return asList(
+				new Record(Snellen.F, "Snellen", 30, Eye.LEFT, false),
+				new Record(Snellen.C, "Snellen", 50, Eye.LEFT, true),
+				new Record(Snellen.D, "Snellen", 50, Eye.LEFT, true),
+				new Record(Snellen.N, "Snellen", 50, Eye.LEFT, true)
 		);
 	}
 
