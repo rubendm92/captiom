@@ -6,7 +6,7 @@ import captiom.core.model.device.OptotypeCharacter;
 import captiom.core.model.device.OptotypeCharacter.Snellen;
 import captiom.core.model.test.Record;
 import captiom.core.model.test.Suggestion;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.List;
@@ -19,10 +19,10 @@ import static org.junit.Assert.assertThat;
 public class AcceptedSuggestTestAction {
 
 	private final List<OptotypeCharacter> characters = asList(Snellen.values());
-	private SuggestTestAction action;
+	private static SuggestTestAction action;
 
-	@Before
-	public void setUp() throws Exception {
+	@BeforeClass
+	public static void setUpClass() throws Exception {
 		action = new SuggestTestAction(new CharacterHeightCalculator.Range(10, 110));
 	}
 
@@ -31,30 +31,57 @@ public class AcceptedSuggestTestAction {
 		Suggestion suggestion = action.suggestGiven(emptyList(), characters);
 
 		assertThat(suggestion.degrees, is(110L));
-		assertThat(suggestion.eye, is(Eye.LEFT));
 	}
 
 	@Test
 	public void should_give_suggestion_with_lower_degrees_if_three_records_for_same_eye_are_correct() {
-		Suggestion suggestion = action.suggestGiven(threeCorrectRecordsForLeftEye(), characters);
+		Suggestion suggestion = action.suggestGiven(threeCorrectRecords(), characters);
 
 		assertThat(suggestion.degrees, is(30L));
-		assertThat(suggestion.eye, is(Eye.LEFT));
 	}
 	
 	@Test
 	public void should_give_suggestion_with_same_degrees_if_three_records_are_wrong() {
-		Suggestion suggestion = action.suggestGiven(threeWrongRecordsForLeftEye(), characters);
+		Suggestion suggestion = action.suggestGiven(threeWrongRecords(), characters);
 
 		assertThat(suggestion.degrees, is(50L));
-		assertThat(suggestion.eye, is(Eye.LEFT));
 	}
 
-	private List<Record> threeCorrectRecordsForLeftEye() {
+	@Test
+	public void should_give_suggestion_with_more_degrees_if_there_is_one_wrong_record() {
+		Suggestion suggestion = action.suggestGiven(oneWrongRecord(), characters);
+
+		assertThat(suggestion.degrees, is(70L));
+	}
+
+	@Test
+	public void should_give_suggestion_with_more_degrees_if_there_is_two_wrong_records() {
+		Suggestion suggestion = action.suggestGiven(twoWrongRecords(), characters);
+
+		assertThat(suggestion.degrees, is(90L));
+	}
+
+	private List<Record> oneWrongRecord() {
+		return asList(
+				new Record(Snellen.C, "Snellen", 50, Eye.LEFT, true),
+				new Record(Snellen.D, "Snellen", 50, Eye.LEFT, false),
+				new Record(Snellen.N, "Snellen", 50, Eye.LEFT, true)
+		);
+	}
+
+	private List<Record> twoWrongRecords() {
+		return asList(
+				new Record(Snellen.C, "Snellen", 50, Eye.LEFT, true),
+				new Record(Snellen.D, "Snellen", 50, Eye.LEFT, false),
+				new Record(Snellen.N, "Snellen", 50, Eye.LEFT, false)
+		);
+	}
+
+	private List<Record> threeCorrectRecords() {
 		return threeRecordsWithSameResult(true);
 	}
 
-	private List<Record> threeWrongRecordsForLeftEye() {
+	private List<Record> threeWrongRecords() {
 		return threeRecordsWithSameResult(false);
 	}
 

@@ -29,7 +29,23 @@ public class SuggestTestAction {
 		if (allRecordsForLastEyeAreWrong(records)) {
 			return suggestionWithSameDegrees(lastTest(records), characters);
 		}
-		throw new UnsupportedOperationException("Not implemented yet");
+		if (thereIsOneWrongRecord(records)) {
+			return suggestionWithOneThirdMoreDegrees(lastTest(records), characters);
+		}
+		return suggestionWithTwoThirdsMoreDegrees(lastTest(records), characters);
+	}
+
+	private Suggestion suggestionWithTwoThirdsMoreDegrees(Record record, List<OptotypeCharacter> characters) {
+		long degrees = (long) (record.detail + 2 * (range.max - record.detail) / 3);
+		return new Suggestion(degrees, randomCharacter(characters), record.eye);
+	}
+
+	private boolean thereIsOneWrongRecord(List<Record> records) {
+		return records.stream()
+				.filter(r -> lastTest(records).eye == r.eye)
+				.filter(r -> lastTest(records).detail == r.detail)
+				.filter(r -> !r.success)
+				.count() == 1;
 	}
 
 	private boolean allRecordsForLastEyeAreWrong(List<Record> records) {
@@ -41,6 +57,11 @@ public class SuggestTestAction {
 
 	private Suggestion suggestionWithMaximumValue(List<OptotypeCharacter> characters) {
 		return new Suggestion((long) range.max, randomCharacter(characters), Eye.LEFT);
+	}
+
+	private Suggestion suggestionWithOneThirdMoreDegrees(Record record, List<OptotypeCharacter> characters) {
+		long degrees = (long) (record.detail + (range.max - record.detail) / 3);
+		return new Suggestion(degrees, randomCharacter(characters), record.eye);
 	}
 
 	private OptotypeCharacter randomCharacter(List<OptotypeCharacter> characters) {
