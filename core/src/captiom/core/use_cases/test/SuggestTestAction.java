@@ -6,86 +6,72 @@ import captiom.core.model.device.OptotypeCharacter;
 import captiom.core.model.test.Record;
 import captiom.core.model.test.Suggestion;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.function.BiFunction;
 
 public class SuggestTestAction {
 
-	private static final int TEST_THRESHOLD = 3;
 	private static final Random RANDOM = new Random();
 	private final CharacterHeightCalculator.Range range;
+	private final Map<Integer, SuggestionBuilder> actionBuilder = new HashMap<>();
 
 	public SuggestTestAction(CharacterHeightCalculator.Range range) {
 		this.range = range;
+		actionBuilder.put(0, this::suggestionWithSameDegrees);
+		actionBuilder.put(1, this::suggestionWithTwoThirdsMoreDegrees);
+		actionBuilder.put(2, this::suggestionWithOneThirdMoreDegrees);
 	}
 
 	public Suggestion suggestGiven(List<Record> records, List<OptotypeCharacter> characters) {
 		if (records.isEmpty()) {
 			return suggestionWithMaximumValue(characters);
 		}
-		if (thereAreEnoughRecordsRightForLastEyeTested(records)) {
-			return suggestionWithLowerValue(lastTest(records), characters);
-		}
-		if (allRecordsForLastEyeAreWrong(records)) {
-			return suggestionWithSameDegrees(lastTest(records), characters);
-		}
-		if (thereIsOneWrongRecord(records)) {
-			return suggestionWithOneThirdMoreDegrees(lastTest(records), characters);
-		}
-		return suggestionWithTwoThirdsMoreDegrees(lastTest(records), characters);
+		return actionBuilder.getOrDefault(rightRecordsForLastTest(records), this::suggestionWithLowerValue)
+				.apply(records, characters);
 	}
 
-	private Suggestion suggestionWithTwoThirdsMoreDegrees(Record record, List<OptotypeCharacter> characters) {
-		long degrees = (long) (record.detail + 2 * (range.max - record.detail) / 3);
-		return new Suggestion(degrees, randomCharacter(characters), record.eye);
-	}
-
-	private boolean thereIsOneWrongRecord(List<Record> records) {
-		return records.stream()
+	private int rightRecordsForLastTest(List<Record> records) {
+		return (int) records.stream()
 				.filter(r -> lastTest(records).eye == r.eye)
 				.filter(r -> lastTest(records).detail == r.detail)
-				.filter(r -> !r.success)
-				.count() == 1;
+				.filter(r -> r.success)
+				.count();
 	}
 
-	private boolean allRecordsForLastEyeAreWrong(List<Record> records) {
-		return records.stream()
-				.filter(r -> lastTest(records).eye == r.eye)
-				.filter(r -> lastTest(records).detail == r.detail)
-				.noneMatch(r -> r.success);
+	private Suggestion suggestionWithTwoThirdsMoreDegrees(List<Record> records, List<OptotypeCharacter> characters) {
+		long degrees = (long) (lastTest(records).detail + 2 * (range.max - lastTest(records).detail) / 3);
+		return new Suggestion(degrees, randomCharacter(characters), lastTest(records).eye);
 	}
 
 	private Suggestion suggestionWithMaximumValue(List<OptotypeCharacter> characters) {
 		return new Suggestion((long) range.max, randomCharacter(characters), Eye.LEFT);
 	}
 
-	private Suggestion suggestionWithOneThirdMoreDegrees(Record record, List<OptotypeCharacter> characters) {
-		long degrees = (long) (record.detail + (range.max - record.detail) / 3);
-		return new Suggestion(degrees, randomCharacter(characters), record.eye);
+	private Suggestion suggestionWithOneThirdMoreDegrees(List<Record> records, List<OptotypeCharacter> characters) {
+		long degrees = (long) (lastTest(records).detail + (range.max - lastTest(records).detail) / 3);
+		return new Suggestion(degrees, randomCharacter(characters), lastTest(records).eye);
 	}
 
 	private OptotypeCharacter randomCharacter(List<OptotypeCharacter> characters) {
 		return characters.get(RANDOM.nextInt(characters.size()));
 	}
 
-	private boolean thereAreEnoughRecordsRightForLastEyeTested(List<Record> records) {
-		return records.stream()
-				.filter(r -> lastTest(records).eye == r.eye)
-				.filter(r -> lastTest(records).detail == r.detail)
-				.filter(r -> r.success)
-				.count() >= TEST_THRESHOLD;
-	}
-
 	private Record lastTest(List<Record> records) {
 		return records.get(records.size() - 1);
 	}
 
-	private Suggestion suggestionWithLowerValue(Record record, List<OptotypeCharacter> characters) {
-		long degrees = (long) (((record.detail - range.min) / 2) + range.min);
-		return new Suggestion(degrees, randomCharacter(characters), record.eye);
+	private Suggestion suggestionWithLowerValue(List<Record> records, List<OptotypeCharacter> characters) {
+		long degrees = (long) (((lastTest(records).detail - range.min) / 2) + range.min);
+		return new Suggestion(degrees, randomCharacter(characters), lastTest(records).eye);
 	}
 
-	private Suggestion suggestionWithSameDegrees(Record record, List<OptotypeCharacter> characters) {
-		return new Suggestion(record.detail, randomCharacter(characters), record.eye);
+	private Suggestion suggestionWithSameDegrees(List<Record> records, List<OptotypeCharacter> characters) {
+		return new Suggestion(lastTest(records).detail, randomCharacter(characters), lastTest(records).eye);
+	}
+
+	private interface SuggestionBuilder extends BiFunction<List<Record>, List<OptotypeCharacter>, Suggestion> {
 	}
 }
