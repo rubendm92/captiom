@@ -11,6 +11,7 @@ import java.util.Random;
 
 public class SuggestTestAction {
 
+	private static final int TEST_THRESHOLD = 3;
 	private static final Random RANDOM = new Random();
 	private final CharacterHeightCalculator.Range range;
 
@@ -22,6 +23,9 @@ public class SuggestTestAction {
 		if (records.isEmpty()) {
 			return suggestionWithMaximumValue(characters);
 		}
+		if (thereAreEnoughRecordsRightForLastEyeTested(records)) {
+			return suggestionWithLowerValue(lastTest(records), characters);
+		}
 		throw new UnsupportedOperationException("Not implemented yet");
 	}
 
@@ -31,5 +35,22 @@ public class SuggestTestAction {
 
 	private OptotypeCharacter randomCharacter(List<OptotypeCharacter> characters) {
 		return characters.get(RANDOM.nextInt(characters.size()));
+	}
+
+	private boolean thereAreEnoughRecordsRightForLastEyeTested(List<Record> records) {
+		return records.stream()
+				.filter(r -> lastTest(records).eye == r.eye)
+				.filter(r -> lastTest(records).detail == r.detail)
+				.filter(r -> r.success)
+				.count() == TEST_THRESHOLD;
+	}
+
+	private Record lastTest(List<Record> records) {
+		return records.get(records.size() - 1);
+	}
+
+	private Suggestion suggestionWithLowerValue(Record record, List<OptotypeCharacter> characters) {
+		long degrees = (long) (((record.detail - range.min) / 2) + range.min);
+		return new Suggestion(degrees, randomCharacter(characters), record.eye);
 	}
 }

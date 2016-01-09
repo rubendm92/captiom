@@ -6,7 +6,6 @@ import captiom.core.model.device.OptotypeCharacter;
 import captiom.core.model.device.OptotypeCharacter.Snellen;
 import captiom.core.model.test.Record;
 import captiom.core.model.test.Suggestion;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -28,7 +27,7 @@ public class AcceptedSuggestTestAction {
 		assertThat(suggestion.eye, is(Eye.LEFT));
 	}
 
-	@Ignore
+	@Test
 	public void should_give_suggestion_with_lower_degrees_if_three_records_for_same_eye_are_correct() {
 		SuggestTestAction action = new SuggestTestAction(range(10, 110));
 
