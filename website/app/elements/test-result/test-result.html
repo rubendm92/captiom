@@ -31,6 +31,11 @@
       padding: 5px 10px;
     }
 
+    ul.history {
+      height: 100%;
+      overflow: auto;
+    }
+
     ul.tests {
       height: calc(100% - 48px);
       overflow: auto;
@@ -63,7 +68,7 @@
         body='{"operation":"suggest"}'
         id="suggestRequest"></iron-ajax>
     <template is="dom-if" if="{{_isHistory(history)}}">
-      <ul class="tests">
+      <ul class="history">
         <template is="dom-repeat" items="{{history}}">
           <li>
             <h3>{{item.date}}</h3>
