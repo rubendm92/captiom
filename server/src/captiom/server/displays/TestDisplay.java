@@ -71,4 +71,8 @@ public class TestDisplay implements Display {
 		unsavedRecords.clear();
 		services.pushService().notify("History", historySerializer.serialize(getTestRecords.forPatient(patient.id)).toString());
 	}
+
+	public void suggest() {
+
+	}
 }
