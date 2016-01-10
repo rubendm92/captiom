@@ -2,7 +2,6 @@ package captiom.core.use_cases.test;
 
 import captiom.core.model.device.CharacterHeightCalculator;
 import captiom.core.model.device.Eye;
-import captiom.core.model.device.OptotypeCharacter;
 import captiom.core.model.device.OptotypeCharacter.Snellen;
 import captiom.core.model.test.Record;
 import captiom.core.model.test.Suggestion;
@@ -18,7 +17,6 @@ import static org.junit.Assert.assertThat;
 
 public class AcceptedSuggestTestAction {
 
-	private final List<OptotypeCharacter> characters = asList(Snellen.values());
 	private static SuggestTestAction action;
 
 	@BeforeClass
@@ -28,51 +26,43 @@ public class AcceptedSuggestTestAction {
 
 	@Test
 	public void should_give_suggestion_with_highest_degrees_for_left_eye_if_there_are_no_records() {
-		Suggestion suggestion = action.suggestGiven(emptyList(), characters);
+		Suggestion suggestion = suggestionGiven(emptyList());
 
 		assertThat(suggestion.degrees, is(110L));
 	}
 
 	@Test
 	public void should_give_suggestion_with_lower_degrees_if_three_records_for_same_eye_are_correct() {
-		Suggestion suggestion = action.suggestGiven(threeCorrectRecords(), characters);
-
-		assertThat(suggestion.degrees, is(30L));
+		assertThat(suggestionGiven(threeCorrectRecords()).degrees, is(30L));
 	}
 	
 	@Test
 	public void should_give_suggestion_with_same_degrees_if_three_records_are_wrong() {
-		Suggestion suggestion = action.suggestGiven(threeWrongRecords(), characters);
-
-		assertThat(suggestion.degrees, is(50L));
+		assertThat(suggestionGiven(threeWrongRecords()).degrees, is(50L));
 	}
 
 	@Test
 	public void should_give_suggestion_with_one_third_more_degrees_if_there_is_one_wrong_record() {
-		Suggestion suggestion = action.suggestGiven(oneWrongRecord(), characters);
-
-		assertThat(suggestion.degrees, is(70L));
+		assertThat(suggestionGiven(oneWrongRecord()).degrees, is(70L));
 	}
 
 	@Test
 	public void should_give_suggestion_with_two_third_more_degrees_if_there_is_two_wrong_records() {
-		Suggestion suggestion = action.suggestGiven(twoWrongRecords(), characters);
-
-		assertThat(suggestion.degrees, is(90L));
+		assertThat(suggestionGiven(twoWrongRecords()).degrees, is(90L));
 	}
 	
 	@Test
 	public void should_give_suggestion_with_value_between_lower_failing_degree_and_current_value() {
-		Suggestion suggestion = action.suggestGiven(threeCorrectRecordsAfterFailingOneLower(), characters);
-
-		assertThat(suggestion.degrees, is(40L));
+		assertThat(suggestionGiven(threeCorrectRecordsAfterFailingOneLower()).degrees, is(40L));
 	}
 
 	@Test
 	public void should_give_suggestion_with_same_value_if_there_are_less_than_three_records_for_current_value() {
-		Suggestion suggestion = action.suggestGiven(lessThanThreeRecords(), characters);
+		assertThat(suggestionGiven(lessThanThreeRecords()).degrees, is(50L));
+	}
 
-		assertThat(suggestion.degrees, is(50L));
+	private Suggestion suggestionGiven(List<Record> records) {
+		return action.suggestGiven(records, asList(Snellen.values()));
 	}
 
 	private List<Record> oneWrongRecord() {
