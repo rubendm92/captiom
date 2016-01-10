@@ -1,6 +1,6 @@
 package captiom.server.infrastructure.repositories;
 
-import captiom.core.infrastructure.device.DeviceRepository;
+import captiom.core.model.device.DeviceRepository;
 import captiom.core.model.device.Device;
 
 import java.util.*;

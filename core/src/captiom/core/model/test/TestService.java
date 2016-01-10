@@ -1,7 +1,5 @@
 package captiom.core.model.test;
 
-import captiom.core.infrastructure.test.TestRepository;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;

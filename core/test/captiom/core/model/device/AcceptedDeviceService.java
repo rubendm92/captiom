@@ -1,7 +1,5 @@
 package captiom.core.model.device;
 
-import captiom.core.infrastructure.device.DeviceNotifier;
-import captiom.core.infrastructure.device.DeviceRepository;
 import org.junit.Test;
 
 import static org.mockito.Mockito.mock;

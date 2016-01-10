@@ -1,6 +1,6 @@
 package captiom.core.use_cases.device;
 
-import captiom.core.infrastructure.device.DeviceNotifier;
+import captiom.core.model.device.DeviceNotifier;
 import captiom.core.model.device.DeviceService;
 import captiom.core.model.device.Eye;
 import captiom.core.model.device.OptotypeCharacter.TumblingE;

@@ -1,4 +1,4 @@
-package captiom.core.infrastructure.device;
+package captiom.core.model.device;
 
 import captiom.core.model.device.Device;
 import captiom.core.model.device.Eye;

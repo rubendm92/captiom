@@ -1,6 +1,5 @@
 package captiom.core.model.patient;
 
-import captiom.core.infrastructure.patient.PatientRepository;
 import org.junit.Test;
 
 import java.time.LocalDate;

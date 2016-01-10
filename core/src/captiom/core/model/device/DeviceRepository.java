@@ -1,6 +1,4 @@
-package captiom.core.infrastructure.device;
-
-import captiom.core.model.device.Device;
+package captiom.core.model.device;
 
 import java.util.List;
 

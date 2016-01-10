@@ -1,6 +1,6 @@
 package captiom.core.use_cases.test;
 
-import captiom.core.infrastructure.test.TestRepository;
+import captiom.core.model.test.TestRepository;
 import captiom.core.model.device.Eye;
 import captiom.core.model.device.OptotypeCharacter;
 import captiom.core.model.test.Record;

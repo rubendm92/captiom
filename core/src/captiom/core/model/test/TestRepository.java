@@ -1,4 +1,4 @@
-package captiom.core.infrastructure.test;
+package captiom.core.model.test;
 
 import captiom.core.model.test.Record;
 import captiom.core.model.test.Test;

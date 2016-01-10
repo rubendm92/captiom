@@ -1,8 +1,5 @@
 package captiom.core.model.device;
 
-import captiom.core.infrastructure.device.DeviceNotifier;
-import captiom.core.infrastructure.device.DeviceRepository;
-
 import java.util.List;
 
 public class DeviceService {
