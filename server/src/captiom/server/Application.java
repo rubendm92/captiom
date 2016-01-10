@@ -7,7 +7,13 @@ import captiom.core.use_cases.device.GetDevicesAction;
 import captiom.core.use_cases.device.RegisterDeviceAction;
 import captiom.server.controllers.*;
 import captiom.server.displays.ApplicationDisplay;
-import captiom.server.infrastructure.*;
+import captiom.server.infrastructure.DisplayService;
+import captiom.server.infrastructure.PushService;
+import captiom.server.infrastructure.Services;
+import captiom.server.infrastructure.repositories.AndroidDeviceNotifier;
+import captiom.server.infrastructure.repositories.CsvPatientRepository;
+import captiom.server.infrastructure.repositories.CsvTestRepository;
+import captiom.server.infrastructure.repositories.InMemoryDeviceRepository;
 
 import static spark.Spark.*;
 import static spark.SparkBase.staticFileLocation;
