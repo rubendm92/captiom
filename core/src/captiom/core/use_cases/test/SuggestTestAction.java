@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 public class SuggestTestAction {
 
 	private static final Random RANDOM = new Random();
+	private static final int TEST_THRESHOLD = 3;
 	private final CharacterHeightCalculator.Range range;
 	private final Map<Integer, SuggestionBuilder> actionBuilder = new HashMap<>();
 
@@ -29,6 +30,9 @@ public class SuggestTestAction {
 	public Suggestion suggestGiven(List<Record> records, List<OptotypeCharacter> characters) {
 		if (records.isEmpty()) {
 			return suggestionWithMaximumValue(characters);
+		}
+		if (recordsForLastTestedEye(records).count() < TEST_THRESHOLD) {
+			return suggestionWithSameDegrees(records, characters);
 		}
 		return actionBuilder.getOrDefault(rightRecordsForLastTest(records), this::suggestionWithLowerValue)
 				.apply(records, characters);
@@ -86,6 +90,5 @@ public class SuggestTestAction {
 		return new Suggestion(lastTest(records).detail, randomCharacter(characters), lastTest(records).eye);
 	}
 
-	private interface SuggestionBuilder extends BiFunction<List<Record>, List<OptotypeCharacter>, Suggestion> {
-	}
+	private interface SuggestionBuilder extends BiFunction<List<Record>, List<OptotypeCharacter>, Suggestion> { }
 }

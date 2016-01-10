@@ -68,6 +68,13 @@ public class AcceptedSuggestTestAction {
 		assertThat(suggestion.degrees, is(40L));
 	}
 
+	@Test
+	public void should_give_suggestion_with_same_value_if_there_are_less_than_three_records_for_current_value() {
+		Suggestion suggestion = action.suggestGiven(lessThanThreeRecords(), characters);
+
+		assertThat(suggestion.degrees, is(50L));
+	}
+
 	private List<Record> oneWrongRecord() {
 		return threeRecords(true, false, true);
 	}
@@ -82,6 +89,13 @@ public class AcceptedSuggestTestAction {
 
 	private List<Record> threeWrongRecords() {
 		return threeRecords(false, false, false);
+	}
+
+	private List<Record> lessThanThreeRecords() {
+		return asList(
+				new Record(Snellen.C, "Snellen", 50, Eye.LEFT, false),
+				new Record(Snellen.D, "Snellen", 50, Eye.LEFT, true)
+		);
 	}
 
 	private List<Record> threeRecords(boolean... results) {
