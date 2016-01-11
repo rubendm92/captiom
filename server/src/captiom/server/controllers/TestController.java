@@ -75,7 +75,7 @@ public class TestController implements Controller {
 	}
 
 	private String finish(JsonObject body, Response response) {
-		 testDisplay().finishTest();
+		testDisplay().finishTest();
 		return "OK";
 	}
 
