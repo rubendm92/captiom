@@ -133,5 +133,4 @@ public class CsvTestRepository implements TestRepository {
 	private Test tumblingE() {
 		return new Test("Tumbling E", asList(OptotypeCharacter.TumblingE.values()));
 	}
-
 }
