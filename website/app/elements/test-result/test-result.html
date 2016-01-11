@@ -31,42 +31,12 @@
       padding: 5px 10px;
     }
 
-    ul.history {
+    ul.history, ul.tests {
       height: 100%;
       overflow: auto;
     }
-
-    ul.tests {
-      height: calc(100% - 48px);
-      overflow: auto;
-    }
-
-    div {
-      width: 100%;
-      display: flex;
-      flex: 1;
-      align-items: flex-end;
-    }
-
-    paper-button {
-      width: 45%;
-    }
   </style>
   <template>
-    <iron-ajax
-        url="/test"
-        method="post"
-        handle-as="json"
-        content-type="application/json"
-        body='{"operation":"finish"}'
-        id="finishRequest"></iron-ajax>
-    <iron-ajax
-        url="/test"
-        method="post"
-        handle-as="json"
-        content-type="application/json"
-        body='{"operation":"suggest"}'
-        id="suggestRequest"></iron-ajax>
     <template is="dom-if" if="{{_isHistory(history)}}">
       <ul class="history">
         <template is="dom-repeat" items="{{history}}">
@@ -88,10 +58,6 @@
           <li><test-case case="{{item}}"></test-case></li>
         </template>
       </ul>
-      <div>
-        <paper-button on-tap="_suggest">Suggest</paper-button>
-        <paper-button on-tap="_notifyFinish">Finish</paper-button>
-      </div>
     </template>
   </template>
   <script>
@@ -134,15 +100,6 @@
 
       _formattedDate: function (date) {
         return date.toLocaleString('es').substring(0, date.toLocaleString('es').indexOf(' '));
-      },
-
-      _suggest: function () {
-        this.$.suggestRequest.generateRequest();
-      },
-
-      _notifyFinish: function () {
-        this.fire('finish');
-        this.$.finishRequest.generateRequest();
       },
 
       _isHistory: function (history) {

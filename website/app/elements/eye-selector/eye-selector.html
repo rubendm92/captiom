@@ -17,8 +17,8 @@
   </style>
   <template>
     <div>
-      <eye-element side="LEFT"></eye-element>
-      <eye-element side="RIGHT"></eye-element>
+      <eye-element side="LEFT" symbol="L" on-eye-selected="_closeTheOtherEye"></eye-element>
+      <eye-element side="RIGHT" symbol="R" on-eye-selected="_closeTheOtherEye"></eye-element>
     </div>
   </template>
   <script>
@@ -30,6 +30,18 @@
 
       reset: function () {
         [].slice.call(this.querySelectorAll('eye-element')).forEach(eye => eye.close());
+      },
+
+      open: function (eyeToOpen) {
+        [].slice.call(this.querySelectorAll('eye-element'))
+          .filter(eye => eye.side === eyeToOpen)
+          .forEach(eye => eye.open());
+      },
+
+      _closeTheOtherEye: function (e) {
+        [].slice.call(this.querySelectorAll('eye-element'))
+          .filter(eye => eye.isOpen() && eye.side !== e.detail.eye)
+          .forEach(eye => eye.close());
       }
     });
   })();

@@ -59,7 +59,7 @@
       }
 
       paper-drawer-panel::content #drawer, paper-drawer-panel::content #scrim {
-        z-index: 20;
+        z-index: 100;
       }
 
       /* Small */
@@ -119,7 +119,7 @@
               <paper-icon-button icon="icons:arrow-back" on-tap="_back"></paper-icon-button>
               <span class="paper-font-title">{{patientName}}</span>
             </paper-toolbar>
-            <test-result on-finish="_showAllTests"></test-result>
+            <test-result></test-result>
           </paper-scroll-header-panel>
 
           <paper-scroll-header-panel main fixed>
@@ -176,10 +176,6 @@
         this.patientName = configuration.patientName;
         this.querySelector('test-configuration').configure(configuration);
         this.querySelector('test-result').history = configuration.history;
-      },
-
-      _showAllTests: function () {
-        this.querySelector('test-configuration').back();
       },
 
       _show: function (page) {

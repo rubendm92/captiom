@@ -74,6 +74,12 @@
     #socket.closed .eye .bottom.eyelid {
     	bottom: -40px;
     }
+
+    p {
+      text-align: center;
+      margin: 5px 0;
+      font-weight: 600;
+    }
   </style>
   <template>
     <span id="socket" class="closed" on-tap="_eyeChosen">
@@ -83,6 +89,7 @@
             <span class="eyelid bottom"></span>
         </span>
     </span>
+    <p>{{symbol}}</p>
   </template>
   <script>
   (() => {
@@ -92,16 +99,25 @@
       is: 'eye-element',
 
       properties: {
-        side: String
+        side: String,
+        symbol: String
+      },
+
+      open: function () {
+        this.$.socket.classList.remove('closed');
       },
 
       close: function () {
         this.$.socket.classList.add('closed');
       },
 
+      isOpen: function () {
+        return !this.$.socket.classList.contains('closed');
+      },
+
       _eyeChosen: function () {
         this.$.socket.classList.toggle('closed');
-        if (this.$.socket.classList.contains('closed')) {
+        if (!this.isOpen()) {
           return;
         }
         this.fire('eye-selected', {eye: this.side});
