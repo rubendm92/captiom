@@ -110,7 +110,12 @@ public class CsvTestRepository implements TestRepository {
 	}
 
 	private String toCsv(Record record) {
-		return now() + ";" + record.testName + ";" + record.eye + ";" + record.detail + ";" + record.character + ";" + (record.success ? "Right" : "Wrong");
+		return now() + ";" +
+				record.testName + ";" +
+				record.eye + ";" +
+				record.detail + ";" +
+				OptotypeCharacterMapper.toString(record.character) + ";"
+				+ (record.success ? "Right" : "Wrong");
 	}
 
 	private String now() {
