@@ -64,6 +64,7 @@ public class TestDisplay implements Display {
 
 	public void selectTest(String testName) {
 		this.currentTest = testName;
+		suggest();
 	}
 
 	private long toPixels(long degrees) {
