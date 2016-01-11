@@ -60,6 +60,8 @@
 
     div.actions paper-button {
       width: 45%;
+      background-color: var(--default-primary-color);
+      color: var(--text-primary-color);
     }
 
     @media (max-width: 600px) {
@@ -106,8 +108,8 @@
         </div>
         <character-selector on-character-selected="_characterSelected"></character-selector>
         <div class="actions">
-          <paper-button on-tap="_suggest">Suggest</paper-button>
-          <paper-button on-tap="_finish">Finish</paper-button>
+          <paper-button raised on-tap="_suggest">Suggest</paper-button>
+          <paper-button raised on-tap="_finish">Finish</paper-button>
         </div>
       </div>
     </iron-pages>
