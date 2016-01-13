@@ -133,7 +133,7 @@
               </div>
             </paper-toolbar>
 
-            <test-configuration on-test-started="_clearHistory" on-new-record="_addRecord"></test-configuration>
+            <test-configuration on-test-started="_testStarted" on-new-record="_addRecord" on-finish-test="_testFinished"></test-configuration>
           </paper-scroll-header-panel>
         </paper-drawer-panel>
       </section>
@@ -149,17 +149,22 @@
       behaviors: [CottonBehaviors.PushBehavior],
 
       properties: {
-        patientName: String
+        patientName: String,
       },
 
       ready: function() {
         this.when('PatientForm').execute(configuration => this._showHome(configuration));
         this.when('DeviceConfiguration').execute(() => this._showSetupDevice());
         this.when('Test').execute(configuration => this._showTest(configuration));
+        this.testingPatient = false;
       },
 
       _back: function () {
-        this._show(this.querySelector('iron-pages').selected - 1);
+        if (this.testingPatient) {
+          this.querySelector('test-configuration').finish();
+        } else {
+          this._show(this.querySelector('iron-pages').selected - 1);
+        }
       },
 
       _showHome: function(configuration) {
@@ -186,8 +191,13 @@
         this.querySelector('test-result').addRecord(e.detail);
       },
 
-      _clearHistory: function () {
+      _testStarted: function () {
         this.querySelector('test-result').clearHistory();
+        this.testingPatient = true;
+      },
+
+      _testFinished: function () {
+        this.testingPatient = false;
       }
 
     });
