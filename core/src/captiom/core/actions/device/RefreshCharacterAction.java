@@ -10,7 +10,6 @@ public class RefreshCharacterAction {
 	private String deviceId;
 	private OptotypeCharacter character;
 	private long detailDegrees;
-	private Eye eye;
 
 	public RefreshCharacterAction(DeviceService service) {
 		this.service = service;
@@ -32,7 +31,6 @@ public class RefreshCharacterAction {
 	}
 
 	private RefreshCharacterAction refreshDevice(Eye eye) {
-		this.eye = eye;
 		service.using(deviceId).drawChar(character, detailDegrees, eye);
 		return this;
 	}

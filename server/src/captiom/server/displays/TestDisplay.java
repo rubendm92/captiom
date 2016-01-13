@@ -93,6 +93,5 @@ public class TestDisplay implements Display {
 	private void makeSuggestion(Test test) {
 		Suggestion suggestion = suggestTest.suggestGiven(unsavedRecords, test.characters());
 		services.pushService().notify("Suggestion", suggestionSerializer.serialize(suggestion).toString());
-
 	}
 }
