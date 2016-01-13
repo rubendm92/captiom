@@ -3,7 +3,7 @@ package captiom.server.controllers;
 import captiom.core.model.device.Device;
 import captiom.core.model.device.DeviceService;
 import captiom.core.model.device.Height;
-import captiom.core.use_cases.device.GetDevicesAction;
+import captiom.core.actions.device.GetDevicesAction;
 import org.junit.Test;
 import spark.Request;
 import spark.Response;

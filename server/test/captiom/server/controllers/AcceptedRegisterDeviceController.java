@@ -2,7 +2,7 @@ package captiom.server.controllers;
 
 import captiom.core.model.device.Device;
 import captiom.core.model.device.DeviceService;
-import captiom.core.use_cases.device.RegisterDeviceAction;
+import captiom.core.actions.device.RegisterDeviceAction;
 import org.junit.Test;
 import spark.Request;
 import spark.Response;

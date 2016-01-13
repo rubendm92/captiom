@@ -4,7 +4,7 @@ import captiom.core.model.device.DeviceNotifier;
 import captiom.core.model.device.DeviceService;
 import captiom.core.model.device.Eye;
 import captiom.core.model.device.OptotypeCharacter;
-import captiom.core.use_cases.device.RefreshCharacterAction;
+import captiom.core.actions.device.RefreshCharacterAction;
 import org.junit.Test;
 import spark.Request;
 import spark.Response;

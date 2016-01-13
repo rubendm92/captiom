@@ -1,7 +1,7 @@
 package captiom.server.displays;
 
 import captiom.core.model.patient.Patient;
-import captiom.core.use_cases.patient.RegisterPatientAction;
+import captiom.core.actions.patient.RegisterPatientAction;
 import captiom.server.infrastructure.Services;
 import com.google.gson.JsonObject;
 

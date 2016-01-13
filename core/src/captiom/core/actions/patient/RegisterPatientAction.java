@@ -1,4 +1,4 @@
-package captiom.core.use_cases.patient;
+package captiom.core.actions.patient;
 
 import captiom.core.model.patient.Patient;
 import captiom.core.model.patient.PatientService;

@@ -1,6 +1,6 @@
 package captiom.server.controllers;
 
-import captiom.core.use_cases.device.GetDevicesAction;
+import captiom.core.actions.device.GetDevicesAction;
 import captiom.server.infrastructure.serializers.DeviceSerializer;
 import spark.Request;
 import spark.Response;

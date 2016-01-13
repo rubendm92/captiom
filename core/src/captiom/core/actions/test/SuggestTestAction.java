@@ -1,4 +1,4 @@
-package captiom.core.use_cases.test;
+package captiom.core.actions.test;
 
 import captiom.core.model.device.CharacterHeightCalculator;
 import captiom.core.model.device.Eye;

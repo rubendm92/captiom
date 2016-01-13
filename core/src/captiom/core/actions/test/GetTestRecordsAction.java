@@ -1,4 +1,4 @@
-package captiom.core.use_cases.test;
+package captiom.core.actions.test;
 
 import captiom.core.model.test.Record;
 import captiom.core.model.test.TestService;

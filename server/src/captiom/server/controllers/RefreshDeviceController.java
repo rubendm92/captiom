@@ -2,7 +2,7 @@ package captiom.server.controllers;
 
 import captiom.core.model.device.Eye;
 import captiom.core.model.device.OptotypeCharacter;
-import captiom.core.use_cases.device.RefreshCharacterAction;
+import captiom.core.actions.device.RefreshCharacterAction;
 import captiom.server.infrastructure.OptotypeCharacterMapper;
 import spark.Request;
 import spark.Response;
