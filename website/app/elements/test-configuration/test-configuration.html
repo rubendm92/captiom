@@ -141,7 +141,7 @@
 
       configure: function (configuration) {
         this._reset();
-        this.querySelector('degrees-selector').range = configuration.deviceRange;
+        this.querySelector('degrees-selector').range = {min: parseInt(configuration.deviceRange.min + 1), max: parseInt(configuration.deviceRange.max)};
         this.tests = configuration.tests;
       },
 

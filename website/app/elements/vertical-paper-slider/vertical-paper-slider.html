@@ -23,7 +23,6 @@
         --paper-progress-active-color: var(--paper-slider-active-color, --google-blue-700);
       }
 
-      /* focus shows the ripple */
       :host(:focus) {
         outline: none;
       }
@@ -189,9 +188,21 @@
       }
 
     </style>
-    <paper-input value="{{immediateValue}}" no-label-float>
-      <div suffix>MAR</div>
+
+    <paper-input
+            id="input"
+            type="number"
+            step="1"
+            min="[[min]]"
+            max="[[max]]"
+            disabled$="[[disabled]]"
+            value="[[immediateValue]]"
+            on-change="_changeValue"
+            on-keydown="_inputKeyDown"
+            no-label-float>
+            <div suffix>MAR</div>
     </paper-input>
+
     <div id="sliderContainer"
       class$="[[_getClassNames(disabled, pin, immediateValue, min, expand, dragging, transiting)]]">
 
@@ -277,6 +288,10 @@
       this.async(function() {
         this._updateKnob(this.value);
       }, 1);
+    },
+
+    _inputKeyDown: function(event) {
+      event.stopPropagation();
     },
 
     _updateKnob: function(value, min, max) {
@@ -423,9 +438,9 @@
     },
 
     _changeValue: function(event) {
-      this.value = Math.round(event.target.value);
+      this.value = event.target.value;
       this.fire('change');
-    }
+    },
   });
 
 </script>
