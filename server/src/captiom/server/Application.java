@@ -14,7 +14,8 @@ import static spark.Spark.*;
 
 public class Application {
 
-	private static final int PUSH_PORT = 8081;
+	private static final int WEB_PORT = 8080;
+	private static final int PUSH_PORT = WEB_PORT + 1;
 	private final Services services;
 	private final String pushUrl;
 
@@ -33,7 +34,7 @@ public class Application {
 	}
 
 	private void registerRoutes() {
-		port(8080);
+		port(WEB_PORT);
 		staticFileLocation("site");
 		post("/patient", new RegisterPatientController(services.displayService()));
 		get("/devices", new GetDevicesController(new GetDevicesAction(services.deviceService())));
