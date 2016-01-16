@@ -33,7 +33,9 @@
       },
 
       _degreesSelected: function () {
-        this.fire('degrees-selected', {degrees: Math.round(this.degrees)});
+        if (this.degrees) {
+          this.fire('degrees-selected', {degrees: Math.round(this.degrees)});
+        }
       }
     });
   })();
