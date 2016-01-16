@@ -33,6 +33,7 @@ public class Application {
 	}
 
 	private void registerRoutes() {
+		port(8080);
 		staticFileLocation("site");
 		post("/patient", new RegisterPatientController(services.displayService()));
 		get("/devices", new GetDevicesController(new GetDevicesAction(services.deviceService())));
