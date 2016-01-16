@@ -19,7 +19,7 @@ class GcmNotificationMessage {
 	public static PendingMessage send(Consumer<GcmNotificationMessage> consumer) {
 		GcmNotificationMessage message = new GcmNotificationMessage();
 		consumer.accept(message);
-			return message::send;
+		return message::send;
 	}
 
 	public GcmNotificationMessage addData(String key, String value) {

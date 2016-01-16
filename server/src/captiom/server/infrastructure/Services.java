@@ -7,8 +7,12 @@ import captiom.core.model.test.TestService;
 public interface Services {
 
 	PushService pushService();
+
 	DisplayService displayService();
+
 	PatientService patientService();
+
 	DeviceService deviceService();
+
 	TestService testService();
 }

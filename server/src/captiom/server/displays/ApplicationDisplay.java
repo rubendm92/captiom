@@ -36,8 +36,9 @@ public class ApplicationDisplay implements Display {
 
 	private DeviceDisplay deviceDisplay() {
 		return display(DeviceDisplay.class);
+	}
 
-	}private TestDisplay testDisplay() {
+	private TestDisplay testDisplay() {
 		return display(TestDisplay.class);
 	}
 

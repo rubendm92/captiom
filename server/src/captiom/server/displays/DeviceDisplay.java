@@ -36,10 +36,6 @@ public class DeviceDisplay implements Display {
 		return characterHeightCalculator;
 	}
 
-	public CharacterHeightCalculator.Range testRangeForCurrentDevice() {
-		return characterHeightCalculator.range();
-	}
-
 	private void configureCharacterHeightCalculator(Configuration configuration) {
 		characterHeightCalculator.usingDevice(device(configuration.deviceId))
 				.withDiopters(configuration.diopters)

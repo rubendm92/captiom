@@ -52,27 +52,6 @@ public class OptotypeCharacterMapper {
 	}
 
 	private static void fillCharToStringMap() {
-		charToString.put(TumblingE.OPENS_RIGHT, "+");
-		charToString.put(TumblingE.OPENS_UP, "/");
-		charToString.put(TumblingE.OPENS_LEFT, "-");
-		charToString.put(TumblingE.OPENS_DOWN, "*");
-		charToString.put(C.OPENS_RIGHT, "0");
-		charToString.put(C.OPENS_RIGHT_UP, "1");
-		charToString.put(C.OPENS_UP, "2");
-		charToString.put(C.OPENS_LEFT_UP, "3");
-		charToString.put(C.OPENS_LEFT, "4");
-		charToString.put(C.OPENS_LEFT_DOWN, "5");
-		charToString.put(C.OPENS_DOWN, "6");
-		charToString.put(C.OPENS_RIGHT_DOWN, "7");
-		charToString.put(Snellen.C, "C");
-		charToString.put(Snellen.D, "D");
-		charToString.put(Snellen.E, "E");
-		charToString.put(Snellen.F, "F");
-		charToString.put(Snellen.L, "L");
-		charToString.put(Snellen.N, "N");
-		charToString.put(Snellen.O, "O");
-		charToString.put(Snellen.P, "P");
-		charToString.put(Snellen.T, "T");
-		charToString.put(Snellen.Z, "Z");
+		stringToChar.entrySet().stream().map(e -> charToString.put(e.getValue(), e.getKey()));
 	}
 }

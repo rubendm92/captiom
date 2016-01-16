@@ -6,7 +6,6 @@ import captiom.core.model.test.Record;
 import captiom.server.displays.TestDisplay;
 import captiom.server.infrastructure.DisplayService;
 import captiom.server.infrastructure.OptotypeCharacterMapper;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import spark.Request;
 import spark.Response;
@@ -14,6 +13,8 @@ import spark.Response;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
+
+import static captiom.server.controllers.Controller.*;
 
 public class TestController implements Controller {
 
@@ -40,10 +41,6 @@ public class TestController implements Controller {
 	public Object handle(Request request, Response response) throws Exception {
 		JsonObject body = bodyFrom(request);
 		return actions.getOrDefault(body.get("operation").getAsString(), this::defaultAction).apply(body, response);
-	}
-
-	private JsonObject bodyFrom(Request request) {
-		return GSON.fromJson(request.body(), JsonElement.class).getAsJsonObject();
 	}
 
 	private String selectTest(JsonObject body, Response response) {
