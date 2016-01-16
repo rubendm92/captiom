@@ -84,7 +84,10 @@ gulp.task('copy-element-styles', function () {
 });
 
 gulp.task('transpile-js', function () {
-  return gulp.src(['app/**/*.{js,html}'])
+  return gulp.src([
+    'app/**/*.{js,html}',
+    '!app/index.html'
+  ])
     .pipe($.sourcemaps.init())
     .pipe($.if('*.html', $.crisper())) // Extract JS from .html files
     .pipe($.if('*.js', $.babel()))
@@ -106,6 +109,7 @@ gulp.task('check-js', function () {
 gulp.task('generate-dist-folder', function () {
   return gulp.src([
     'app/*',
+    '!app/index.html',
     '!app/test'
   ], {
     dot: true
@@ -172,16 +176,6 @@ gulp.task('vulcanize', function () {
     .pipe(gulp.dest(DEST_DIR));
 });
 
-gulp.task('rename-index', function () {
-  return gulp.src('dist/index.build.html')
-    .pipe($.rename('index.html'))
-    .pipe(gulp.dest('dist/'));
-});
-
-gulp.task('remove-old-build-index', function (cb) {
-  del('dist/index.build.html', cb);
-});
-
 // Clean output directory
 gulp.task('clean', function (cb) {
   del(['.tmp', 'dist'], cb);
@@ -192,7 +186,6 @@ gulp.task('dev', ['copy-dev-app-to-res'], function() {
     basePath: 'app'
   });
 
-  gulp.watch(['app/index.html'], ['refresh']);
   gulp.watch(['app/{styles,elements}/**/*.css'], ['refresh']);
   gulp.watch(['app/{scripts,elements}/**/{*.js,*.html}'], ['refresh']);
 });
@@ -220,7 +213,7 @@ gulp.task('default', ['clean'], function (cb) {
     'generate-dist-folder', ['copy-styles', 'copy-dependencies', 'copy-elements', 'copy-element-styles', 'copy-fonts'],
     'check-js', 'transpile-js',
     'copy-minified-html',
-    'vulcanize','rename-index', 'remove-old-build-index',
+    'vulcanize',
     'copy-to-res',
     cb);
 });

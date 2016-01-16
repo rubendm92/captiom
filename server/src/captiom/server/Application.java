@@ -2,82 +2,47 @@ package captiom.server;
 
 import captiom.core.actions.device.GetDevicesAction;
 import captiom.core.actions.device.RegisterDeviceAction;
-import captiom.core.model.device.DeviceService;
-import captiom.core.model.patient.PatientService;
-import captiom.core.model.test.TestService;
 import captiom.server.controllers.*;
 import captiom.server.displays.ApplicationDisplay;
-import captiom.server.infrastructure.DisplayService;
 import captiom.server.infrastructure.PushService;
 import captiom.server.infrastructure.Services;
-import captiom.server.infrastructure.repositories.AndroidDeviceNotifier;
-import captiom.server.infrastructure.repositories.CsvPatientRepository;
-import captiom.server.infrastructure.repositories.CsvTestRepository;
-import captiom.server.infrastructure.repositories.InMemoryDeviceRepository;
 
+import java.net.UnknownHostException;
+
+import static java.net.InetAddress.getLocalHost;
 import static spark.Spark.*;
 
 public class Application {
 
-	public static void main(String[] args) {
-		staticFileLocation("site");
-		Services services = services(new PushService(8081), args[0]);
+	private static final int PUSH_PORT = 8081;
+	private final Services services;
+	private final String pushUrl;
+
+	public Application(Services services, String pushUrl) {
+		this.services = services;
+		this.pushUrl = pushUrl;
+	}
+
+	public void launch() {
 		services.pushService().addConnectionOpenedListener(() -> services.displayService().register(new ApplicationDisplay(services)));
+		registerRoutes();
+	}
 
-		GetDevicesAction getDevicesAction = new GetDevicesAction(services.deviceService());
-		RegisterDeviceAction registerDeviceAction = new RegisterDeviceAction(services.deviceService());
+	public static void main(String[] args) throws UnknownHostException {
+		new Application(new ApplicationServices(new PushService(PUSH_PORT), args[0]), pushUrl()).launch();
+	}
 
+	private void registerRoutes() {
+		staticFileLocation("site");
 		post("/patient", new RegisterPatientController(services.displayService()));
-		get("/devices", new GetDevicesController(getDevicesAction));
-		put("/devices", new RegisterDeviceController(registerDeviceAction));
+		get("/devices", new GetDevicesController(new GetDevicesAction(services.deviceService())));
+		put("/devices", new RegisterDeviceController(new RegisterDeviceAction(services.deviceService())));
 		post("/device", new ConfigureDeviceController(services.displayService()));
 		post("/test", new TestController(services.displayService()));
+		get("/", new HomeController(pushUrl));
 	}
 
-	private static Services services(PushService pushService, String workingDirectory) {
-		return new Services() {
-
-			private final PatientService patientService = createPatientService(workingDirectory);
-			private final DeviceService deviceService = createDeviceService();
-			private final TestService testService = createTestService(workingDirectory);
-			private final DisplayService displayService = new DisplayService();
-
-			@Override
-			public PushService pushService() {
-				return pushService;
-			}
-
-			@Override
-			public DisplayService displayService() {
-				return displayService;
-			}
-
-			@Override
-			public PatientService patientService() {
-				return patientService;
-			}
-
-			@Override
-			public DeviceService deviceService() {
-				return deviceService;
-			}
-
-			@Override
-			public TestService testService() {
-				return testService;
-			}
-		};
-	}
-
-	private static PatientService createPatientService(String workingDirectory) {
-		return new PatientService(new CsvPatientRepository(workingDirectory));
-	}
-
-	private static DeviceService createDeviceService() {
-		return new DeviceService(new InMemoryDeviceRepository(), new AndroidDeviceNotifier());
-	}
-
-	private static TestService createTestService(String workingDirectory) {
-		return new TestService(new CsvTestRepository(workingDirectory));
+	private static String pushUrl() throws UnknownHostException {
+		return "ws://" + getLocalHost().getHostAddress() +  ":" + PUSH_PORT;
 	}
 }
