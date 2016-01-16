@@ -8,7 +8,7 @@ import captiom.core.model.test.Suggestion;
 import captiom.core.model.test.Test;
 import captiom.core.actions.device.RefreshCharacterAction;
 import captiom.core.actions.test.AddTestRecordAction;
-import captiom.core.actions.test.GetTestRecordsAction;
+import captiom.core.actions.test.GetHistoryAction;
 import captiom.core.actions.test.SuggestTestAction;
 import captiom.server.infrastructure.OptotypeCharacterMapper;
 import captiom.server.infrastructure.Services;
@@ -30,7 +30,7 @@ public class TestDisplay implements Display {
 	private final Services services;
 	private final RefreshCharacterAction refreshCharacter;
 	private final AddTestRecordAction addTestRecord;
-	private final GetTestRecordsAction getTestRecords;
+	private final GetHistoryAction getTestRecords;
 	private final SuggestTestAction suggestTest;
 	private final List<Record> unsavedRecords = new ArrayList<>();
 	private String currentTest;
@@ -42,7 +42,7 @@ public class TestDisplay implements Display {
 		this.services = services;
 		this.refreshCharacter = new RefreshCharacterAction(services.deviceService());
 		this.addTestRecord = new AddTestRecordAction(services.testService());
-		this.getTestRecords = new GetTestRecordsAction(services.testService());
+		this.getTestRecords = new GetHistoryAction(services.testService());
 		this.suggestTest = new SuggestTestAction(calculator.range());
 	}
 

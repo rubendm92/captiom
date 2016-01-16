@@ -90,5 +90,7 @@ public class SuggestTestAction {
 		return new Suggestion(lastTest(records).detail, randomCharacter(characters), lastTest(records).eye);
 	}
 
-	private interface SuggestionBuilder extends BiFunction<List<Record>, List<OptotypeCharacter>, Suggestion> { }
+	@FunctionalInterface
+	private interface SuggestionBuilder extends BiFunction<List<Record>, List<OptotypeCharacter>, Suggestion> {
+	}
 }

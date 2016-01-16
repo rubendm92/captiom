@@ -1,10 +1,10 @@
 package captiom.server;
 
+import captiom.core.actions.device.GetDevicesAction;
+import captiom.core.actions.device.RegisterDeviceAction;
 import captiom.core.model.device.DeviceService;
 import captiom.core.model.patient.PatientService;
 import captiom.core.model.test.TestService;
-import captiom.core.actions.device.GetDevicesAction;
-import captiom.core.actions.device.RegisterDeviceAction;
 import captiom.server.controllers.*;
 import captiom.server.displays.ApplicationDisplay;
 import captiom.server.infrastructure.DisplayService;

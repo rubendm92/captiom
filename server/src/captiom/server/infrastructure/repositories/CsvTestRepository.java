@@ -1,10 +1,11 @@
 package captiom.server.infrastructure.repositories;
 
-import captiom.core.model.test.TestRepository;
 import captiom.core.model.device.Eye;
 import captiom.core.model.device.OptotypeCharacter;
+import captiom.core.model.test.History;
 import captiom.core.model.test.Record;
 import captiom.core.model.test.Test;
+import captiom.core.model.test.TestRepository;
 import captiom.server.infrastructure.OptotypeCharacterMapper;
 
 import java.io.IOException;
@@ -15,10 +16,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -43,15 +41,11 @@ public class CsvTestRepository implements TestRepository {
 	}
 
 	@Override
-	public Map<LocalDate, List<Record>> testResultsByDate(String patientId) {
-		LinkedHashMap<LocalDate, List<Record>> history = new LinkedHashMap<>();
+	public History history(String patientId) {
+		History history = new History();
 		readRecordsOf(patientId)
 				.map(l -> l.split(";"))
-				.forEach(splitLine -> {
-					LocalDate instant = instantFrom(splitLine[0]);
-					history.putIfAbsent(instant, new ArrayList<>());
-					history.get(instant).add(recordFrom(splitLine));
-				});
+				.forEach(splitLine -> history.addRecord(instantFrom(splitLine[0]), recordFrom(splitLine)));
 		return history;
 	}
 

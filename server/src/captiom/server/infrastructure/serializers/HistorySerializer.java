@@ -1,29 +1,27 @@
 package captiom.server.infrastructure.serializers;
 
+import captiom.core.model.test.History;
 import captiom.core.model.test.Record;
 import captiom.server.infrastructure.OptotypeCharacterMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
 public class HistorySerializer {
 
 	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-	public JsonElement serialize(Map<LocalDate, List<Record>> history) {
-		return toJsonArray(history.entrySet().stream().map(this::serializeDayHistory));
+	public JsonElement serialize(History history) {
+		return toJsonArray(history.entries().map(this::serializeDayHistory));
 	}
 
-	private JsonElement serializeDayHistory(Map.Entry<LocalDate, List<Record>> entry) {
+	private JsonElement serializeDayHistory(History.Entry entry) {
 		JsonObject object = new JsonObject();
-		object.addProperty("date", FORMATTER.format(entry.getKey()));
-		object.add("results", toJsonArray(entry.getValue().stream().map(this::serializeRecord)));
+		object.addProperty("date", FORMATTER.format(entry.date));
+		object.add("results", toJsonArray(entry.records.stream().map(this::serializeRecord)));
 		return object;
 	}
 

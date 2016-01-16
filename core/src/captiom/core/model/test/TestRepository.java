@@ -1,15 +1,12 @@
 package captiom.core.model.test;
 
-import captiom.core.model.test.Record;
-import captiom.core.model.test.Test;
-
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 public interface TestRepository {
 
 	List<Test> availableTests();
-	Map<LocalDate, List<Record>> testResultsByDate(String patientId);
+
+	History history(String patientId);
+
 	void save(String patientId, List<Record> testResults);
 }

@@ -1,8 +1,6 @@
 package captiom.core.model.test;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class TestService {
@@ -21,8 +19,8 @@ public class TestService {
 		testRepository.save(patientId, testResult);
 	}
 
-	public Map<LocalDate, List<Record>> resultsForPatient(String patientId) {
-		return testRepository.testResultsByDate(patientId);
+	public History historyForPatient(String patientId) {
+		return testRepository.history(patientId);
 	}
 
 	public Optional<Test> testFor(String testName) {
