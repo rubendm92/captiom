@@ -16,7 +16,6 @@ import captiom.server.infrastructure.repositories.CsvTestRepository;
 import captiom.server.infrastructure.repositories.InMemoryDeviceRepository;
 
 import static spark.Spark.*;
-import static spark.SparkBase.staticFileLocation;
 
 public class Application {
 

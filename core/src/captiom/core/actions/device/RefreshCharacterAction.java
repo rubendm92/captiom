@@ -51,6 +51,6 @@ public class RefreshCharacterAction {
 
 	@FunctionalInterface
 	public interface EyeReader {
-		RefreshCharacterAction in(Eye eye);
+		void in(Eye eye);
 	}
 }

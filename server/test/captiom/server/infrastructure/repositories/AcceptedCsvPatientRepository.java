@@ -18,7 +18,7 @@ import static org.junit.Assert.assertTrue;
 public class AcceptedCsvPatientRepository {
 
 	private static final String BASE_DIR = "test-res/csv-repositories";
-	public static final Path PATIENTS_REPO = Paths.get(BASE_DIR, "patient-repository");
+	private static final Path PATIENTS_REPO = Paths.get(BASE_DIR, "patient-repository");
 
 	@BeforeClass
 	public static void setUpClass() throws IOException {
