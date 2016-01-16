@@ -52,6 +52,6 @@ public class OptotypeCharacterMapper {
 	}
 
 	private static void fillCharToStringMap() {
-		stringToChar.entrySet().stream().map(e -> charToString.put(e.getValue(), e.getKey()));
+		stringToChar.entrySet().stream().forEach(e -> charToString.put(e.getValue(), e.getKey()));
 	}
 }
