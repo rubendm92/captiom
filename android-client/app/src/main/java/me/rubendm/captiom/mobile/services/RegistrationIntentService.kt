@@ -60,9 +60,16 @@ class RegistrationIntentService : IntentService(RegistrationIntentService.TAG) {
 
     private fun screen(): ScreenHeight {
         val metrics = metrics()
-        val height = if(isInLandscape()) metrics.heightPixels else metrics.widthPixels;
-        val heightInMeters = if (isInLandscape()) heightInMeters(metrics) else widthInMeters(metrics);
-        return ScreenHeight(height, heightInMeters)
+        if (isInLandscape()) {
+            if (metrics.heightPixels > metrics.widthPixels / 2) {
+                return ScreenHeight(metrics.widthPixels / 2, widthInMeters(metrics) / 2)
+            }
+            return ScreenHeight(metrics.heightPixels, heightInMeters(metrics))
+        }
+        if (metrics.widthPixels > metrics.heightPixels / 2) {
+            return ScreenHeight(metrics.heightPixels / 2, heightInMeters(metrics) / 2)
+        }
+        return ScreenHeight(metrics.widthPixels, widthInMeters(metrics))
     }
 
     private fun metrics(): DisplayMetrics {
@@ -82,6 +89,5 @@ class RegistrationIntentService : IntentService(RegistrationIntentService.TAG) {
     private fun isInLandscape(): Boolean {
         return applicationContext.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
-
 }
 

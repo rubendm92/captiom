@@ -37,7 +37,7 @@ class EyeView : ViewGroup {
 
     fun showCharacter(character: String, size: Float) {
         currentChar = character
-        charSize = size
+        charSize = (size / 1.4).toFloat()
         redraw()
     }
 
