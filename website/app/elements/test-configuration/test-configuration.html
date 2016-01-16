@@ -228,6 +228,7 @@
         this.querySelector('character-selector').select(suggestion.character);
         this.querySelector('eye-selector').open(suggestion.eye);
         this._setConfiguration(suggestion);
+        this._notifyServer(this.$.addRecordRequest);
       },
 
       _setConfiguration: function (suggestion) {
