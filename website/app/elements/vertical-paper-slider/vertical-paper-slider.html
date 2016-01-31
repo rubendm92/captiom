@@ -1,0 +1,446 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-behaviors/paper-inky-focus-behavior.html">
+<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../../bower_components/iron-range-behavior/iron-range-behavior.html">
+<link rel="import" href="../../bower_components/iron-form-element-behavior/iron-form-element-behavior.html">
+
+<dom-module id="vertical-paper-slider">
+  <template strip-whitespace>
+    <style>
+      :host {
+        display: inline-block;
+        width: 85px;
+        height: 200px;
+        cursor: default;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        --paper-progress-active-color: var(--paper-slider-active-color, --google-blue-700);
+      }
+
+      :host(:focus) {
+        outline: none;
+      }
+
+      #sliderContainer {
+        position: relative;
+        width: 32px;
+        height: calc(100% - 45px);
+        margin-left: 24px;
+      }
+
+      #sliderContainer:focus {
+        outline: 0;
+      }
+
+      .bar-container {
+        position: absolute;
+        top: 0;
+        left: 13px;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      .ring > .bar-container {
+        width: calc(100% - 4px);
+        height: 100%;
+        transition: left 0.18s ease, width 0.18s ease;
+      }
+
+      .ring.expand:not(.pin) > .bar-container {
+        left: 30px;
+        width: calc(100% - 14px);
+      }
+
+      .ring.expand.dragging > .bar-container {
+        transition: none;
+      }
+
+      #sliderBar {
+        position: absolute;
+        top: 15px;
+        left: 0;
+        width: 100%;
+        padding: 8px 0;
+        margin: -8px 0;
+        width: 6px;
+        height: 100%;
+        background-color: var(--google-grey-300);
+      }
+
+      .ring.expand:not(.pin) #sliderBar {
+        left: -14px;
+        width: calc(100% + 14px);
+      }
+
+      #sliderKnob {
+        @apply(--layout-center-justified);
+        @apply(--layout-center);
+        @apply(--layout-horizontal);
+
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 32px;
+        height: 32px;
+      }
+
+      .transiting > #sliderKnob {
+        transition: left 0.08s ease;
+      }
+
+      #sliderKnob:focus {
+        outline: none;
+      }
+
+      #sliderKnob.dragging {
+        transition: none;
+      }
+
+      #sliderKnobInner {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: var(--paper-slider-knob-color, --google-blue-700);
+
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+
+        transition-property: height, width, background-color, border;
+        transition-duration: 0.1s;
+        transition-timing-function: ease;
+      }
+
+      .expand:not(.pin) > #sliderKnob > #sliderKnobInner {
+        width: 100%;
+        height: 100%;
+
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+      }
+
+      .ring > #sliderKnob > #sliderKnobInner {
+        background-color: var(--paper-slider-knob-start-color, transparent);
+        border: 2px solid var(--paper-slider-knob-start-border-color, #c8c8c8);
+      }
+
+      #sliderKnobInner::before {
+        background-color: var(--paper-slider-pin-color, --google-blue-700);
+      }
+
+      .pin > #sliderKnob > #sliderKnobInner::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 26px;
+        height: 26px;
+        margin-left: 3px;
+        border-radius: 50% 50% 50% 0;
+
+        -webkit-transform: rotate(-135deg) scale(0) translate(0);
+        transform: rotate(-135deg) scale(0) translate(0);
+      }
+
+      #sliderKnobInner::before,
+      #sliderKnobInner::after {
+        transition: -webkit-transform .2s ease, background-color .18s ease;
+        transition: transform .2s ease, background-color .18s ease;
+      }
+
+      .pin.ring > #sliderKnob > #sliderKnobInner::before {
+        background-color: var(--paper-slider-pin-start-color, #c8c8c8);
+      }
+
+      .pin.expand > #sliderKnob > #sliderKnobInner::before {
+        -webkit-transform: rotate(-135deg) scale(1) translate(17px, -20px);
+        transform: rotate(-135deg) scale(1) translate(17px, -20px);
+      }
+
+      .pin > #sliderKnob > #sliderKnobInner::after {
+        content: attr(value);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 32px;
+        height: 26px;
+        text-align: center;
+        color: var(--paper-slider-font-color, #fff);
+        font-size: 10px;
+
+        -webkit-transform: scale(0) translate(0);
+        transform: scale(0) translate(0);
+      }
+
+      .pin.expand > #sliderKnob > #sliderKnobInner::after {
+        -webkit-transform: scale(1) translate(-25px, 9px);
+        transform: scale(1) translate(-25px, 9px);
+      }
+
+      #ink {
+        display: none !important;
+      }
+
+    </style>
+
+    <paper-input
+            id="input"
+            type="number"
+            step="1"
+            min="[[min]]"
+            max="[[max]]"
+            disabled$="[[disabled]]"
+            value="[[immediateValue]]"
+            on-change="_changeValue"
+            on-keydown="_inputKeyDown"
+            no-label-float>
+            <div suffix>MAR</div>
+    </paper-input>
+
+    <div id="sliderContainer"
+      class$="[[_getClassNames(disabled, pin, immediateValue, min, expand, dragging, transiting)]]">
+
+      <div class="bar-container">
+        <div
+          id="sliderBar"
+          on-down="_bardown"
+          on-up="_resetKnob"
+          on-track="_onTrack">
+        </div>
+      </div>
+
+      <div id="sliderKnob"
+        class="center-justified center horizontal layout"
+        on-down="_knobdown"
+        on-up="_resetKnob"
+        on-track="_onTrack"
+        on-transitionend="_knobTransitionEnd">
+          <div id="sliderKnobInner" value$="[[immediateValue]]"></div>
+      </div>
+    </div>
+  </template>
+</dom-module>
+
+<script>
+
+  Polymer({
+    is: 'vertical-paper-slider',
+
+    behaviors: [
+      Polymer.IronFormElementBehavior,
+      Polymer.PaperInkyFocusBehavior,
+      Polymer.IronRangeBehavior
+    ],
+
+    properties: {
+
+      pin: {
+        type: Boolean,
+        value: false,
+        notify: true
+      },
+
+      immediateValue: {
+        type: Number,
+        value: 0,
+        readOnly: true,
+        notify: true
+      },
+
+      expand: {
+        type: Boolean,
+        value: false,
+        readOnly: true
+      },
+
+      dragging: {
+        type: Boolean,
+        value: false,
+        readOnly: true
+      },
+
+      transiting: {
+        type: Boolean,
+        value: false,
+        readOnly: true
+      }
+    },
+
+    observers: [
+      '_updateKnob(value, min, max, step)',
+      '_valueChanged(value)',
+      '_immediateValueChanged(immediateValue)'
+    ],
+
+    hostAttributes: {
+      role: 'slider',
+      tabindex: 0
+    },
+
+    ready: function() {
+      // issue polymer/polymer#1305
+      this.async(function() {
+        this._updateKnob(this.value);
+      }, 1);
+    },
+
+    _inputKeyDown: function(event) {
+      event.stopPropagation();
+    },
+
+    _updateKnob: function(value, min, max) {
+      this.setAttribute('aria-valuemin', min);
+      this.setAttribute('aria-valuemax', max);
+      this.setAttribute('aria-valuenow', value);
+
+      this._positionKnob(this._calcRatio(value));
+    },
+
+    _valueChanged: function() {
+      this.fire('value-change');
+    },
+
+    _immediateValueChanged: function() {
+      if (this.dragging) {
+        this.fire('immediate-value-change');
+      } else {
+        this.value = Math.round(this.immediateValue);
+      }
+    },
+
+    _expandKnob: function() {
+      this._setExpand(true);
+    },
+
+    _resetKnob: function() {
+      this.cancelDebouncer('expandKnob');
+      this._setExpand(false);
+    },
+
+    _positionKnob: function(ratio) {
+      this._setImmediateValue(Math.round(this._calcStep(this._calcKnobPosition(ratio))));
+      this._setRatio(this._calcRatio(this.immediateValue));
+
+      this.$.sliderKnob.style.bottom = 'calc(' + (this.ratio * 100) + '% - 16px)';
+    },
+
+    _calcKnobPosition: function(ratio) {
+      return (this.max - this.min) * ratio + this.min;
+    },
+
+    _onTrack: function(event) {
+      event.stopPropagation();
+      switch (event.detail.state) {
+        case 'start':
+          this._trackStart(event);
+          break;
+        case 'track':
+          this._trackY(event);
+          break;
+        case 'end':
+          this._trackEnd();
+          break;
+      }
+    },
+
+    _trackStart: function() {
+      this._y = this.$.sliderBar.offsetHeight;
+      this._x = this.ratio * this._y;
+      this._startx = this._x || 0;
+      this._minx = - this._startx;
+      this._maxx = this._y - this._startx;
+      this.$.sliderKnob.classList.add('dragging');
+      this._setDragging(true);
+    },
+
+    _trackY: function(event) {
+      if (!this.dragging) {
+        this._trackStart(event);
+      }
+
+      var dx = Math.min(this._maxx, Math.max(this._minx, (-1 * event.detail.dy)));
+      this._x = this._startx + dx;
+
+      var immediateValue = Math.round(this._calcStep(this._calcKnobPosition(this._x / this._y)));
+      this._setImmediateValue(immediateValue);
+
+      var translateY = ((this._calcRatio(immediateValue) * this._y) - this._startx) - 16;
+      this.translate3d(0, -translateY + 'px', 0, this.$.sliderKnob);
+    },
+
+    _trackEnd: function() {
+      var s = this.$.sliderKnob.style;
+
+      this.$.sliderKnob.classList.remove('dragging');
+      this._setDragging(false);
+      this._resetKnob();
+      this.value = Math.round(this.immediateValue);
+
+      s.transform = s.webkitTransform = '';
+
+      this.fire('change');
+    },
+
+    _knobdown: function(event) {
+      this._expandKnob();
+      event.preventDefault();
+      this.focus();
+    },
+
+    _bardown: function(event) {
+      this._y = this.$.sliderBar.offsetHeight;
+      var rect = this.$.sliderBar.getBoundingClientRect();
+      var ratio = ((rect.bottom - event.detail.y) / this._y);
+      var prevRatio = this.ratio;
+
+      this._setTransiting(true);
+
+      this._positionKnob(ratio);
+
+      this.debounce('expandKnob', this._expandKnob, 60);
+
+      if (prevRatio === this.ratio) {
+        this._setTransiting(false);
+      }
+
+      this.async(function() {
+        this.fire('change');
+      });
+
+      event.preventDefault();
+    },
+
+    _knobTransitionEnd: function(event) {
+      if (event.target === this.$.sliderKnob) {
+        this._setTransiting(false);
+      }
+    },
+
+    _mergeClasses: function(classes) {
+      return Object.keys(classes).filter(className => classes[className]).join(' ');
+    },
+
+    _getClassNames: function() {
+      return this._mergeClasses({
+        disabled: this.disabled,
+        pin: this.pin,
+        ring: this.immediateValue <= this.min,
+        expand: this.expand,
+        dragging: this.dragging,
+        transiting: this.transiting
+      });
+    },
+
+    _changeValue: function(event) {
+      this.value = event.target.value;
+      this.fire('change');
+    },
+  });
+
+</script>

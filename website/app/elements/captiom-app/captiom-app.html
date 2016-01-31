@@ -1,0 +1,206 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
+
+<dom-module id="captiom-app">
+  <template>
+    <style>
+      #drawerToolbar {
+        color: var(--secondary-text-color);
+        background-color: var(--drawer-menu-color);
+        border-bottom: var(--drawer-toolbar-border-color);
+      }
+
+      paper-menu iron-icon {
+        margin-right: 33px;
+        opacity: 0.54;
+      }
+
+      .paper-menu > .iron-selected {
+        color: var(--default-primary-color);
+      }
+
+      paper-menu a {
+        text-decoration: none;
+        color: var(--menu-link-color);
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -ms-flex-direction: row;
+        -webkit-flex-direction: row;
+        flex-direction: row;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+        font-family: 'Roboto', 'Noto', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 24px;
+        min-height: 48px;
+        padding: 0 16px;
+      }
+
+      #mainToolbar .middle-container  {
+        height: 100%;
+        margin-left: 48px;
+      }
+
+      #mainToolbar .middle {
+        font-size: 18px;
+        padding-bottom: 0;
+      }
+
+      #mainToolbar .bottom {
+        margin-left: 48px;
+      }
+
+      paper-drawer-panel::content #drawer, paper-drawer-panel::content #scrim {
+        z-index: 100;
+      }
+
+      /* Small */
+      @media (max-width: 600px) {
+
+        #drawer .paper-toolbar {
+          margin-left: 16px;
+        }
+      }
+
+      /* Tablet+ */
+      @media (min-width: 601px) {
+
+        #drawer.paper-drawer-panel > [drawer] {
+          border-right: 1px solid rgba(0, 0, 0, 0.14);
+        }
+
+        patient-form, device-configuration {
+          padding: 48px 128px;
+        }
+      }
+    </style>
+
+    <iron-pages>
+
+      <section>
+        <paper-header-panel main condenses keep-condensed-header>
+
+          <paper-toolbar id="mainToolbar">
+            <span class="flex"></span>
+            <div class="middle middle-container center horizontal layout">
+              <div class="app-name">Captiom</div>
+            </div>
+          </paper-toolbar>
+        </paper-header-panel>
+        <patient-form></patient-form>
+      </section>
+
+      <section>
+        <paper-header-panel main condenses keep-condensed-header>
+
+          <paper-toolbar id="mainToolbar">
+            <paper-icon-button icon="icons:arrow-back" on-tap="_back"></paper-icon-button>
+            <span class="flex"></span>
+            <div class="middle middle-container center horizontal layout">
+              <div class="app-name">Captiom</div>
+            </div>
+          </paper-toolbar>
+        </paper-header-panel>
+        <device-configuration></device-configuration>
+      </section>
+
+      <section>
+        <paper-drawer-panel id="paperDrawerPanel">
+          <paper-scroll-header-panel class="flex" drawer fixed>
+            <paper-toolbar id="drawerToolbar">
+              <paper-icon-button icon="icons:arrow-back" on-tap="_back"></paper-icon-button>
+              <span class="paper-font-title">{{patientName}}</span>
+            </paper-toolbar>
+            <test-result></test-result>
+          </paper-scroll-header-panel>
+
+          <paper-scroll-header-panel main fixed>
+
+            <paper-toolbar id="mainToolbar">
+              <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
+              <span class="flex"></span>
+
+              <div class="middle middle-container center horizontal layout">
+                <div class="app-name">Captiom</div>
+              </div>
+            </paper-toolbar>
+
+            <test-configuration on-test-started="_testStarted" on-new-record="_addRecord" on-finish-test="_testFinished"></test-configuration>
+          </paper-scroll-header-panel>
+        </paper-drawer-panel>
+      </section>
+
+    </iron-pages>
+  </template>
+  <script>
+  (() => {
+    'use strict';
+
+    Polymer({
+      is: 'captiom-app',
+      behaviors: [CottonBehaviors.PushBehavior],
+
+      properties: {
+        patientName: String,
+      },
+
+      ready: function() {
+        this.when('PatientForm').execute(configuration => this._showHome(configuration));
+        this.when('DeviceConfiguration').execute(() => this._showSetupDevice());
+        this.when('Test').execute(configuration => this._showTest(configuration));
+        this.testingPatient = false;
+      },
+
+      _back: function () {
+        if (this.testingPatient) {
+          this.querySelector('test-configuration').finish();
+        } else {
+          this._show(this.querySelector('iron-pages').selected - 1);
+        }
+      },
+
+      _showHome: function(configuration) {
+        this._show('0');
+        this.querySelector('patient-form').configuration = configuration;
+      },
+
+      _showSetupDevice: function () {
+        this._show('1');
+      },
+
+      _showTest: function (configuration) {
+        this._show('2');
+        this.patientName = configuration.patientName;
+        this.querySelector('test-configuration').configure(configuration);
+        this.querySelector('test-result').history = configuration.history;
+      },
+
+      _show: function (page) {
+        this.querySelector('iron-pages').selected = page;
+      },
+
+      _addRecord: function (e) {
+        this.querySelector('test-result').addRecord(e.detail);
+      },
+
+      _testStarted: function () {
+        this.querySelector('test-result').clearHistory();
+        this.testingPatient = true;
+      },
+
+      _testFinished: function () {
+        this.testingPatient = false;
+      }
+
+    });
+  })();
+  </script>
+</dom-module>

@@ -1,0 +1,243 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../character-selector/character-selector.html">
+<link rel="import" href="../eye-selector/eye-selector.html">
+<link rel="import" href="../degrees-selector/degrees-selector.html">
+
+<dom-module id="test-configuration">
+  <style>
+    :host {
+      display: block;
+    }
+
+    .tests {
+      @apply(--layout-vertical);
+      @apply(--layout-center-justified);
+    }
+
+    paper-button {
+      background-color: var(--default-primary-color);
+      color: var(--text-primary-color);
+    }
+
+    .tests paper-button {
+      margin: 20px 25%;
+    }
+
+    eye-selector {
+      @apply(--layout-horizontal);
+      @apply(--layout-center-justified);
+    }
+
+    character-selector {
+      padding-right: 50px;
+    }
+
+    degrees-selector {
+      position: relative;
+    }
+
+    .eye-selector-container {
+      padding-top: 10px;
+      background-color: white;
+      width: calc(100% - 140px);
+      z-index: 10;
+    }
+
+    .degress-selector-container {
+      position: fixed;
+      width: 90px;
+      height: 100%;
+      z-index: 10;
+      top: 64px;
+      right: 10px;
+    }
+
+    degrees-selector {
+      height: calc(100% - 72px);
+    }
+
+    div.actions {
+      position: absolute;
+      bottom: 10%;
+      width: calc(100% - 60px);
+    }
+
+    div.actions paper-button {
+      width: 45%;
+    }
+
+    @media (max-width: 600px) {
+
+      .eye-selector-container {
+        width: calc(100% - 15px);
+      }
+    }
+  </style>
+  <template>
+    <iron-ajax
+        url="/test"
+        method="post"
+        handle-as="json"
+        content-type="application/json"
+        body='{"operation":"finish"}'
+        id="finishRequest"></iron-ajax>
+    <iron-ajax
+        url="/test"
+        method="post"
+        handle-as="json"
+        content-type="application/json"
+        body='{"operation":"suggest"}'
+        id="suggestRequest"></iron-ajax>
+    <iron-ajax
+      url="/test"
+      method="post"
+      handle-as="json"
+      id="addRecordRequest"></iron-ajax>
+    <iron-pages selected="0">
+      <div>
+        <div class="tests">
+          <template is="dom-repeat" items="{{tests}}">
+            <paper-button raised on-tap="_testSelected" name="{{item.name}}">{{item.name}}</paper-button>
+          </template>
+        </div>
+      </div>
+      <div>
+        <div class="eye-selector-container">
+          <eye-selector on-eye-selected="_eyeSelected"></eye-selector>
+        </div>
+        <div class="degress-selector-container">
+          <degrees-selector on-degrees-selected="_degreesSelected"></degrees-selector>
+        </div>
+        <character-selector on-character-selected="_characterSelected"></character-selector>
+        <div class="actions">
+          <paper-button raised on-tap="_suggest">Suggest</paper-button>
+          <paper-button raised on-tap="finish">Finish</paper-button>
+        </div>
+      </div>
+    </iron-pages>
+  </template>
+  <script>
+  (() => {
+    'use strict';
+
+    Polymer({
+      is: 'test-configuration',
+
+      properties: {
+        tests: Array,
+        selectedTest: {
+          type: String,
+          value: '-1'
+        },
+        currentTestConfiguration: Object
+      },
+
+      behaviors: [CottonBehaviors.PushBehavior],
+
+      ready: function () {
+        this.when('Suggestion').execute(suggestion => this._showSuggestion(suggestion));
+      },
+
+      configure: function (configuration) {
+        this._reset();
+        this.querySelector('degrees-selector').range = {min: parseInt(configuration.deviceRange.min + 1), max: parseInt(configuration.deviceRange.max)};
+        this.tests = configuration.tests;
+      },
+
+      _reset: function () {
+        this.querySelector('iron-pages').selected = '0';
+        this.selectedTest = '-1';
+        this.querySelector('degrees-selector').reset();
+        this.querySelector('eye-selector').reset();
+        this.querySelector('character-selector').characters = [];
+        this.querySelector('character-selector').reset();
+        this._clearConfiguration();
+      },
+
+      _testSelected: function (e) {
+        this.selectedTest = e.srcElement.name;
+        let query = this.$.addRecordRequest;
+        this.querySelector('iron-pages').selected = '1';
+        this.querySelector('character-selector').characters = this.tests.filter(test => test.name === this.selectedTest)[0].characters;
+        this.fire('test-started');
+        query.body = JSON.stringify({operation: 'selectTest', test: this.selectedTest});
+        query.generateRequest();
+      },
+
+      _eyeSelected: function (e) {
+        this.currentTestConfiguration.eye = e.detail.eye;
+        this._updateConfiguration();
+      },
+
+      _degreesSelected: function (e) {
+        this.currentTestConfiguration.detail = e.detail.degrees;
+        this._updateConfiguration();
+      },
+
+      _characterSelected: function (e) {
+        this.currentTestConfiguration.character = e.detail.character;
+        this._updateConfiguration();
+      },
+
+      _clearConfiguration: function () {
+        this.currentTestConfiguration = {operation: 'showChar'};
+      },
+
+      _updateConfiguration: function () {
+        if (this.selectedTest === '-1') {
+          return;
+        }
+        if (!this._isConfigured('eye') || !this._isConfigured('detail') || !this._isConfigured('character')) {
+          return;
+        }
+        this._notifyServer(this.$.addRecordRequest);
+        this._showRecord(this.currentTestConfiguration);
+      },
+
+      _isConfigured: function (parameter) {
+        return this.currentTestConfiguration.hasOwnProperty(parameter);
+      },
+
+      _notifyServer: function (query) {
+        query.body = JSON.stringify(this.currentTestConfiguration);
+        query.generateRequest();
+      },
+
+      _showRecord: function (configuration) {
+        this.fire('new-record', {
+          char: configuration.character,
+          testName: this.selectedTest,
+          degrees: configuration.detail,
+          eye: configuration.eye
+        });
+      },
+
+      _suggest: function () {
+        this.$.suggestRequest.generateRequest();
+      },
+
+      finish: function () {
+        this.$.finishRequest.generateRequest();
+        this._reset();
+        this.fire('finish-test');
+      },
+
+      _showSuggestion: function (suggestion) {
+        this.querySelector('degrees-selector').degrees = suggestion.degrees;
+        this.querySelector('character-selector').select(suggestion.character);
+        this.querySelector('eye-selector').open(suggestion.eye);
+        this._setConfiguration(suggestion);
+        this._notifyServer(this.$.addRecordRequest);
+      },
+
+      _setConfiguration: function (suggestion) {
+        this.currentTestConfiguration.character = suggestion.character;
+        this.currentTestConfiguration.detail = suggestion.degrees;
+        this.currentTestConfiguration.eye = suggestion.eye;
+        this._showRecord(this.currentTestConfiguration);
+      }
+    });
+  })();
+  </script>
+</dom-module>

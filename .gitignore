@@ -6,3 +6,10 @@ libraries
 /build
 /captures
 android-client/build
+out
+rubendm.xml
+local.properties
+website/node_modules
+website/bower_components
+server/res/site
+google-services.json

@@ -1,0 +1,121 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<dom-module id="test-case">
+  <style is="custom-style" include="shared-styles"></style>
+  <style>
+
+    :host {
+      @apply(--layout-horizontal);
+    }
+
+    span.character {
+      font-family: 'Optotypes';
+    }
+
+    div.info {
+      padding-left: 15px;
+    }
+
+    div > div, div > span {
+      font-size: smaller;
+    }
+
+    div > div.detail {
+      display: inline;
+    }
+
+    div > span {
+      padding-left: 5px;
+    }
+
+    span.space {
+      @apply(--layout-flex);
+    }
+
+    paper-icon-button.correct {
+      color: green;
+    }
+
+    paper-icon-button.wrong {
+      color: red;
+    }
+  </style>
+  <template>
+    <iron-ajax
+        url="/test"
+        method="post"
+        handle-as="json"
+        content-type="application/json"
+        id="caseResultRequest"></iron-ajax>
+    <span class="character">[[case.character]]</span>
+    <div class="info">
+      <div class="eye">[[case.eye]]</div>
+      <div class="detail">[[case.detail]]</div><span>degrees</span>
+    </div>
+    <span class="space"></span>
+    <div>
+      <paper-icon-button icon="done" class="correct" on-tap="_rightAnswer"></paper-icon-button>
+      <paper-icon-button icon="clear" class="wrong" on-tap="_wrongAnswer"></paper-icon-button>
+    </div>
+  </template>
+  <script>
+  (() => {
+    'use strict';
+
+    Polymer({
+      is: 'test-case',
+
+      properties: {
+        case: {
+          type: Object,
+          observer: '_updateButtons'
+        }
+      },
+
+      _updateButtons: function () {
+        if (this.case.hasOwnProperty('success')) {
+          this._hideIcon(this.case.success ? '.wrong' : '.correct');
+        }
+      },
+
+      _rightAnswer: function () {
+        if (this.case.hasOwnProperty('success')) {
+          return;
+        }
+        this._hideIcon('.wrong');
+        this._sendRequest(true);
+      },
+
+      _wrongAnswer: function () {
+        if (this.case.hasOwnProperty('success')) {
+          return;
+        }
+        this._hideIcon('.correct');
+        this._sendRequest(false);
+
+      },
+
+      _hideIcon: function (icon) {
+        this.querySelector(icon).setAttribute('hidden', '');
+      },
+
+      _sendRequest: function (success) {
+        let query = this.querySelector('iron-ajax');
+        query.body = this._generateBody(success);
+        query.generateRequest();
+      },
+
+      _generateBody: function (success) {
+        this.case.success = success;
+        let request = this.case;
+        request.operation = 'addRecord';
+        return JSON.stringify(request);
+      }
+    });
+  })();
+  </script>
+</dom-module>

@@ -1,0 +1,43 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../vertical-paper-slider/vertical-paper-slider.html">
+
+<dom-module id="degrees-selector">
+  <style>
+    :host, vertical-paper-slider {
+      display: block;
+      height: 100%;
+    }
+  </style>
+  <template>
+    <vertical-paper-slider value="{{degrees}}" min="{{range.min}}" max="{{range.max}}" pin></vertical-paper-slider>
+  </template>
+  <script>
+  (() => {
+    'use strict';
+
+    Polymer({
+      is: 'degrees-selector',
+
+      properties: {
+        range: Object,
+        degrees: {
+          type: Number,
+          observer: '_degreesSelected'
+        }
+      },
+
+      reset: function () {
+        if (this.range) {
+          this.querySelector('vertical-paper-slider').value = this.range.max;
+        }
+      },
+
+      _degreesSelected: function () {
+        if (this.degrees) {
+          this.fire('degrees-selected', {degrees: Math.round(this.degrees)});
+        }
+      }
+    });
+  })();
+  </script>
+</dom-module>

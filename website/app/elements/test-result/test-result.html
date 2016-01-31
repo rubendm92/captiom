@@ -1,0 +1,115 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="test-case.html">
+
+<dom-module id="test-result">
+  <style>
+    :host {
+      display: block;
+      height: 100%;
+      @apply(--layout-vertical);
+    }
+
+    h3 {
+      margin: 0;
+      padding: 15px;
+      padding-left: 30px;
+      font-weight: normal;
+      border-bottom: 1px solid var(--divider-color);
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    ul li {
+      padding: 5px 10px;
+    }
+
+    ul.history, ul.tests {
+      height: 100%;
+      overflow: auto;
+    }
+  </style>
+  <template>
+    <template is="dom-if" if="{{_isHistory(history)}}">
+      <ul class="history">
+        <template is="dom-repeat" items="{{history}}">
+          <li>
+            <h3>{{item.date}}</h3>
+            <ul>
+              <template is="dom-repeat" items="{{item.results}}">
+                <li><test-case case="{{item}}"></test-case></li>
+              </template>
+            </ul>
+          </li>
+        </template>
+      </ul>
+    </template>
+    <template is="dom-if" if="{{_isExam(history)}}">
+      <h3>{{date}}</h3>
+      <ul class="tests">
+        <template is="dom-repeat" items="{{cases}}">
+          <li><test-case case="{{item}}"></test-case></li>
+        </template>
+      </ul>
+    </template>
+  </template>
+  <script>
+  (() => {
+    'use strict';
+
+    Polymer({
+      is: 'test-result',
+
+      properties: {
+        date: String,
+        history: {
+          type: Array,
+          notify: true
+        },
+        cases: {
+          type: Array,
+          notify: true
+        }
+      },
+
+      behaviors: [CottonBehaviors.PushBehavior],
+
+      ready: function () {
+        this.date = this._formattedDate(new Date());
+        this.when('History').execute(history => this.history = history);
+      },
+
+      addRecord: function (record) {
+        if (this.cases.length > 0 && !this.cases[this.cases.length - 1].hasOwnProperty('success')) {
+          this.pop('cases');
+        }
+        this.push('cases', {eye: record.eye, character: record.char, detail: record.degrees, testName: record.testName});
+      },
+
+      clearHistory: function () {
+        this.history = [];
+        this.cases = [];
+      },
+
+      _formattedDate: function (date) {
+        return date.toLocaleString('es').substring(0, date.toLocaleString('es').indexOf(' '));
+      },
+
+      _isHistory: function (history) {
+        return history.length !== 0;
+      },
+
+      _isExam: function (history) {
+        return history.length === 0;
+      }
+    });
+  })();
+  </script>
+</dom-module>

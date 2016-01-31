@@ -1,0 +1,90 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="device-selector.html">
+
+<dom-module id="device-configuration">
+  <style include="shared-styles"></style>
+  <style>
+    :host {
+      display: block;
+    }
+
+    paper-button {
+      float: right;
+      margin-top: 40px;
+    }
+
+    paper-icon-button {
+      position: absolute;
+      top: 17vh;
+      left: 7vh;
+    }
+
+    @media screen and (min-width: 600px) {
+      paper-button {
+        margin-top: 20px;
+      }
+    }
+  </style>
+  <template>
+
+    <iron-ajax
+        auto
+        url="/devices"
+        method="get"
+        handle-as="json"
+        last-response="{{devices}}"></iron-ajax>
+
+      <iron-ajax
+          url="/device"
+          method="post"
+          content-type="application/json"
+          id="setupDeviceRequest"></iron-ajax>
+
+    <form is="iron-form" method="post" action="/device" id="deviceConfiguration">
+      <device-selector id="deviceSelector" devices="{{devices}}" required></device-selector>
+      <paper-input-container auto-validate>
+        <label>Diopters</label>
+        <input is="iron-input" type="number" id="diopters" autocomplete="off" required>
+      </paper-input-container>
+      <paper-input-container auto-validate>
+        <label>Distance (mm)</label>
+        <input is="iron-input" type="number" id="distance" autocomplete="off" required>
+      </paper-input-container>
+
+       <paper-button raised on-click="_beginExam">Begin exam</paper-button>
+   </form>
+
+  </template>
+  <script>
+  (() => {
+    'use strict';
+
+    Polymer({
+      is: 'device-configuration',
+
+      properties: {
+        devices: Array,
+        diopters: Number,
+        distance: Number
+      },
+
+      _beginExam: function () {
+        if (!this._validate()) {
+          return;
+        }
+        this.$.setupDeviceRequest.body = {
+          deviceId: this.$.deviceSelector.selectedDevice,
+          diopters: this.$.diopters.value,
+          distance: this.$.distance.value
+        };
+        this.$.setupDeviceRequest.generateRequest();
+      },
+
+      _validate: function () {
+        return this.$.deviceSelector.validate() && this.$.diopters.value && this.$.distance.value;
+      }
+    });
+  })();
+  </script>
+</dom-module>

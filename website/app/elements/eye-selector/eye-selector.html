@@ -1,0 +1,50 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="eye-element.html">
+
+<dom-module id="eye-selector">
+  <style>
+    :host {
+      display: block;
+    }
+
+    div {
+      @apply(--layout-horizontal);
+    }
+
+    eye-element {
+      padding: 0 5px;
+    }
+  </style>
+  <template>
+    <div>
+      <eye-element side="LEFT" symbol="L" on-eye-selected="_closeTheOtherEye"></eye-element>
+      <eye-element side="RIGHT" symbol="R" on-eye-selected="_closeTheOtherEye"></eye-element>
+    </div>
+  </template>
+  <script>
+  (() => {
+    'use strict';
+
+    Polymer({
+      is: 'eye-selector',
+
+      reset: function () {
+        [].slice.call(this.querySelectorAll('eye-element')).forEach(eye => eye.close());
+      },
+
+      open: function (eyeToOpen) {
+        [].slice.call(this.querySelectorAll('eye-element'))
+          .filter(eye => eye.side === eyeToOpen)
+          .forEach(eye => eye.open());
+        this._closeTheOtherEye({detail: {eye: eyeToOpen}});
+      },
+
+      _closeTheOtherEye: function (e) {
+        [].slice.call(this.querySelectorAll('eye-element'))
+          .filter(eye => eye.isOpen() && eye.side !== e.detail.eye)
+          .forEach(eye => eye.close());
+      }
+    });
+  })();
+  </script>
+</dom-module>

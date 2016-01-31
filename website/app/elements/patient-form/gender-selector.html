@@ -1,0 +1,104 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-ripple/paper-ripple.html"/>
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html"/>
+<link rel="import" href="../../bower_components/paper-item/paper-item.html"/>
+<link rel="import" href="../../bower_components/iron-form-element-behavior/iron-form-element-behavior.html"/>
+<link rel="import" href="../../bower_components/iron-validatable-behavior/iron-validatable-behavior.html"/>
+<link rel="import" href="../../bower_components/iron-validator-behavior/iron-validator-behavior.html"/>
+
+<dom-module id="gender-selector">
+  <style>
+    paper-item {
+      width: calc(49% - 32px);
+      display: inline-block;
+      line-height: 50px;
+      position: relative;
+      cursor: pointer;
+      background-color: transparent;
+    }
+
+    paper-menu {
+      background-color: transparent;
+    }
+
+    paper-menu.invalid {
+      border: 2px solid #db4437;
+    }
+
+    :host {
+      --paper-menu-selected-item: {
+        background-color: var(--accent-color);
+        color: var(--text-primary-color);
+      };
+
+      --paper-menu-focused-item: {
+        background-color: var(--accent-color);
+        color: var(--text-primary-color);
+      };
+    }
+
+    paper-ripple {
+      color: var(--light-primary-color);
+    }
+  </style>
+  <template>
+    <paper-menu id="menu">
+      <paper-item>
+        <paper-ripple opacityDecayVelocity="2"></paper-ripple>Male
+      </paper-item>
+      <paper-item>
+        <paper-ripple opacityDecayVelocity="2"></paper-ripple>Female
+      </paper-item>
+    </paper-menu>
+  </template>
+  <script>
+
+    (() => {
+      'use strict';
+
+      const GENDERS = ['male', 'female'];
+
+      Polymer({
+        is: 'gender-selector',
+
+        properties: {
+          invalid: {
+            notify: true,
+            type: Boolean,
+            value: true
+          }
+        },
+
+        behaviors: [Polymer.IronFormElementBehavior, Polymer.IronValidatableBehavior, Polymer.IronValidatorBehavior],
+
+        attached: function () {
+          this.querySelector('paper-menu').addEventListener('iron-select', () => this.validate());
+        },
+
+        validate: function() {
+          if (this.$.menu.selected === 0 || this.$.menu.selected === 1) {
+            this.querySelector('paper-menu').classList.remove('invalid');
+            return true;
+          }
+          this.querySelector('paper-menu').classList.add('invalid');
+          return false;
+        },
+
+        gender: function() {
+          return this.$.menu.selected === 0 ? 'Male' : 'Female';
+        },
+
+        select: function(gender) {
+          if (GENDERS.indexOf(gender.toLowerCase()) < 0) {
+            return;
+          }
+          this.$.menu.selected = GENDERS.indexOf(gender.toLowerCase());
+          this.invalid = false;
+        },
+
+        _invalidChanged: function() {
+        }
+      });
+    })();
+  </script>
+</dom-module>
